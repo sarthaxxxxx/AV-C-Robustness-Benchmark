@@ -1,0 +1,24 @@
+# Dysarthric corpus
+data/VGGSound-C/
+
+utils/
+
+src/classification/CAV-MAE/ckpt/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+.vscode
+
+# cython debug symbols
+cython_debug/
+
+# environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
