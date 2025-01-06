@@ -8,6 +8,8 @@ import torch.utils.data as data
 
 from PIL import Image
 
+os.environ['MAGICK_HOME'] = '/usr/local/opt/imagemagick@6'
+
 
 
 IMG_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm']

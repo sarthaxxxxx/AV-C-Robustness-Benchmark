@@ -22,3 +22,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# videos
+*.wav
+*.mp4

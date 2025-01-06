@@ -97,6 +97,7 @@ class DistortAudioFolder(data.Dataset):
         self.audio_paths = audios
         self.candi_audio_names = sorted(candi_audio_names)
         self.noise_path = noise_path
+        self.weather_path = noise_path
         self.save_path = save_path
 
     def __getitem__(self, index):
@@ -151,7 +152,7 @@ noise_path = args.noise_path
 
 d = collections.OrderedDict()
 if args.corruption == 'all':
-    corruption_list = ['gaussian_noise', 'impulse_noise', 'shot_noise', 'speckle_noise', 'snow', 'frost' , 'spatter' 'wind']
+    corruption_list = ['gaussian_noise', 'impulse_noise', 'shot_noise', 'speckle_noise', 'snow', 'frost' , 'spatter', 'wind']
 else:
     corruption_list = [args.corruption]
 
