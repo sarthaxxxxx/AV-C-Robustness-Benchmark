@@ -8,9 +8,6 @@ import torch
 import torch.nn.functional as F
 import torch.nn as nn
 from torchvision import transforms
-import numpy as np
-import scipy.io.wavfile as wavfile
-from scipy.misc import imsave
 
 # Our libs
 from dataset import MUSICDataset
@@ -65,6 +62,7 @@ class NetWrapper(torch.nn.Module):
         self.net_sound, self.net_frame, self.net_classifier = nets
 
     def forward(self, frame, audio):
+        # import pdb; pdb.set_trace()
         feat_frame = self.net_frame(frame)
         feat_sound = self.net_sound(audio)
         pred = self.net_classifier(feat_frame, feat_sound)
@@ -88,9 +86,9 @@ def evaluate(netWrapper, loader, history, epoch, args):
         frames = batch_data['frames']
         gts = batch_data['labels']
 
-        audio = audios[0].to(args.device).detach()
-        frame = frames[0].to(args.device).squeeze(2).detach()
-        gt = gts[0].to(args.device)
+        audio = audios.to(args.device).detach()
+        frame = frames.to(args.device).squeeze(2).detach()
+        gt = gts.to(args.device)
         # netWrapper.zero_grad()
         # forward pass
         preds, feat_v, feat_a = netWrapper(frame, audio)
@@ -122,22 +120,21 @@ def train(netWrapper, loader, optimizer, history, epoch, args):
     netWrapper.train()
 
     # main loop
-    torch.cuda.synchronize()
+    # torch.cuda.synchronize()
     tic = time.perf_counter()
     feats_a = []
     feats_v = []
     for i, batch_data in enumerate(loader):
         # measure data time
-        torch.cuda.synchronize()
+        # torch.cuda.synchronize()
         data_time.update(time.perf_counter() - tic)
 
         audios = batch_data['audios']
         frames = batch_data['frames']
         gts = batch_data['labels']
-        audio = audios[0].to(args.device)
-        frame = frames[0].to(args.device).squeeze(2)
-        gt = gts[0].to(args.device)
-
+        audio = audios.to(args.device)
+        frame = frames.to(args.device).squeeze(2)
+        gt = gts.to(args.device)
 
         # forward pass
         netWrapper.zero_grad()
@@ -151,7 +148,7 @@ def train(netWrapper, loader, optimizer, history, epoch, args):
         optimizer.step()
 
         # measure total time
-        torch.cuda.synchronize()
+        # torch.cuda.synchronize()
         batch_time.update(time.perf_counter() - tic)
         tic = time.perf_counter()
 
@@ -241,7 +238,7 @@ def main(args):
     print('1 Epoch = {} iters'.format(args.epoch_iters))
 
     netWrapper = NetWrapper(nets)
-    netWrapper = torch.nn.DataParallel(netWrapper, device_ids=range(args.num_gpus))
+    # netWrapper = netWrapper, device_ids=range(args.num_gpus))
     netWrapper.to(args.device)
 
     optimizer = create_optimizer(nets, args)
@@ -270,7 +267,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--data-name", type=str, default="avsync15")
-    parser.add_argument("--batch-size-per-gpu", type=int, default=4)
+    parser.add_argument("--batch-size-per-gpu", type=int, default=2)
     parser.add_argument('--seed', default=1234, type=int, help='manual seed')
     parser.add_argument('--ckpt', default='data/ckpt', help='folder to output checkpoints')
     parser.add_argument('--eval_epoch', type=int, default=1, help='frequency to evaluate')
@@ -301,10 +298,18 @@ if __name__ == '__main__':
     parser.add_argument('--num_gpus', default=2, type=int, help='epochs to train for')
 
     parser.add_argument('--workers', default=16, type=int, help='number of data loading workers')
+
+    parser.add_argument('--weights_sound', default='', help="weights to finetune net_sound")
+    parser.add_argument('--weights_frame', default='', help="weights to finetune net_frame")
+    parser.add_argument('--weights_classifier', default='', help="weights to finetune net_classifier")
     
+    parser.add_argument('--img_pool', default='maxpool', help="avg or max pool image features")
+    parser.add_argument('--log_freq', default=1, type=int, help="log frequency scale")
+
     args = parser.parse_args()
+    args.batch_size = args.num_gpus * args.batch_size_per_gpu
     args.device = torch.device("cuda")
-    experiment_index = len(glob(f"{args.results_dir}/*"))
+    experiment_index = len(glob(f"{args.ckpt}/*"))
     args.ckpt = os.path.join(args.ckpt, f"experiment_{experiment_index:03d}")
 
     args.best_err = float("inf")
@@ -312,4 +317,5 @@ if __name__ == '__main__':
 
     random.seed(args.seed)
     torch.manual_seed(args.seed)
+
     main(args)

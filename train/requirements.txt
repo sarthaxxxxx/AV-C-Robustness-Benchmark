@@ -1,0 +1,6 @@
+numpy==1.19.1
+torch==1.2.0
+torchvision==0.4.0
+pandas==0.24.1
+
+#conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia

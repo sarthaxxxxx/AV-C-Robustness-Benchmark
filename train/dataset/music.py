@@ -40,20 +40,24 @@ class MUSICDataset(BaseDataset):
         else:
             center_frame = int(count_frames) // 2
 
-        path_frame = os.path.join(self.frame_path, info[0], '{:06d}.jpg'.format(center_frame))
+        path_frame = os.path.join(self.frame_path, info[0]+'.mp4', '{:06d}.jpg'.format(center_frame))
         path_audio = os.path.join(self.audio_path, info[0] + '.wav')
 
-        # load frames and audios, STFT
-        try:
-            frame = self._load_frames(path_frame)
-            center_time = (center_frame - 0.5) / self.fps
-            audio = self._load_audio(path_audio, center_time)
+        # import pdb; pdb.set_trace()
+        frame = self._load_frames(path_frame)
+        center_time = (center_frame - 0.5) / self.fps
+        audio = self._load_audio(path_audio, center_time)
 
-        except Exception as e:
-            print('Failed loading frame/audio: {}'.format(e))
-            # create dummy data
-            # mags, frames, audios, phs = self.dummy_mix_data(N)
-            raise e
+        # # load frames and audios, STFT
+        # try:
+        #     frame = self._load_frames(path_frame)
+        #     center_time = (center_frame - 0.5) / self.fps
+        #     audio = self._load_audio(path_audio, center_time)
+
+        # except Exception as e:
+        #     print('Failed loading frame/audio: {}'.format(e))
+
+        #     raise e
 
         ret_dict = {'frames': frame, 'audios': audio, 'labels':label}
         if self.split != 'train':

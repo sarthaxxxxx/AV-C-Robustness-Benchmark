@@ -1,10 +1,9 @@
 import torch
 import torchvision
-import torch.nn.functional as F
 
 from .audio_net import  ANet
 from .vision_net import  Resnet
-from .cls_net import Classifier_Concat, Classifier_Single
+from .cls_net import Classifier_Concat
 from .criterion import BCELoss, CELoss
 
 

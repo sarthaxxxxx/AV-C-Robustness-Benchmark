@@ -38,10 +38,10 @@ class BaseDataset(torchdata.Dataset):
         df = df[df['new_split'] == split].reset_index(drop=True)
          
         self.list_sample = []
-        for i, row in range(len(df)):
+        for i, row in df.iterrows():
             label = row['label']
             vid = row['vid']
-            frame_count = row['frame_count']
+            frame_count = row['frames_count']
             self.list_sample.append([os.path.join(label,vid), label, frame_count])
 
         if self.split == 'train':
@@ -94,7 +94,9 @@ class BaseDataset(torchdata.Dataset):
 
     def _load_frames(self, path):
         frame = self._load_frame(path)
-        frame = self.vid_transform(frame)
+        frame = self.vid_transform([frame])
+        # reaarnge the dimension 1, 0, 2, 3
+        # frame = frame.permute(1, 0, 2, 3)
         return frame
 
     def _load_frame(self, path):
