@@ -51,9 +51,9 @@ def process_files(args):
 
 # 
 parser = argparse.ArgumentParser()
-parser.add_argument('--refer-path', type=str, default="/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound/vgg_test_refer.json")
-parser.add_argument('--video-path', type=str, default="/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound/image_mulframe_test")
-parser.add_argument('--audio-path', type=str, default="/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound/audio_test")
+parser.add_argument('--refer-path', type=str, default="/people/cs/s/skm200005/UTD/audio-visual-datasets/VGGSound/test/vgg_test_refer.json")
+parser.add_argument('--video-path', type=str, default="/people/cs/s/skm200005/UTD/audio-visual-datasets/VGGSound/test/image_mulframe_test")
+parser.add_argument('--audio-path', type=str, default="/people/cs/s/skm200005/UTD/audio-visual-datasets/VGGSound/test/audio_test")
 parser.add_argument('--save-path', type=str, default="/people/cs/s/skm200005/UTD/AV-Robustness/utils/vggsound")
 args = parser.parse_args()
 process_files(args)
