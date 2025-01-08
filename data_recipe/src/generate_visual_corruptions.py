@@ -8,6 +8,8 @@ import torch.utils.data as data
 
 from PIL import Image
 
+os.environ['MAGICK_HOME'] = '/usr/local/opt/imagemagick@6'
+
 
 
 IMG_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm']
@@ -407,7 +409,7 @@ def frost(x, severity=1):
          (0.65, 0.7),
          (0.6, 0.75)][severity - 1]
     idx = np.random.randint(5)
-    frost_dir = '/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound'
+    frost_dir = '../../data/VGGSound'
     filename = [f"{frost_dir}/frost{1}.png", f"{frost_dir}/frost{2}.png", f"{frost_dir}/frost{3}.png", f"{frost_dir}/frost{4}.jpg", f"{frost_dir}/frost{5}.jpg", f"{frost_dir}/frost{6}.jpg"][idx]
     frost = cv2.imread(filename)
     # randomly crop and convert to rgb
@@ -437,7 +439,7 @@ def snow(x, severity=1):
 
     snow_layer.motion_blur(radius=c[4], sigma=c[5], angle=np.random.uniform(-135, -45))
 
-    snow_layer = cv2.imdecode(np.fromstring(snow_layer.make_blob(), np.uint8),
+    snow_layer = cv2.imdecode(np.frombuffer(snow_layer.make_blob(), np.uint8),
                               cv2.IMREAD_UNCHANGED) / 255.
     snow_layer = snow_layer[..., np.newaxis]
 
@@ -649,7 +651,7 @@ import argparse
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--corruption', type=str, default='all', choices=['all'], help='Type of corruption to apply')
-parser.add_argument('--severity', type=int, default=5, choices=[1, 2, 3, 4, 5], help='Severity of corruption to apply')
+parser.add_argument('--severity', type=int, default=0, choices=[1, 2, 3, 4, 5, 0], help='Severity of corruption to apply, 0: all')
 parser.add_argument('--data_path', type=str, help='Path to test data')
 parser.add_argument('--save_path', type=str, help='Path to store corruption data')
 args = parser.parse_args()
@@ -678,7 +680,11 @@ dir = os.path.join(args.data_path, 'frame_0')
 candi_image_names = os.listdir(dir)
 
 for method_name in d.keys():
-    save_distorted_for_image(d[method_name], candi_image_names, args.severity, args.data_path, args.save_path)
+    if args.severity == 0:
+        for severity in range(1, 6):
+            save_distorted_for_image(d[method_name], candi_image_names, severity, args.data_path, args.save_path)
+    else:
+        save_distorted_for_image(d[method_name], candi_image_names, args.severity, args.data_path, args.save_path)
 
 
 
