@@ -16,14 +16,8 @@ args = parser.parse_args()
 severity_list = range(1, 6)
 
 corruption_list = [
-    'gaussian_noise',
-    'shot_noise',
-    'impulse_noise',
-    'speckle_noise',
-    'snow',
-    'frost',
-    'spatter',
-    ]
+        'gaussian_noise', 'impulse_noise', 'shot_noise', 'speckle_noise', 
+        'snow', 'frost' , 'spatter', 'wind', 'concert', 'smoke']
 
 for corruption in corruption_list:
     for severity in [1, 2, 3, 4, 5]:

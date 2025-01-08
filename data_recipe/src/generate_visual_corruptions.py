@@ -375,6 +375,32 @@ def fog(x, severity=1):
     x += c[0] * plasma_fractal(wibbledecay=c[1])[:224, :224][..., np.newaxis]
     return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
 
+def smoke(x, severity=1):
+    import numpy as np
+    from scipy.ndimage import gaussian_filter
+
+    # Smoke parameters based on severity
+    c = [(1.5, 2), (2, 2), (2.5, 1.7), (2.5, 1.5), (3, 1.4)][severity - 1]
+
+    # Normalize the image
+    x = np.array(x) / 255.0
+    max_val = x.max()
+
+    # Generate smoke-like noise (Gaussian blobs)
+    noise = np.random.rand(224, 224)
+    smoke_pattern = gaussian_filter(noise, sigma=c[1])
+
+    # Add color tint for smoke (grayish appearance)
+    smoke_pattern = np.expand_dims(smoke_pattern, axis=-1)  # Add channel dimension
+    smoke_pattern = np.repeat(smoke_pattern, 3, axis=-1)    # Match RGB channels
+
+    # Blend smoke with the image
+    x += c[0] * smoke_pattern
+
+    # Normalize and clip
+    return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
+
+
 
 def frost(x, severity=1):
     c = [(1, 0.4),
@@ -483,8 +509,43 @@ def contrast(x, severity=1):
     means = np.mean(x, axis=(0, 1), keepdims=True)
     return np.clip((x - means) * c + means, 0, 1) * 255
 
+def shadow(x, severity=1):
+    import numpy as np
+    from scipy.ndimage import gaussian_filter
 
-def brightness(x, severity=1):
+    # Shadow severity parameters
+    c = [0.7, 0.6, 0.5, 0.4, 0.3][severity - 1]  # Darkening factor for shadows
+
+    x = np.array(x) / 255.0  # Normalize the image
+
+    # Generate a shadow mask
+    shadow_mask = np.random.rand(224, 224)  # Random noise for shadow shape
+    shadow_mask = gaussian_filter(shadow_mask, sigma=severity * 2)  # Smooth the shadow
+    shadow_mask = (shadow_mask > 0.5).astype(float)  # Binary mask for shadow regions
+
+    # Expand shadow mask to match RGB channels
+    shadow_mask = np.expand_dims(shadow_mask, axis=-1)  # Add channel dimension
+    shadow_mask = np.repeat(shadow_mask, 3, axis=-1)    # Repeat for all RGB channels
+
+    # Apply shadow: darken the selected regions
+    x = x * (1 - shadow_mask * c)
+
+    # Clip values and return
+    return np.clip(x, 0, 1) * 255
+
+
+
+# def brightness(x, severity=1):
+#     c = [.1, .2, .3, .4, .5][severity - 1]
+
+#     x = np.array(x) / 255.
+#     x = sk.color.rgb2hsv(x)
+#     x[:, :, 2] = np.clip(x[:, :, 2] + c, 0, 1)
+#     x = sk.color.hsv2rgb(x)
+
+#     return np.clip(x, 0, 1) * 255
+
+def concert(x, severity=1):
     c = [.1, .2, .3, .4, .5][severity - 1]
 
     x = np.array(x) / 255.
@@ -609,6 +670,9 @@ if args.corruption == 'all':
     d['Frost'] = frost
     d['Spatter'] = spatter
     d['Wind'] = wind
+    d['Concert'] = concert
+    d['Smoke'] = smoke
+    # d['Forest'] = contrast    
 else:
     d[args.corruption] = eval(args.corruption.lower())
 
@@ -625,6 +689,17 @@ for method_name in d.keys():
 
 
 # /////////////// Some notes ///////////////
-# Noise patterns that can be added to both images and audio
-# Noise - Gaussian, Shot, Impulse
-# Weather - Snow, Frost, Fog
+# Digital noise:
+#   - Gaussian noise: random noise added to the image
+#   - Shot noise: random noise that looks like dots
+#   - Impulse noise: random noise that looks like salt and pepper
+#   - Speckle noise: random noise that looks like grains
+# Weather:
+#   - Snow: random snowflakes
+#   - Frost: random frost
+#   - Spatter: random splatters
+#   - Wind: random wind sounds (audio) and motion blur (image)
+# Crowd-related (concert/events):
+#  - Concert: brightness (image) and concert sound (audio)
+#  - Smoke: random smoke + smoke alarm (audio)
+# /////////////// End Display Results ///////////////
