@@ -6,9 +6,9 @@ import argparse
 
 
 parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('--clean-path', type=str, default='/people/cs/s/skm200005/UTD/AV-Robustness/utils/vggsound/clean/severity_0.json') # path to clean json (Severity 0)
-parser.add_argument('--video-c-path', type=str, default="/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound-C/image-C")
-parser.add_argument('--audio-c-path', type=str, default="/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound-C/audio-C")
+parser.add_argument('--clean-path', type=str, default='/home/jovyan/workspace/AV-C-Robustness-Benchmark/utils/epic-kitchen/clean/severity_0.json') # path to clean json (Severity 0)
+parser.add_argument('--video-c-path', type=str, default="/home/jovyan/workspace/AV-C-Robustness-Benchmark/data_recipe/corrupt_frames")
+parser.add_argument('--audio-c-path', type=str, default="/home/jovyan/workspace/AV-C-Robustness-Benchmark/data_recipe/corrupt_audio")
 parser.add_argument('--corruption', nargs='*', default=['all'])
 args = parser.parse_args()
 
@@ -26,7 +26,7 @@ corruption_list = [
     ]
 
 for corruption in corruption_list:
-    for severity in [5]:
+    for severity in [1, 2, 3, 4, 5]:
         save_path = os.path.join(os.path.dirname(args.clean_path)[:-5], 'both')
         if not os.path.exists(os.path.join(save_path, corruption)):
             os.makedirs(os.path.join(save_path, corruption))

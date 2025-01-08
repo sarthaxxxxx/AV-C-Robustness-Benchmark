@@ -16,7 +16,7 @@ from adaptation import Source
 
 # TTA for the cav-mae-finetuned model
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--dataset', type=str, default='vggsound', choices=['vggsound', 'ks50'], help='dataset name')
+parser.add_argument('--dataset', type=str, default='vggsound', choices=['vggsound', 'ks50', 'epic-kitchen'], help='dataset name')
 parser.add_argument("--json-root", type=str, default='utils/vggsound', help="validation data json")
 parser.add_argument("--label-csv", type=str, default='data/VGGSound/class_labels_indices_vgg.csv', help="csv with class labels")
 parser.add_argument("--n_class", type=int, default=309, help="number of classes")
@@ -69,7 +69,9 @@ for idx, corruption in enumerate(corruption_list):
     for severity in range(args.severity_start, args.severity_end+1):
         print("Now handling severity: ", severity)
         if args.corruption_modality == 'both':
-            data_val = 'utils/vggsound/both/{}/severity_{}.json'.format(corruption, severity)
+            # data_val = 'utils/vggsound/both/{}/severity_{}.json'.format(corruption, severity)
+            data_val = '/home/jovyan/workspace/AV-C-Robustness-Benchmark/utils/epic-kitchen/both/{}/severity_{}.json'.format(corruption, severity)
+
 
         # all exp in this work is based on 224 * 224 image
         im_res = 224

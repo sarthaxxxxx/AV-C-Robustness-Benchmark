@@ -134,7 +134,7 @@ ROOTDIR = '/people/cs/s/skm200005/UTD/AV-Robustness/'
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--corruption', type=str, default='wind', choices=['all'], help='Type of corruption to apply')
-parser.add_argument('--severity', type=int, default=5, choices=[1, 2, 3, 4, 5], help='Severity of corruption to apply')
+parser.add_argument('--severity', type=int, default=5, choices=[0, 1, 2, 3, 4, 5], help='Severity of corruption to apply')
 parser.add_argument('--data_path', type=str, help='Path to test data')
 parser.add_argument('--save_path', type=str, help='Path to store corruption data')
 parser.add_argument('--noise_path', type=str, default=f'{ROOTDIR}/data/VGGSound/NoisyAudios', help='Path to store corruption data')

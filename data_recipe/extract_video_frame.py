@@ -5,6 +5,7 @@
 # @Email   : yuangong@mit.edu
 # @File    : extract_video_frame.py
 
+import os
 import os.path
 import cv2
 import numpy as np
@@ -18,6 +19,7 @@ preprocess = T.Compose([
     T.ToTensor()])
 
 def extract_frame(input_video_path, target_fold, extract_frame_num=10):
+    os.environ['OPENCV_FFMPEG_READ_ATTEMPTS'] = '50000'
     # TODO: you can define your own way to extract video_id
     ext_len = len(input_video_path.split('/')[-1].split('.')[-1])
     video_id = input_video_path.split('/')[-1][:-ext_len-1]
@@ -29,7 +31,12 @@ def extract_frame(input_video_path, target_fold, extract_frame_num=10):
         frame_idx = int(i * (total_frame_num/extract_frame_num))
         print('Extract frame {:d} from original frame {:d}, total video frame {:d} at frame rate {:d}.'.format(i, frame_idx, total_frame_num, int(fps)))
         vidcap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx - 1)
-        _, frame = vidcap.read()
+        ret, frame = vidcap.read()
+        if frame is None:
+            print(f"Error: Could not read frame {frame_idx} from video {input_video_path}")
+            frame = last_frame
+            # continue
+        last_frame = frame
         cv2_im = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         pil_im = Image.fromarray(cv2_im)
         image_tensor = preprocess(pil_im)
@@ -53,5 +60,5 @@ if __name__ == "__main__":
         try:
             print('processing video {:d}: {:s}'.format(file_id, input_filelist[file_id]))
             extract_frame(input_filelist[file_id], args.target_fold)
-        except:
-            print('error with ', print(input_filelist[file_id]))
+        except Exception as e:
+            print('error with ', print(input_filelist[file_id]), e)

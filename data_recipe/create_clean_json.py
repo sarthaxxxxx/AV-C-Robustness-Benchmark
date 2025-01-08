@@ -9,7 +9,8 @@ def process_files(args):
     with open(json_file_path, 'r') as f:
         data = json.load(f)
     data = data['data']
-    ytid_to_labels = {dic['video_id']: dic['labels'] for dic in data}
+    # ytid_to_labels = {dic['video_id']: dic['labels'] for dic in data}
+    ytid_to_labels = {dic['video_id']: dic['verb'] for dic in data}
 
     # generate new json
     new_data = []
@@ -51,9 +52,9 @@ def process_files(args):
 
 # 
 parser = argparse.ArgumentParser()
-parser.add_argument('--refer-path', type=str, default="/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound/vgg_test_refer.json")
-parser.add_argument('--video-path', type=str, default="/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound/image_mulframe_test")
-parser.add_argument('--audio-path', type=str, default="/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound/audio_test")
-parser.add_argument('--save-path', type=str, default="/people/cs/s/skm200005/UTD/AV-Robustness/utils/vggsound")
+parser.add_argument('--refer-path', type=str, default="/home/jovyan/workspace/AV-C-Robustness-Benchmark/data/EPIC_100_validation.json")
+parser.add_argument('--video-path', type=str, default="/home/jovyan/workspace/AV-C-Robustness-Benchmark/data_recipe/sample_frames")
+parser.add_argument('--audio-path', type=str, default="/home/jovyan/workspace/AV-C-Robustness-Benchmark/data_recipe/sample_audio")
+parser.add_argument('--save-path', type=str, default="/home/jovyan/workspace/AV-C-Robustness-Benchmark/utils/epic-kitchen")
 args = parser.parse_args()
 process_files(args)
