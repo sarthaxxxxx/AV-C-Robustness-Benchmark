@@ -8,8 +8,13 @@ from torchvision import transforms
 import librosa
 from PIL import Image
 import pandas as pd
+import soundfile as sf
 
 from . import video_transforms as vtransforms
+from .distortions import noise_function_map_v, noise_function_map_a
+
+TEMP_BASE_DIR = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/train/temp_samples'
+SAVE_PROB = 0.05
 
 class BaseDataset(torchdata.Dataset):
     def __init__(self, meta_path, opt, split='train'):
@@ -26,6 +31,20 @@ class BaseDataset(torchdata.Dataset):
         self.stft_hop = opt.stft_hop
         self.HS = opt.stft_frame // 2 + 1
         self.WS = (self.audLen + 1) // self.stft_hop
+
+        self.add_audio_noise = opt.add_audio_noise
+        self.audio_noise_type = opt.audio_noise_type
+        self.audio_noise_intensity = opt.audio_noise_intensity
+        
+        self.add_frame_noise = opt.add_frame_noise
+        self.frame_noise_type = opt.frame_noise_type
+        self.frame_noise_intensity = opt.frame_noise_intensity
+
+        if self.add_frame_noise:
+            print(f'Adding frame noise of type {self.frame_noise_type} with intensity {self.frame_noise_intensity}')
+        
+        if self.add_audio_noise:
+            print(f'Adding audio noise of type {self.audio_noise_type} with intensity {self.audio_noise_intensity}')
 
         self.split = split
         self.seed = opt.seed
@@ -56,47 +75,38 @@ class BaseDataset(torchdata.Dataset):
 
     # video transform funcs
     def _init_vtransform(self):
-        transform_list = []
+        transform_list_1 = []
+        transform_list_2 = []
         mean = [0.485, 0.456, 0.406]
         std = [0.229, 0.224, 0.225]
 
         if self.split == 'train':
-            transform_list.append(vtransforms.Resize(int(self.imgSize * 1.1), Image.BICUBIC))
-            transform_list.append(vtransforms.RandomCrop(self.imgSize))
-            transform_list.append(vtransforms.RandomHorizontalFlip())
+            transform_list_1.append(vtransforms.Resize(int(self.imgSize * 1.1), Image.BICUBIC))
+            transform_list_1.append(vtransforms.RandomCrop(self.imgSize))
+            transform_list_1.append(vtransforms.RandomHorizontalFlip())
         else:
-            transform_list.append(vtransforms.Resize(self.imgSize, Image.BICUBIC))
-            transform_list.append(vtransforms.CenterCrop(self.imgSize))
+            transform_list_1.append(vtransforms.Resize(self.imgSize, Image.BICUBIC))
+            transform_list_1.append(vtransforms.CenterCrop(self.imgSize))
 
-        transform_list.append(vtransforms.ToTensor())
-        transform_list.append(vtransforms.Normalize(mean, std))
-        transform_list.append(vtransforms.Stack())
-        self.vid_transform = transforms.Compose(transform_list)
-
-    # image transform funcs, deprecated
-    def _init_transform(self):
-        mean = [0.485, 0.456, 0.406]
-        std = [0.229, 0.224, 0.225]
-
-        if self.split == 'train':
-            self.img_transform = transforms.Compose([
-                transforms.Scale(int(self.imgSize * 1.2)),
-                transforms.RandomCrop(self.imgSize),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                transforms.Normalize(mean, std)])
-        else:
-            self.img_transform = transforms.Compose([
-                transforms.Scale(self.imgSize),
-                transforms.CenterCrop(self.imgSize),
-                transforms.ToTensor(),
-                transforms.Normalize(mean, std)])
+        transform_list_2.append(vtransforms.ToTensor())
+        transform_list_2.append(vtransforms.Normalize(mean, std))
+        transform_list_2.append(vtransforms.Stack())
+        self.vid_transform_1 = transforms.Compose(transform_list_1)
+        self.vid_transform_2 = transforms.Compose(transform_list_2)
 
     def _load_frames(self, path):
         frame = self._load_frame(path)
-        frame = self.vid_transform([frame])
-        # reaarnge the dimension 1, 0, 2, 3
-        # frame = frame.permute(1, 0, 2, 3)
+        frame = self.vid_transform_1([frame])
+        if self.add_frame_noise:
+            method = noise_function_map_v[self.frame_noise_type]
+            frame = [method(frame[0], self.frame_noise_intensity)]
+            if random.random() < SAVE_PROB:
+                # save the noisy frame
+                file_name = path.split('/')[-1].split('.')[0]
+                save_path = os.path.join(TEMP_BASE_DIR, f'{file_name}_{self.frame_noise_type}_{self.frame_noise_intensity}.jpg')
+                Image.fromarray(frame[0]).save(save_path)
+
+        frame = self.vid_transform_2(frame)
         return frame
 
     def _load_frame(self, path):
@@ -123,6 +133,16 @@ class BaseDataset(torchdata.Dataset):
 
         # load audio
         audio_raw, rate = self._load_audio_file(path)
+
+        # add noise
+        if self.add_audio_noise:
+            method = noise_function_map_a[self.audio_noise_type]
+            audio_raw = method(audio_raw, self.audio_noise_intensity)
+            if random.random() < SAVE_PROB:
+                # save the noisy audio
+                file_name = path.split('/')[-1].split('.')[0]
+                save_path = os.path.join(TEMP_BASE_DIR, f'{file_name}_{self.audio_noise_type}_{self.audio_noise_intensity}.wav')
+                sf.write(save_path, audio_raw, rate)
 
         # repeat if audio is too short
         if audio_raw.shape[0] < rate * self.audSec:
@@ -153,30 +173,3 @@ class BaseDataset(torchdata.Dataset):
         audio[audio < -1.] = -1.
         audio = torch.from_numpy(audio).unsqueeze(0)
         return audio
-
-    def _n_and_stft(self, audios):
-        N = len(audios)
-        mags = [None for n in range(N)]
-        phs = [None for n in range(N)]
-        for n in range(N):
-            ampN, phN = self._stft(audios[n])
-            mags[n] = ampN.unsqueeze(0)
-            phs[n] = phN.unsqueeze(0)
-        for n in range(N):
-            audios[n] = torch.from_numpy(audios[n])
-
-        return mags, phs
-
-    def dummy_mix_data(self, N):
-        frames = [None for n in range(N)]
-        audios = [None for n in range(N)]
-        mags = [None for n in range(N)]
-        phs = [None for n in range(N)]
-
-        for n in range(N):
-            frames[n] = torch.zeros(
-                3, self.num_frames, self.imgSize, self.imgSize)
-            audios[n] = torch.zeros(self.audLen).unsqueeze(0)
-            mags[n] = torch.zeros(1, self.HS, self.WS)
-            phs[n] = torch.zeros(1, self.HS, self.WS)
-        return mags, frames, audios, phs

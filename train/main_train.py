@@ -286,6 +286,14 @@ if __name__ == '__main__':
     parser.add_argument('--img_pool', default='maxpool', help="avg or max pool image features")
     parser.add_argument('--log_freq', default=1, type=int, help="log frequency scale")
 
+    # During training the add_audio_noise and add_video_noise flags should be set to False
+    parser.add_argument('--add_audio_noise', default=False, type=bool)
+    parser.add_argument("--audio_noise_type", type=str, default="gaussian")
+    parser.add_argument('--audio_noise_intensity', default=5, type=int)
+    parser.add_argument('--add_frame_noise', default=False, type=bool)
+    parser.add_argument("--frame_noise_type", type=str, default="gaussian")
+    parser.add_argument('--frame_noise_intensity', default=5, type=int)
+
     args = parser.parse_args()
     args.device = torch.device("cuda")
     experiment_index = len(glob(f"{args.ckpt}/*"))
