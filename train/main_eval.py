@@ -34,12 +34,6 @@ class UnNormalize(object):
         self.std = std
 
     def __call__(self, tensor):
-        """
-        Args:
-            tensor (Tensor): Tensor image of size (C, H, W) to be normalized.
-        Returns:
-            Tensor: Normalized image.
-        """
         for t, m, s in zip(tensor, self.mean, self.std):
             t.mul_(s).add_(m)
             # The normalize code -> t.sub_(m).div_(s)
@@ -55,7 +49,6 @@ def inv_norm_tensor(x):
 
     return x
 
-# Network wrapper, defines forward pass
 class NetWrapper(torch.nn.Module):
     def __init__(self, nets):
         super(NetWrapper, self).__init__()
@@ -67,16 +60,11 @@ class NetWrapper(torch.nn.Module):
         pred = self.net_classifier(feat_frame, feat_sound)
         return pred, feat_frame, feat_sound
 
-def evaluate(netWrapper, loader, history, epoch, args):
-    print('Evaluating at {} epochs...'.format(epoch))
-    criterion = nn.CrossEntropyLoss()
+def evaluate(netWrapper, loader, args):
     torch.set_grad_enabled(False)
-
     netWrapper.eval()
 
-    loss_meter = AverageMeter()
     correct = 0
-
     total = 0
     for i, batch_data in enumerate(loader):
         audios = batch_data['audios']
@@ -87,92 +75,12 @@ def evaluate(netWrapper, loader, history, epoch, args):
         frame = frames.to(args.device).squeeze(2).detach()
         gt = gts.to(args.device)
         preds, feat_v, feat_a = netWrapper(frame, audio)
-        err = criterion(preds, gt) #+ F.cosine_similarity(feat_v, feat_a, 1).mean()
 
         _, predicted = torch.max(preds.data, 1)
         total += preds.size(0)
         correct += (predicted == gt).sum().item()
 
-        loss_meter.update(err.item())
-    acc = 100 * correct / total
-    print('[Eval Summary] Epoch: {}, Loss: {:.4f}'
-          .format(epoch, loss_meter.average()))
-    history['val']['epoch'].append(epoch)
-    history['val']['err'].append(loss_meter.average())
-    history['val']['acc'].append(acc)
     print('Accuracy of the audio-visual event recognition network: %.2f %%' % (100 * correct / total))
-
-def train(netWrapper, loader, optimizer, history, epoch, args):
-    torch.set_grad_enabled(True)
-    batch_time = AverageMeter()
-    data_time = AverageMeter()
-    criterion = nn.CrossEntropyLoss()
-
-    netWrapper.train()
-
-    tic = time.perf_counter()
-    feats_a = []
-    feats_v = []
-    for i, batch_data in enumerate(loader):
-        data_time.update(time.perf_counter() - tic)
-
-        audios = batch_data['audios']
-        frames = batch_data['frames']
-        gts = batch_data['labels']
-        audio = audios.to(args.device)
-        frame = frames.to(args.device).squeeze(2)
-        gt = gts.to(args.device)
-
-        netWrapper.zero_grad()
-        output, feat_v, feat_a = netWrapper.forward(frame, audio)
-        feats_v.append(feat_v.detach())
-        feats_a.append(feat_a.detach())
-        err = criterion(output, gt)
-
-        err.backward()
-        optimizer.step()
-
-        batch_time.update(time.perf_counter() - tic)
-        tic = time.perf_counter()
-
-        # display
-        if i % args.disp_iter == 0:
-            print('Epoch: [{}][{}/{}], Time: {:.2f}, Data: {:.2f}, '
-                  'lr_sound: {}, lr_frame: {}, lr_classifier: {}, '
-                  'loss: {:.4f}'
-                  .format(epoch, i, args.epoch_iters,
-                          batch_time.average(), data_time.average(),
-                          args.lr_sound, args.lr_frame, args.lr_classifier,
-                          err.item()))
-            fractional_epoch = epoch - 1 + 1. * i / args.epoch_iters
-            history['train']['epoch'].append(fractional_epoch)
-            history['train']['err'].append(err.item())
-
-def checkpoint(nets, history, epoch, args):
-    print('Saving checkpoints at {} epochs.'.format(epoch))
-    (net_sound, net_frame, net_classifier) = nets
-    suffix_latest = 'latest.pth'
-    suffix_best = 'best.pth'
-
-    torch.save(history,
-               '{}/history_{}'.format(args.ckpt, suffix_latest))
-    torch.save(net_sound.state_dict(),
-               '{}/sound_{}'.format(args.ckpt, suffix_latest))
-    torch.save(net_frame.state_dict(),
-               '{}/frame_{}'.format(args.ckpt, suffix_latest))
-    torch.save(net_classifier.state_dict(),
-               '{}/classifier_{}'.format(args.ckpt, suffix_latest))
-
-    cur_acc = history['val']['acc'][-1]
-    if cur_acc > args.best_acc:
-        args.best_acc = cur_acc
-        torch.save(net_sound.state_dict(),
-                   '{}/sound_{}'.format(args.ckpt, suffix_best))
-        torch.save(net_frame.state_dict(),
-                   '{}/frame_{}'.format(args.ckpt, suffix_best))
-        torch.save(net_classifier.state_dict(),
-                   '{}/classifier_{}'.format(args.ckpt, suffix_best))
-
 
 def create_optimizer(nets, args):
     (net_sound, net_frame, net_classifier) = nets
@@ -189,7 +97,6 @@ def adjust_learning_rate(optimizer, args):
         param_group['lr'] *= 0.1
 
 def main(args):
-    # Network Builders
     builder = ModelBuilder()
     net_sound = builder.build_sound(
         weights=args.weights_sound)
@@ -201,47 +108,18 @@ def main(args):
         weights=args.weights_classifier)
     nets = (net_sound, net_frame, net_classifier)
 
-    # Dataset and Loader
-    dataset_train = MUSICDataset(args.meta_path, args, split='train')
-    dataset_val = MUSICDataset(args.meta_path, args, split='val')
-
-    loader_train = torch.utils.data.DataLoader(
-        dataset_train,
-        batch_size=args.batch_size,
-        shuffle=True,
-        num_workers=int(args.workers),
-        drop_last=True)
-    loader_val = torch.utils.data.DataLoader(
-        dataset_val,
+    dataset_test = MUSICDataset(args.meta_path, args, split='test')
+    loader_test = torch.utils.data.DataLoader(
+        dataset_test,
         batch_size=args.batch_size,
         shuffle=False,
         num_workers=2,
         drop_last=False)
-    args.epoch_iters = len(dataset_train) // args.batch_size
-    print('1 Epoch = {} iters'.format(args.epoch_iters))
 
     netWrapper = NetWrapper(nets)
-    # netWrapper = netWrapper, device_ids=range(args.num_gpus))
     netWrapper.to(args.device)
 
-    optimizer = create_optimizer(nets, args)
-
-    history = {
-        'train': {'epoch': [], 'err': []},
-        'val': {'epoch': [], 'err': [], 'acc':[], 'cos':[]}}
-
-    # Training loop
-    for epoch in range(1, args.num_epoch + 1):
-        train(netWrapper, loader_train, optimizer, history, epoch, args)
-        if epoch % args.eval_epoch == 0:
-            evaluate(netWrapper, loader_val, history, epoch, args)
-            checkpoint(nets, history, epoch, args)
-
-        if epoch in args.lr_steps:
-            adjust_learning_rate(optimizer, args)
-
-    print('Training Done!')
-
+    evaluate(netWrapper, loader_test, args)
 
 if __name__ == '__main__':
 
@@ -288,13 +166,17 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     args.device = torch.device("cuda")
-    experiment_index = len(glob(f"{args.ckpt}/*"))
-    args.ckpt = os.path.join(args.ckpt, f"experiment_{experiment_index:03d}_{args.data_name}")
+
+    args.ckpt = os.path.join(args.ckpt, f"experiment_002_{args.data_name}")
 
     makedirs(args.ckpt)
 
     args.best_err = float("inf")
     args.best_acc = 0
+
+    args.weights_sound = os.path.join(args.ckpt, 'sound_best.pth')
+    args.weights_frame = os.path.join(args.ckpt, 'frame_best.pth')
+    args.weights_classifier = os.path.join(args.ckpt, 'classifier_best.pth')
 
     random.seed(args.seed)
     torch.manual_seed(args.seed)
