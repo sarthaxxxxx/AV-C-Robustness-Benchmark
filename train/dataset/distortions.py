@@ -1,6 +1,7 @@
 import numpy as np
 import skimage as sk
-import soundfile as sf
+from scipy.ndimage import zoom as scizoom
+from .weather_distortions import spatter_noise_v, spatter_noise_a
 
 # visual corruptions
 
@@ -28,7 +29,15 @@ def speckle_noise(x, severity=1):
     noisy_x = np.clip(x + x * np.random.normal(size=x.shape, scale=c), 0, 1) * 255
     return noisy_x.astype(np.uint8)
 
-# audio corruptions
+def clipped_zoom(img, zoom_factor):
+    h = img.shape[0]
+    ch = int(np.ceil(h / zoom_factor))
+    top = (h - ch) // 2
+    img = scizoom(img[top:top + ch, top:top + ch], (zoom_factor, zoom_factor, 1), order=1)
+    trim_top = (img.shape[0] - h) // 2
+    return img[trim_top:trim_top + h, trim_top:trim_top + h]
+
+############## audio corruptions  ####################################
 def gaussian_noise_a(audio, intensity):
     noise_std = [.08, .12, 0.18, 0.26, 0.38][intensity - 1]
     noise = np.random.normal(0, noise_std, len(audio))
@@ -64,12 +73,14 @@ noise_function_map_v = {
     'gaussian': gaussian_noise_v,
     'shot': shot_noise_v,
     'impulse': impulse_noise_v,
-    'speckle': speckle_noise
+    'speckle': speckle_noise,
+    'spatter': spatter_noise_v
 }
 
 noise_function_map_a = {
     'gaussian': gaussian_noise_a,
     'shot': shot_noise_a,
     'impulse': impulse_noise_a,
-    'speckle': speckle_noise_a
+    'speckle': speckle_noise_a,
+    'weather': spatter_noise_a
 }
