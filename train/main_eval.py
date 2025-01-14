@@ -11,6 +11,9 @@ from nets import ModelBuilder
 #new
 import argparse
 
+import warnings
+warnings.filterwarnings("ignore")
+
 class NetWrapper(torch.nn.Module):
     def __init__(self, nets):
         super(NetWrapper, self).__init__()

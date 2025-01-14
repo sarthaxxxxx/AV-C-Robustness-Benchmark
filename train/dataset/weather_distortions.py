@@ -2,6 +2,8 @@ import numpy as np
 import cv2
 from skimage.filters import gaussian
 from pydub import AudioSegment
+import soundfile as sf
+import os
 
 def spatter_noise_v(x, severity=1):
     c = [(0.65, 0.3, 4, 0.69, 0.6, 0),
@@ -59,13 +61,11 @@ def spatter_noise_v(x, severity=1):
 ############## audio corruptions  ####################################
 
 def weather_noise_a(audio_raw, weather_audio_path, intensity):
-    audio = AudioSegment(
-        audio_raw.tobytes(),
-        frame_rate=16_000,
-        sample_width=audio_raw.dtype.itemsize,
-        channels=1
-    )
-    rain_sound = AudioSegment.from_file(weather_audio_path)
+    temp_audio_path = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/train/temp_samples/temp.wav'
+    sf.write(temp_audio_path, audio_raw, 16_000)
+    audio = AudioSegment.from_file(temp_audio_path, frame_rate=16_000, channels=1)
+    os.remove(temp_audio_path)
+    rain_sound = AudioSegment.from_file(weather_audio_path, frame_rate=16_000, channels=1)
 
     if len(audio) <= len(rain_sound):
         rain_sound = rain_sound[:len(audio)]
@@ -77,12 +77,13 @@ def weather_noise_a(audio_raw, weather_audio_path, intensity):
     scale = [1, 2, 4, 6, 8]
     rain_sound = rain_sound.apply_gain(scale[intensity - 1])
     output = audio.overlay(rain_sound)
-    output_samples = np.array(output.get_array_of_samples()).astype(np.float32)
+    
+    output_samples = np.array(output.get_array_of_samples()).astype(np.float32)[:len(audio_raw)]
     max_amplitude = max(np.max(np.abs(output_samples)), 1.0)
     output_samples = output_samples / max_amplitude
 
     return output_samples
 
 def spatter_noise_a(audio, intensity):
-    spatter_path = '.external_audio/spatter.wav'
+    spatter_path = './dataset/external_audio/spatter.wav'
     return weather_noise_a(audio, spatter_path, intensity)

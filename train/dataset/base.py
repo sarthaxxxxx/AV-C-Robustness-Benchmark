@@ -137,8 +137,8 @@ class BaseDataset(torchdata.Dataset):
 
         # add noise
         if self.add_audio_noise:
-            method = noise_function_map_a.get(self.audio_noise_type, noise_function_map_a['weather_noise_a'])
-            # method = noise_function_map_a[self.audio_noise_type]
+            # method = noise_function_map_a.get(self.audio_noise_type, noise_function_map_a['weather_noise_a'])
+            method = noise_function_map_a[self.audio_noise_type]
             audio_raw = method(audio_raw, self.audio_noise_intensity)
             if random.random() < SAVE_PROB:
                 # save the noisy audio

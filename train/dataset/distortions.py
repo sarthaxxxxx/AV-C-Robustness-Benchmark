@@ -82,5 +82,5 @@ noise_function_map_a = {
     'shot': shot_noise_a,
     'impulse': impulse_noise_a,
     'speckle': speckle_noise_a,
-    'weather': spatter_noise_a
+    'spatter': spatter_noise_a
 }
