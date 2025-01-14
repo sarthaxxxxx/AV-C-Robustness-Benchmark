@@ -27,3 +27,4 @@ venv.bak/
 **/*.wav
 **/*.pth
 **/*.jpg
+**/*.png

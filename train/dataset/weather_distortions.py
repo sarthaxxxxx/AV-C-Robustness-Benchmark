@@ -57,6 +57,21 @@ def spatter_noise_v(x, severity=1):
 
         noisy_x = np.clip(x + color, 0, 1) * 255
         return noisy_x.astype(np.uint8)
+
+def frost_noise_v(x, severity=1):
+    c = [(1, 0.4),
+         (0.8, 0.6),
+         (0.7, 0.7),
+         (0.65, 0.7),
+         (0.6, 0.75)][severity - 1]
+    idx = np.random.randint(5)
+    frost_dir = './dataset/external_image'
+    filename = [f"{frost_dir}/frost{1}.png", f"{frost_dir}/frost{2}.png", f"{frost_dir}/frost{3}.png", f"{frost_dir}/frost{4}.jpg", f"{frost_dir}/frost{5}.jpg", f"{frost_dir}/frost{6}.jpg"][idx]
+    frost = cv2.imread(filename)
+    # randomly crop and convert to rgb
+    x_start, y_start = np.random.randint(0, frost.shape[0] - 224), np.random.randint(0, frost.shape[1] - 224)
+    frost = frost[x_start:x_start + 224, y_start:y_start + 224][..., [2, 1, 0]]
+    return np.clip(c[0] * np.array(x) + c[1] * frost, 0, 255).astype(np.uint8)    
     
 ############## audio corruptions  ####################################
 
@@ -86,4 +101,12 @@ def weather_noise_a(audio_raw, weather_audio_path, intensity):
 
 def spatter_noise_a(audio, intensity):
     spatter_path = './dataset/external_audio/spatter.wav'
+    return weather_noise_a(audio, spatter_path, intensity)
+
+def snow_noise_a(audio, intensity):
+    spatter_path = './dataset/external_audio/snow.wav'
+    return weather_noise_a(audio, spatter_path, intensity)
+
+def frost_noise_a(audio, intensity):
+    spatter_path = './dataset/external_audio/frost.wav'
     return weather_noise_a(audio, spatter_path, intensity)
