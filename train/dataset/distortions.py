@@ -1,7 +1,7 @@
 import numpy as np
 import skimage as sk
 from scipy.ndimage import zoom as scizoom
-from .weather_distortions import spatter_noise_v, spatter_noise_a, snow_noise_a, frost_noise_a, frost_noise_v
+from .weather_distortions import spatter_noise_v, spatter_noise_a, snow_noise_a, frost_noise_a, frost_noise_v, snow_noise_v
 
 # visual corruptions
 
@@ -75,6 +75,7 @@ noise_function_map_v = {
     'impulse': impulse_noise_v,
     'speckle': speckle_noise,
     'spatter': spatter_noise_v,
+    'snow': snow_noise_v,
     'frost': frost_noise_v,
 }
 
