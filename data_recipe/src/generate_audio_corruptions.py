@@ -57,6 +57,8 @@ def impulse_noise(audio_file, output_path, intensity):
     audio, sr = sf.read(audio_file)
     c = [.03, .06, .09, 0.17, 0.27][intensity - 1]
     audio_with_noise = sk.util.random_noise(audio, mode='s&p', amount=c)
+    max_amplitude = max(np.max(np.abs(audio_with_noise)), 1.0)
+    audio_with_noise = audio_with_noise / max_amplitude
     sf.write(output_path, audio_with_noise, sr)
 
 
