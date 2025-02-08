@@ -1,5 +1,7 @@
 import os
+import cv2
 import os.path
+import random
 import numpy as np
 
 import torch
@@ -8,14 +10,44 @@ import torch.utils.data as data
 
 from PIL import Image
 
-os.environ['MAGICK_HOME'] = '/usr/local/opt/imagemagick@6'
+import skimage as sk
+from skimage.filters import gaussian
+from io import BytesIO
+from wand.image import Image as WandImage
+from wand.api import library as wandlibrary
+import ctypes
+from PIL import Image as PILImage
+import cv2
+from scipy.ndimage import zoom as scizoom
+# from scipy.ndimage.interpolation import map_coordinates
+from scipy.ndimage import map_coordinates
+import warnings
 
+warnings.simplefilter("ignore", UserWarning)
 
 
 IMG_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm']
 
 
-
+# /////////////// Some notes ///////////////
+# Digital noise:
+#   - Gaussian noise: random noise added to the image
+#   - Shot noise: random noise that looks like dots
+#   - Impulse noise: random noise that looks like salt and pepper
+#   - Speckle noise: random noise that looks like grains
+# Environmental:
+#   - Snow: random snowflakes
+#   - Frost: random frost
+#   - Spatter: random splatters
+#   - Wind: random wind sounds (audio) and motion blur (image)
+#   - Rain: random raindrops
+#   - Underwater - muffled audio and blue-green tint (image)
+# Human-related:
+#   - Concert: brightness (image) and concert sound (audio)
+#   - Smoke: random smoke + smoke alarm (audio)
+#   - Crowd: random crowd noise (audio) + occlusion (image)
+#   - Interference: random mic interference (audio) + random frame rotation (image)
+# /////////////// End Display Results ///////////////
 
 def is_image_file(filename):
     """Checks if a file is an image.
@@ -112,24 +144,6 @@ class DistortImageFolder(data.Dataset):
 
     def __len__(self):
         return len(self.imgs)
-
-
-# /////////////// Distortion Helpers ///////////////
-
-import skimage as sk
-from skimage.filters import gaussian
-from io import BytesIO
-from wand.image import Image as WandImage
-from wand.api import library as wandlibrary
-import ctypes
-from PIL import Image as PILImage
-import cv2
-from scipy.ndimage import zoom as scizoom
-# from scipy.ndimage.interpolation import map_coordinates
-from scipy.ndimage import map_coordinates
-import warnings
-
-warnings.simplefilter("ignore", UserWarning)
 
 
 def auc(errs):  # area under the alteration error curve
@@ -231,10 +245,39 @@ def clipped_zoom(img, zoom_factor):
     return img[trim_top:trim_top + h, trim_top:trim_top + h]
 
 
-# /////////////// End Distortion Helpers ///////////////
+def crowd(x, severity = 1):
+    """Simulate occlusions/shadow in an image."""
+    x = np.array(x) / 255.
+    h, w, _ = x.shape
+    c = [20, 40, 80, 100, 120][severity - 1]
+    x_bb, y_bb = random.randint(0, w - c), random.randint(0, h - c)
+    x_bb_end, y_bb_end = x_bb + c, y_bb + c
+    x[y_bb:y_bb_end, x_bb:x_bb_end] = 0.3
+    return np.clip(x, 0, 1) * 255
+
+# def crowd(x, severity = 1):
+#     """ Simulate shadow patterns on the image (random shadow patterns). """
+#     # x = np.array(x) / 255.
+#     h, w ,_ = np.array(x).shape
+#     mask = np.zeros_like(np.array(x), dtype=np.uint8)
+#     num_points = random.randint(3, 10)  # Random number of points for the shadow shape
+#     points = np.array([[[random.randint(0, w), random.randint(0, h)] for _ in range(num_points)]], dtype=np.int32)
+    
+#     c = {1: (200, 200, 200), 2: (150, 150, 150), 3: (100, 100, 100), 4: (50, 50, 50), 5: (0, 0, 0)}[severity]
+#     cv2.fillPoly(mask, points, c)
+#     shadow_img = cv2.addWeighted(np.array(x, dtype=np.float32), 1.0, mask.astype(np.float32), 0.5, 0)
+#     return np.clip(shadow_img, 0, 255).astype(np.uint8)
 
 
-# /////////////// Distortions ///////////////
+
+def interference(x, severity):
+    """
+    Random rotation of the image.
+    """
+    deg = random.randint(-severity*6-5, severity*6+5)
+    return x.rotate(deg)    
+
+
 
 def gaussian_noise(x, severity=1):
     c = [.08, .12, 0.18, 0.26, 0.38][severity - 1]
@@ -264,24 +307,30 @@ def speckle_noise(x, severity=1):
     return np.clip(x + x * np.random.normal(size=x.shape, scale=c), 0, 1) * 255
 
 
-# def fgsm(x, source_net, severity=1):
-#     c = [8, 16, 32, 64, 128][severity - 1]
-
-#     x = V(x, requires_grad=True)
-#     logits = source_net(x)
-#     source_net.zero_grad()
-#     loss = F.cross_entropy(logits, V(logits.data.max(1)[1].squeeze_()), size_average=False)
-#     loss.backward()
-
-#     return standardize(torch.clamp(unstandardize(x.data) + c / 255. * unstandardize(torch.sign(x.grad.data)), 0, 1))
-
-
 def gaussian_blur(x, severity=1):
     c = [1, 2, 3, 4, 6][severity - 1]
 
     x = gaussian(np.array(x) / 255., sigma=c, channel_axis=-1)
     return np.clip(x, 0, 1) * 255
 
+
+def underwater(x, severity = 1):
+    """Simulate underwater effect on the image - blue-green tint."""
+    x = np.array(x) / 255.
+    tint_values = {
+        1: np.array([1.0, 0.9, 0.8]),
+        2: np.array([1.0, 0.85, 0.7]),
+        3: np.array([1.0, 0.8, 0.6]),
+        4: np.array([0.9, 0.7, 0.5]),
+        5: np.array([0.8, 0.6, 0.4])
+    }
+    blue_tint = tint_values.get(severity, tint_values[3])
+    x = np.clip(x * blue_tint, 0, 1)
+
+    # light_scatter = {1: 3, 2: 5, 3: 9, 4: 13, 5: 17}
+    # light_scatter = light_scatter.get(severity, light_scatter[3])
+    # x = cv2.GaussianBlur(x, (light_scatter, light_scatter), light_scatter)
+    return np.clip(x, 0, 1) * 255  
 
 def glass_blur(x, severity=1):
     # sigma, max_delta, iterations
@@ -332,6 +381,7 @@ def defocus_blur(x, severity=1):
 #     else:  # greyscale to RGB
 #         return np.clip(np.array([x, x, x]).transpose((1, 2, 0)), 0, 255)
 def wind(x, severity=1):
+    '''Simulate wind effect on the image - motion blur.'''
     c = [(10, 3), (15, 5), (15, 8), (15, 12), (20, 15)][severity - 1]
 
     output = BytesIO()
@@ -376,6 +426,7 @@ def fog(x, severity=1):
     return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
 
 def smoke(x, severity=1):
+    '''Simulate smoke effect on the image - grayish appearance.'''
     import numpy as np
     from scipy.ndimage import gaussian_filter
 
@@ -409,7 +460,7 @@ def frost(x, severity=1):
          (0.65, 0.7),
          (0.6, 0.75)][severity - 1]
     idx = np.random.randint(5)
-    frost_dir = '../../data/VGGSound'
+    frost_dir = '/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound'
     filename = [f"{frost_dir}/frost{1}.png", f"{frost_dir}/frost{2}.png", f"{frost_dir}/frost{3}.png", f"{frost_dir}/frost{4}.jpg", f"{frost_dir}/frost{5}.jpg", f"{frost_dir}/frost{6}.jpg"][idx]
     frost = cv2.imread(filename)
     # randomly crop and convert to rgb
@@ -439,12 +490,98 @@ def snow(x, severity=1):
 
     snow_layer.motion_blur(radius=c[4], sigma=c[5], angle=np.random.uniform(-135, -45))
 
-    snow_layer = cv2.imdecode(np.frombuffer(snow_layer.make_blob(), np.uint8),
+    snow_layer = cv2.imdecode(np.fromstring(snow_layer.make_blob(), np.uint8),
                               cv2.IMREAD_UNCHANGED) / 255.
     snow_layer = snow_layer[..., np.newaxis]
 
     x = c[6] * x + (1 - c[6]) * np.maximum(x, cv2.cvtColor(x, cv2.COLOR_RGB2GRAY).reshape(224, 224, 1) * 1.5 + 0.5)
     return np.clip(x + snow_layer + np.rot90(snow_layer, k=2), 0, 1) * 255
+
+def clipped_zoom(img, zoom_factor):
+    """
+    Example placeholder for the clipped_zoom function,
+    which zooms in on the center of the image by zoom_factor.
+    You can replace this with your actual clipped_zoom implementation.
+    """
+    # naive example for demonstration:
+    # zoom in by resizing + cropping to the original shape
+    h, w, c = img.shape
+    # new size
+    zoom_h, zoom_w = int(h * zoom_factor), int(w * zoom_factor)
+    # resize
+    resized = cv2.resize(img, (zoom_w, zoom_h), interpolation=cv2.INTER_LINEAR)
+    # center-crop back
+    start_h = (zoom_h - h) // 2
+    start_w = (zoom_w - w) // 2
+    return resized[start_h:start_h+h, start_w:start_w+w]
+
+def rain(x, severity=1):
+    """
+    Similar to your snow() function but adds watery, bluish raindrops.
+    x: input image as a NumPy array (H, W, 3), e.g., (224, 224, 3). dtype=uint8
+    severity: integer 1-5 controlling how intense the effect is.
+    """
+
+    # Each tuple defines:
+    # (loc, scale, zoom_factor, threshold, motion_blur_radius, motion_blur_sigma, alpha_blend)
+    # Tweak these to your liking.
+    c = [
+        (0.05, 0.2, 3,   0.3,  10, 4,  0.8),
+        (0.05, 0.2, 3.5, 0.3,  10, 5,  0.7),
+        (0.1,  0.2, 4,   0.25, 12, 6,  0.7),
+        (0.1,  0.2, 4.5, 0.25, 15, 8,  0.65),
+        (0.1,  0.25,5,   0.2,  18,10, 0.6),
+    ][severity - 1]
+
+    # Convert x to float [0..1]
+    x = np.array(x, dtype=np.float32) / 255.0
+
+    # 1) Create random "raindrop" noise (monochrome)
+    rain_layer = np.random.normal(loc=c[0], scale=c[1], size=x.shape[:2])
+
+    # 2) Zoom in/out to cluster/spread droplets
+    rain_layer = clipped_zoom(rain_layer[..., np.newaxis], c[2])
+
+    # 3) Threshold out smaller values to form discrete drops
+    rain_layer[rain_layer < c[3]] = 0.0
+    rain_layer = np.clip(rain_layer, 0, 1)
+
+    # 4) Convert to a PIL image -> use Wand for motion blur
+    pil_rain = PILImage.fromarray((rain_layer.squeeze() * 255).astype(np.uint8), mode='L')
+    output = BytesIO()
+    pil_rain.save(output, format='PNG')
+    wand_rain = MotionImage(blob=output.getvalue())
+
+    # Random angle for slanted raindrops
+    angle = random.uniform(-120, -60)
+    wand_rain.motion_blur(radius=c[4], sigma=c[5], angle=angle)
+
+    # 5) Convert back to NumPy [0..1], single-channel
+    # Some versions of wand might raise a warning about fromstring
+    rain_np = cv2.imdecode(np.frombuffer(wand_rain.make_blob(), np.uint8), cv2.IMREAD_UNCHANGED)
+    if rain_np is None:
+        # fallback in case decode fails
+        rain_np = (rain_layer[...,0] * 255).astype(np.uint8)
+    else:
+        # might contain alpha or multiple channels
+        if len(rain_np.shape) == 3 and rain_np.shape[2] > 1:
+            rain_np = rain_np[..., 0]  # take first channel
+    rain_np = rain_np.astype(np.float32) / 255.0
+
+    # 6) Add blue tint: expand single channel to 3 channels with a mild (R, G, B) scale
+    rain_color = np.stack([rain_np * 0.5, rain_np * 0.9, rain_np * 1.2], axis=-1)
+    rain_color = np.clip(rain_color, 0, 1)
+
+    # 7) Blend with original
+    alpha = c[6]
+    gray_x = cv2.cvtColor(x, cv2.COLOR_RGB2GRAY).reshape(x.shape[0], x.shape[1], 1)
+    # Slight brightness correction on darker zones
+    x = alpha * x + (1 - alpha) * np.maximum(x, gray_x * 1.3 + 0.3)
+
+    # 8) Add the streaks in forward orientation and a 180° rotation
+    #    to add more scattered droplets
+    final = np.clip(x + rain_color + np.rot90(rain_color, k=2), 0, 1) * 255.0
+    return final.astype(np.uint8)
 
 
 def spatter(x, severity=1):
@@ -509,29 +646,29 @@ def contrast(x, severity=1):
     means = np.mean(x, axis=(0, 1), keepdims=True)
     return np.clip((x - means) * c + means, 0, 1) * 255
 
-def shadow(x, severity=1):
-    import numpy as np
-    from scipy.ndimage import gaussian_filter
+# def crowd(x, severity=1):
+#     import numpy as np
+#     from scipy.ndimage import gaussian_filter
 
-    # Shadow severity parameters
-    c = [0.7, 0.6, 0.5, 0.4, 0.3][severity - 1]  # Darkening factor for shadows
+#     # Shadow severity parameters
+#     c = [0.7, 0.6, 0.5, 0.4, 0.3][severity - 1]  # Darkening factor for shadows
 
-    x = np.array(x) / 255.0  # Normalize the image
+#     x = np.array(x) / 255.0  # Normalize the image
 
-    # Generate a shadow mask
-    shadow_mask = np.random.rand(224, 224)  # Random noise for shadow shape
-    shadow_mask = gaussian_filter(shadow_mask, sigma=severity * 2)  # Smooth the shadow
-    shadow_mask = (shadow_mask > 0.5).astype(float)  # Binary mask for shadow regions
+#     # Generate a shadow mask
+#     shadow_mask = np.random.rand(224, 224)  # Random noise for shadow shape
+#     shadow_mask = gaussian_filter(shadow_mask, sigma=severity * 2)  # Smooth the shadow
+#     shadow_mask = (shadow_mask > 0.5).astype(float)  # Binary mask for shadow regions
 
-    # Expand shadow mask to match RGB channels
-    shadow_mask = np.expand_dims(shadow_mask, axis=-1)  # Add channel dimension
-    shadow_mask = np.repeat(shadow_mask, 3, axis=-1)    # Repeat for all RGB channels
+#     # Expand shadow mask to match RGB channels
+#     shadow_mask = np.expand_dims(shadow_mask, axis=-1)  # Add channel dimension
+#     shadow_mask = np.repeat(shadow_mask, 3, axis=-1)    # Repeat for all RGB channels
 
-    # Apply shadow: darken the selected regions
-    x = x * (1 - shadow_mask * c)
+#     # Apply shadow: darken the selected regions
+#     x = x * (1 - shadow_mask * c)
 
-    # Clip values and return
-    return np.clip(x, 0, 1) * 255
+#     # Clip values and return
+#     return np.clip(x, 0, 1) * 255
 
 
 
@@ -546,6 +683,7 @@ def shadow(x, severity=1):
 #     return np.clip(x, 0, 1) * 255
 
 def concert(x, severity=1):
+    '''Simulate concert effect on the image - brightness.'''
     c = [.1, .2, .3, .4, .5][severity - 1]
 
     x = np.array(x) / 255.
@@ -557,6 +695,7 @@ def concert(x, severity=1):
 
 
 def saturate(x, severity=1):
+    '''Simulate saturation effect on the image.'''
     c = [(0.3, 0), (0.1, 0), (2, 0), (5, 0.1), (20, 0.2)][severity - 1]
 
     x = np.array(x) / 255.
@@ -619,10 +758,6 @@ def elastic_transform(image, severity=1):
     return np.clip(map_coordinates(image, indices, order=1, mode='reflect').reshape(shape), 0, 1) * 255
 
 
-# /////////////// End Distortions ///////////////
-
-
-# /////////////// Further Setup ///////////////
 
 
 def save_distorted_for_image(method, candi_image_names, severity, data_path, save_path):
@@ -642,18 +777,14 @@ def save_distorted_for_image(method, candi_image_names, severity, data_path, sav
         for _ in distorted_dataset_loader:
             continue
 
-# /////////////// End Further Setup ///////////////
-
-
-# /////////////// Display Results ///////////////
 import collections
 import argparse
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--corruption', type=str, default='all', choices=['all'], help='Type of corruption to apply')
-parser.add_argument('--severity', type=int, default=0, choices=[1, 2, 3, 4, 5, 0], help='Severity of corruption to apply, 0: all')
-parser.add_argument('--data_path', type=str, help='Path to test data')
-parser.add_argument('--save_path', type=str, help='Path to store corruption data')
+parser.add_argument('--severity', type=int, default=5, choices=[1, 2, 3, 4, 5], help='Severity of corruption to apply')
+parser.add_argument('--data_path', type=str, help='Path to test data', default = '/people/cs/s/skm200005/UTD/audio-visual-datasets/VGGSound/test/image_mulframe_test')
+parser.add_argument('--save_path', type=str, help='Path to store corruption data', default='/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound-C/image-C/')
 args = parser.parse_args()
 
 
@@ -672,7 +803,10 @@ if args.corruption == 'all':
     d['Wind'] = wind
     d['Concert'] = concert
     d['Smoke'] = smoke
-    # d['Forest'] = contrast    
+    d['Crowd'] = crowd
+    d['Interference'] = interference
+    d['Underwater'] = underwater
+    d['Rain'] = rain
 else:
     d[args.corruption] = eval(args.corruption.lower())
 
@@ -680,26 +814,6 @@ dir = os.path.join(args.data_path, 'frame_0')
 candi_image_names = os.listdir(dir)
 
 for method_name in d.keys():
-    if args.severity == 0:
-        for severity in range(1, 6):
-            save_distorted_for_image(d[method_name], candi_image_names, severity, args.data_path, args.save_path)
-    else:
-        save_distorted_for_image(d[method_name], candi_image_names, args.severity, args.data_path, args.save_path)
+    save_distorted_for_image(d[method_name], candi_image_names, args.severity, args.data_path, args.save_path)
 
 
-
-# /////////////// Some notes ///////////////
-# Digital noise:
-#   - Gaussian noise: random noise added to the image
-#   - Shot noise: random noise that looks like dots
-#   - Impulse noise: random noise that looks like salt and pepper
-#   - Speckle noise: random noise that looks like grains
-# Weather:
-#   - Snow: random snowflakes
-#   - Frost: random frost
-#   - Spatter: random splatters
-#   - Wind: random wind sounds (audio) and motion blur (image)
-# Crowd-related (concert/events):
-#  - Concert: brightness (image) and concert sound (audio)
-#  - Smoke: random smoke + smoke alarm (audio)
-# /////////////// End Display Results ///////////////
