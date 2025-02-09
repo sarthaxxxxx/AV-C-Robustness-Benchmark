@@ -28,3 +28,4 @@ venv.bak/
 **/*.pth
 **/*.jpg
 **/*.png
+**/*.json

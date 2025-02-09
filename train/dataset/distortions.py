@@ -66,7 +66,8 @@ def speckle_noise_a(audio, intensity):
     noise = np.random.normal(0, noise_std, len(audio))
     audio_with_noise = audio + audio * noise
     max_amplitude = max(np.max(np.abs(audio_with_noise)), 1.0)  # Avoid divide-by-zero
-    audio_with_noise = audio_with_noise / max_amplitude
+    if max_amplitude > 0:  # Avoid divide-by-zero
+        audio_with_noise = audio_with_noise / max_amplitude
     return audio_with_noise
 
 noise_function_map_v = {
