@@ -71,19 +71,30 @@ def make_dataset(dir, candi_images):
     images = []
     dir = os.path.expanduser(dir)
     # for name in sorted(os.listdir(dir)):
-    for name in sorted(candi_images):
-        path = os.path.join(dir, name)
-        item = (path, name)
-        images.append(item)
+    for root, _, files in os.walk(dir):
+        print("files: ", files)
+        for name in sorted(files):
+            if name in candi_images:
+                path = os.path.join(dir, name)
+                item = (path, name)
+                images.append(item)
+    print("images: ", len(images))
 
     return images
 
 
 def pil_loader(path):
     # open path as file to avoid ResourceWarning (https://github.com/python-pillow/Pillow/issues/835)
-    with open(path, 'rb') as f:
-        img = Image.open(f)
-        return img.convert('RGB')
+    # with open(path, 'rb') as f:
+    #     img = Image.open(f)
+    #     return img.convert('RGB')
+    try:
+        with open(path, 'rb') as f:
+            img = Image.open(f)
+            return img.convert('RGB')
+    except FileNotFoundError:
+        print(f"Warning: File not found: {path}")
+        return None    
 
 
 def accimage_loader(path):
@@ -104,46 +115,79 @@ def default_loader(path):
 
 
 class DistortImageFolder(data.Dataset):
-    def __init__(self, root, save_path, candi_images, method, severity, frame, transform=None, target_transform=None,
-                 loader=default_loader):
-        imgs = make_dataset(root, candi_images)
-        if len(imgs) == 0:
-            raise (RuntimeError("Found 0 images in subfolders of: " + root + "\n"
-                    "Supported image extensions are: " + ",".join(IMG_EXTENSIONS)))
+    def __init__(self, root, save_path, candi_images, method, severity, transform=None, loader=default_loader):
+        # imgs = make_dataset(root, candi_images)
+        # print("init: ", imgs)
+        # if len(imgs) == 0:
+        #     raise (RuntimeError("Found 0 images in subfolders of: " + root + "\n"
+        #             "Supported image extensions are: " + ",".join(IMG_EXTENSIONS)))
 
+        # self.root = root
+        # self.method = method
+        # self.severity = severity
+        # self.imgs = imgs
+        # self.transform = transform
+        # self.loader = loader
+        # self.candi_images = candi_images
+        # self.save_path = save_path
         self.root = root
+        self.save_path = save_path
+        self.candi_images = candi_images
         self.method = method
         self.severity = severity
-        self.imgs = imgs
         self.transform = transform
-        self.target_transform = target_transform
-        self.loader = loader
-        self.frame = frame
-        self.candi_images = candi_images
-        self.save_path = save_path
 
     def __getitem__(self, index):
-        path, name = self.imgs[index]
-        img = self.loader(path)
+        # Get the frame file name
+        frame_name = self.candi_images[index]
+        frame_path = os.path.join(self.root, frame_name)  # Construct the full path
+
+        # Load the image
+        img = pil_loader(frame_path)
+        if img is None:
+            return None  # Skip if the file is not found
+
+        # Apply the distortion method
+        distorted_img = self.method(img, self.severity)
+
+        if isinstance(distorted_img, np.ndarray):
+            distorted_img = PILImage.fromarray(np.uint8(distorted_img))
+
+        # Apply transformations (if any)
         if self.transform is not None:
-            img = self.transform(img)
-            img = self.method(img, self.severity)
+            distorted_img = self.transform(distorted_img)
 
-        save_path = os.path.join(self.save_path, '{}'.format(self.method.__name__), 'severity_{}'.format(self.severity), 'frame_{}'.format(self.frame))
-        if not os.path.exists(save_path):
-            try:
-                os.makedirs(save_path)
-            except:
-                print(save_path)
+        # Save the distorted image
+        save_dir = os.path.join(self.save_path, '')
+        os.makedirs(save_dir, exist_ok=True)
+        save_path = os.path.join(save_dir, frame_name)
+        os.makedirs(save_path.split('frame_')[0], exist_ok=True)
+        print("save_path: ", save_path, "index: ", index, "len: ", len(self.candi_images))
+        distorted_img.save(save_path, quality=85, optimize=True)
 
-        save_image = os.path.join(save_path, '{}.jpg'.format(name.replace('.jpg', '')))
+        return 0  # Return a dummy value (since we're not training)
+    
+        # path, name = self.imgs[index]
+        # img = self.loader(path)
+        # if self.transform is not None:
+        #     img = self.transform(img)
+        #     img = self.method(img, self.severity)
 
-        Image.fromarray(np.uint8(img)).save(save_image, quality=85, optimize=True)
+        # save_path = os.path.join(self.save_path, '{}'.format(self.method.__name__), 'severity_{}'.format(self.severity), 'frame_{}'.format(self.frame))
+        # if not os.path.exists(save_path):
+        #     try:
+        #         os.makedirs(save_path)
+        #     except:
+        #         print(save_path)
 
-        return 0  # we do not care about returning the data
+        # save_image = os.path.join(save_path, '{}.jpg'.format(name.replace('.jpg', '')))
+
+        # Image.fromarray(np.uint8(img)).save(save_image, quality=85, optimize=True)
+
+        # return 0  # we do not care about returning the data
 
     def __len__(self):
-        return len(self.imgs)
+        return len(self.candi_images)
 
 
 def auc(errs):  # area under the alteration error curve
@@ -761,30 +805,39 @@ def elastic_transform(image, severity=1):
 
 
 def save_distorted_for_image(method, candi_image_names, severity, data_path, save_path):
-    # for severity in range(1, 6):
-    print(method.__name__, severity)
-    for frame in range(10):
-        distorted_dataset = DistortImageFolder(
-            root=os.path.join(data_path, 'frame_{}').format(frame),
-            save_path=save_path,
-            candi_images=candi_image_names,
-            method=method, 
-            severity=severity,
-            transform=trn.Compose([trn.Resize(256), trn.CenterCrop(224)]),
-            frame=frame)
-        distorted_dataset_loader = torch.utils.data.DataLoader(
-            distorted_dataset, batch_size=128, shuffle=False, num_workers=4)
-        for _ in distorted_dataset_loader:
-            continue
+    print(f"Applying {method.__name__} with severity {severity}")
+
+    # Create the distorted dataset
+    distorted_dataset = DistortImageFolder(
+        root=data_path,  # Use the base data path directly
+        save_path=save_path,
+        candi_images=candi_image_names,  # List of frame file names (e.g., "frame_0000076312.jpg")
+        method=method,
+        severity=severity,
+        transform=trn.Compose([trn.Resize(256), trn.CenterCrop(224)])
+    )
+    print("distorted_dataset: ", distorted_dataset)
+
+    # Create the DataLoader
+    distorted_dataset_loader = torch.utils.data.DataLoader(
+        distorted_dataset, batch_size=128, shuffle=False, num_workers=4
+    )
+
+    print("distorted_dataset_loader: ", distorted_dataset_loader)
+
+    # Process the frames
+    for i, _ in enumerate(distorted_dataset_loader):
+        print(i)
+        continue
 
 import collections
 import argparse
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--corruption', type=str, default='all', choices=['all'], help='Type of corruption to apply')
-parser.add_argument('--severity', type=int, default=5, choices=[1, 2, 3, 4, 5], help='Severity of corruption to apply')
-parser.add_argument('--data_path', type=str, help='Path to test data', default = '/people/cs/s/skm200005/UTD/audio-visual-datasets/VGGSound/test/image_mulframe_test')
-parser.add_argument('--save_path', type=str, help='Path to store corruption data', default='/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound-C/image-C/')
+parser.add_argument('--corruption', type=str, default='gaussian_noise', choices=['gaussian_noise'], help='Type of corruption to apply')
+parser.add_argument('--severity', type=int, default=1, choices=[1, 2, 3, 4, 5, 0], help='Severity of corruption to apply, 0: all')
+parser.add_argument('--data_path', type=str, help='Path to test data')
+parser.add_argument('--save_path', type=str, help='Path to store corruption data')
 args = parser.parse_args()
 
 
@@ -810,8 +863,20 @@ if args.corruption == 'all':
 else:
     d[args.corruption] = eval(args.corruption.lower())
 
-dir = os.path.join(args.data_path, 'frame_0')
-candi_image_names = os.listdir(dir)
+# dir = os.path.join(args.data_path, '')
+# candi_image_names = os.listdir(dir)
+def get_image_files(base_dir):
+    image_files = []
+    for root, _, files in os.walk(base_dir):
+        for file in files:
+            if file.lower().endswith('.jpg'):  # Only include .jpg files
+                image_files.append(os.path.relpath(os.path.join(root, file), base_dir))
+    return image_files
+
+# Example usage
+base_dir = "/home/jovyan/EPIC-KITCHENS"
+candi_image_names = get_image_files(base_dir)
+print(f"Found {len(candi_image_names)} image files.")
 
 for method_name in d.keys():
     save_distorted_for_image(d[method_name], candi_image_names, args.severity, args.data_path, args.save_path)

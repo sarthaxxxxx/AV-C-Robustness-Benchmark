@@ -157,7 +157,6 @@ def make_dataset(dir, candi_audios):
         path = os.path.join(dir, name)
         # item = (path, name)
         audios.append(path)
-
     return audios
 
 class DistortAudioFolder(data.Dataset):
@@ -209,10 +208,10 @@ ROOTDIR = '/people/cs/s/skm200005/UTD/AV-Robustness/'
 
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--corruption', type=str, default='all', help='Type of corruption to apply')
-parser.add_argument('--severity', type=int, default=5, choices=[1, 2, 3, 4, 5], help='Severity of corruption to apply')
-parser.add_argument('--data_path', type=str, help='Path to test data', default = '/people/cs/s/skm200005/UTD/audio-visual-datasets/VGGSound/test/audio_test')
-parser.add_argument('--save_path', type=str, help='Path to store corruption data', default = f"{ROOTDIR}/data/VGGSound-C/audio-C")
+parser.add_argument('--corruption', type=str, default='wind', choices=['all', 'gaussian_noise', 'impulse_noise', 'shot_noise', 'speckle_noise', 'snow', 'frost' , 'spatter', 'wind', 'concert', 'smoke'], help='Type of corruption to apply')
+parser.add_argument('--severity', type=int, default=5, choices=[0, 1, 2, 3, 4, 5], help='Severity of corruption to apply')
+parser.add_argument('--data_path', type=str, help='Path to test data')
+parser.add_argument('--save_path', type=str, help='Path to store corruption data')
 parser.add_argument('--noise_path', type=str, default=f'{ROOTDIR}/data/VGGSound/NoisyAudios', help='Path to store corruption data')
 args = parser.parse_args()
 
