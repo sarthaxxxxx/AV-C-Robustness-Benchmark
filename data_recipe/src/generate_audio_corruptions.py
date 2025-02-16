@@ -155,23 +155,30 @@ def spatter_noise(audio_file, output_path, intensity):
 
 ###########################################################################################
 
-def underwater(audio_file, output_path, intensity):
-    audio, sr = sf.read(audio_file)
+##################################### Human ######################################################
+def underwater_noise(audio_file, output_path, intensity):    
+    spatter_dir = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/underwater'
+    add_env_noise(audio_file, output_path, intensity, noise_dir=spatter_dir)
 
-    # Define severity levels for low-pass filtering and muffling
-    cutoff_values = {1: 3000, 2: 2000, 3: 1500, 4: 1000, 5: 500}
-    muffle_factors = {1: 0.85, 2: 0.75, 3: 0.65, 4: 0.55, 5: 0.45}
+###########################################################################################
 
-    nyquist_rate = sr / 2
+# def underwater(audio_file, output_path, intensity):
+#     audio, sr = sf.read(audio_file)
 
-    cutoff = cutoff_values[intensity]
-    muffle = muffle_factors[intensity]
+#     # Define severity levels for low-pass filtering and muffling
+#     cutoff_values = {1: 3000, 2: 2000, 3: 1500, 4: 1000, 5: 500}
+#     muffle_factors = {1: 0.85, 2: 0.75, 3: 0.65, 4: 0.55, 5: 0.45}
 
-    # Apply low-pass filter
-    b, a = butter(5, cutoff / nyquist_rate, btype='low')
-    audio_low_pass = filtfilt(b, a, audio) * muffle
+#     nyquist_rate = sr / 2
 
-    sf.write(output_path, audio_low_pass, sr)
+#     cutoff = cutoff_values[intensity]
+#     muffle = muffle_factors[intensity]
+
+#     # Apply low-pass filter
+#     b, a = butter(5, cutoff / nyquist_rate, btype='low')
+#     audio_low_pass = filtfilt(b, a, audio) * muffle
+
+#     sf.write(output_path, audio_low_pass, sr)
 
 def add_external_noise(audio_path, weather_path, output_path, intensity):
     

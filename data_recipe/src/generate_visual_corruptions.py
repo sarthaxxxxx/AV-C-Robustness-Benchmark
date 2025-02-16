@@ -342,137 +342,6 @@ def wind(x, severity=1):
     else:  # greyscale to RGB
         return np.clip(np.array([x, x, x]).transpose((1, 2, 0)), 0, 255)
 
-
-##############################################################################################
-
-def gaussian_blur(x, severity=1):
-    c = [1, 2, 3, 4, 6][severity - 1]
-
-    x = gaussian(np.array(x) / 255., sigma=c, channel_axis=-1)
-    return np.clip(x, 0, 1) * 255
-
-
-def underwater(x, severity = 1):
-    """Simulate underwater effect on the image - blue-green tint."""
-    x = np.array(x) / 255.
-    tint_values = {
-        1: np.array([1.0, 0.9, 0.8]),
-        2: np.array([1.0, 0.85, 0.7]),
-        3: np.array([1.0, 0.8, 0.6]),
-        4: np.array([0.9, 0.7, 0.5]),
-        5: np.array([0.8, 0.6, 0.4])
-    }
-    blue_tint = tint_values.get(severity, tint_values[3])
-    x = np.clip(x * blue_tint, 0, 1)
-
-    # light_scatter = {1: 3, 2: 5, 3: 9, 4: 13, 5: 17}
-    # light_scatter = light_scatter.get(severity, light_scatter[3])
-    # x = cv2.GaussianBlur(x, (light_scatter, light_scatter), light_scatter)
-    return np.clip(x, 0, 1) * 255  
-
-def glass_blur(x, severity=1):
-    # sigma, max_delta, iterations
-    c = [(0.7, 1, 2), (0.9, 2, 1), (1, 2, 3), (1.1, 3, 2), (1.5, 4, 2)][severity - 1]
-
-    x = np.uint8(gaussian(np.array(x) / 255., sigma=c[0], channel_axis=-1) * 255)
-
-    # locally shuffle pixels
-    for i in range(c[2]):
-        for h in range(224 - c[1], c[1], -1):
-            for w in range(224 - c[1], c[1], -1):
-                dx, dy = np.random.randint(-c[1], c[1], size=(2,))
-                h_prime, w_prime = h + dy, w + dx
-                # swap
-                x[h, w], x[h_prime, w_prime] = x[h_prime, w_prime], x[h, w]
-
-    return np.clip(gaussian(x / 255., sigma=c[0], channel_axis=-1), 0, 1) * 255
-
-
-def defocus_blur(x, severity=1):
-    c = [(3, 0.1), (4, 0.5), (6, 0.5), (8, 0.5), (10, 0.5)][severity - 1]
-
-    x = np.array(x) / 255.
-    kernel = disk(radius=c[0], alias_blur=c[1])
-
-    channels = []
-    for d in range(3):
-        channels.append(cv2.filter2D(x[:, :, d], -1, kernel))
-    channels = np.array(channels).transpose((1, 2, 0))  # 3x224x224 -> 224x224x3
-
-    return np.clip(channels, 0, 1) * 255
-
-# def wind(x, severity=1):
-#     '''Simulate wind effect on the image - motion blur.'''
-#     c = [(10, 3), (15, 5), (15, 8), (15, 12), (20, 15)][severity - 1]
-
-#     output = BytesIO()
-#     x.save(output, format='PNG')
-#     x = MotionImage(blob=output.getvalue())
-
-#     x.motion_blur(radius=c[0], sigma=c[1], angle=np.random.uniform(-45, 45))
-
-#     x = cv2.imdecode(np.frombuffer(x.make_blob(), np.uint8),
-#                         cv2.IMREAD_UNCHANGED)
-#     # x = cv2.imdecode(np.fromstring(x.make_blob(), np.uint8),
-#     #                  cv2.IMREAD_UNCHANGED)
-
-#     if x.shape != (224, 224):
-#         return np.clip(x[..., [2, 1, 0]], 0, 255)  # BGR to RGB
-#     else:  # greyscale to RGB
-#         return np.clip(np.array([x, x, x]).transpose((1, 2, 0)), 0, 255)
-
-
-def zoom_blur(x, severity=1):
-    c = [np.arange(1, 1.11, 0.01),
-         np.arange(1, 1.16, 0.01),
-         np.arange(1, 1.21, 0.02),
-         np.arange(1, 1.26, 0.02),
-         np.arange(1, 1.31, 0.03)][severity - 1]
-
-    x = (np.array(x) / 255.).astype(np.float32)
-    out = np.zeros_like(x)
-    for zoom_factor in c:
-        out += clipped_zoom(x, zoom_factor)
-
-    x = (x + out) / (len(c) + 1)
-    return np.clip(x, 0, 1) * 255
-
-
-def fog(x, severity=1):
-    c = [(1.5, 2), (2, 2), (2.5, 1.7), (2.5, 1.5), (3, 1.4)][severity - 1]
-
-    x = np.array(x) / 255.
-    max_val = x.max()
-    x += c[0] * plasma_fractal(wibbledecay=c[1])[:224, :224][..., np.newaxis]
-    return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
-
-def smoke(x, severity=1):
-    '''Simulate smoke effect on the image - grayish appearance.'''
-    import numpy as np
-    from scipy.ndimage import gaussian_filter
-
-    # Smoke parameters based on severity
-    c = [(1.5, 2), (2, 2), (2.5, 1.7), (2.5, 1.5), (3, 1.4)][severity - 1]
-
-    # Normalize the image
-    x = np.array(x) / 255.0
-    max_val = x.max()
-
-    # Generate smoke-like noise (Gaussian blobs)
-    noise = np.random.rand(224, 224)
-    smoke_pattern = gaussian_filter(noise, sigma=c[1])
-
-    # Add color tint for smoke (grayish appearance)
-    smoke_pattern = np.expand_dims(smoke_pattern, axis=-1)  # Add channel dimension
-    smoke_pattern = np.repeat(smoke_pattern, 3, axis=-1)    # Match RGB channels
-
-    # Blend smoke with the image
-    x += c[0] * smoke_pattern
-
-    # Normalize and clip
-    return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
-
-
 def frost(x, severity=1):
     c = [(1, 0.4),
          (0.8, 0.6),
@@ -488,27 +357,6 @@ def frost(x, severity=1):
     frost = frost[x_start:x_start + 224, y_start:y_start + 224][..., [2, 1, 0]]
 
     return np.clip(c[0] * np.array(x) + c[1] * frost, 0, 255)
-
-
-
-
-def clipped_zoom(img, zoom_factor):
-    """
-    Example placeholder for the clipped_zoom function,
-    which zooms in on the center of the image by zoom_factor.
-    You can replace this with your actual clipped_zoom implementation.
-    """
-    # naive example for demonstration:
-    # zoom in by resizing + cropping to the original shape
-    h, w, c = img.shape
-    # new size
-    zoom_h, zoom_w = int(h * zoom_factor), int(w * zoom_factor)
-    # resize
-    resized = cv2.resize(img, (zoom_w, zoom_h), interpolation=cv2.INTER_LINEAR)
-    # center-crop back
-    start_h = (zoom_h - h) // 2
-    start_w = (zoom_w - w) // 2
-    return resized[start_h:start_h+h, start_w:start_w+w]
 
 def rain(x, severity=1):
     """
@@ -632,6 +480,326 @@ def spatter(x, severity=1):
         x *= (1 - m[..., np.newaxis])
 
         return np.clip(x + color, 0, 1) * 255
+
+def underwater(x, severity = 1):
+    # CHECK: Please plot and check if the image values are scaled for your use
+    img = cv2.cvtColor(x, cv2.COLOR_BGR2RGB)
+
+    # Define intensity-based parameters
+    blur_levels = {1: 3, 2: 5, 3: 7, 4: 10, 5: 15}  # Blur kernel size
+    red_reduction = {1: 0.9, 2: 0.7, 3: 0.5, 4: 0.3, 5: 0.1}  # % of red channel kept
+    contrast_factors = {1: 0.9, 2: 0.8, 3: 0.7, 4: 0.6, 5: 0.5}  # Contrast reduction
+    haze_factors = {1: 20, 2: 40, 3: 60, 4: 80, 5: 100}  # White overlay intensity
+
+    blur_k = blur_levels[severity]
+    red_factor = red_reduction[severity]
+    contrast = contrast_factors[severity]
+    haze_intensity = haze_factors[severity]
+
+    # Reduce red channel to simulate underwater color shift
+    img_underwater = img.astype(np.float32)
+    img_underwater[:, :, 0] *= red_factor  # Reduce red
+    img_underwater = np.clip(img_underwater, 0, 255).astype(np.uint8)
+    img_blurred = cv2.GaussianBlur(img_underwater, (blur_k, blur_k), 0)
+    img_low_contrast = cv2.convertScaleAbs(img_blurred, alpha=contrast, beta=0)
+    haze = np.full_like(img_low_contrast, (haze_intensity, haze_intensity, haze_intensity), dtype=np.uint8)
+    img_hazy = cv2.addWeighted(img_low_contrast, 0.85, haze, 0.15, 0)
+
+    return  img_hazy
+
+
+##############################################################################################
+
+########################################## Human-related ######################################
+
+
+##############################################################################################
+
+def gaussian_blur(x, severity=1):
+    c = [1, 2, 3, 4, 6][severity - 1]
+
+    x = gaussian(np.array(x) / 255., sigma=c, channel_axis=-1)
+    return np.clip(x, 0, 1) * 255
+
+
+# def underwater(x, severity = 1):
+#     """Simulate underwater effect on the image - blue-green tint."""
+#     x = np.array(x) / 255.
+#     tint_values = {
+#         1: np.array([1.0, 0.9, 0.8]),
+#         2: np.array([1.0, 0.85, 0.7]),
+#         3: np.array([1.0, 0.8, 0.6]),
+#         4: np.array([0.9, 0.7, 0.5]),
+#         5: np.array([0.8, 0.6, 0.4])
+#     }
+#     blue_tint = tint_values.get(severity, tint_values[3])
+#     x = np.clip(x * blue_tint, 0, 1)
+
+#     # light_scatter = {1: 3, 2: 5, 3: 9, 4: 13, 5: 17}
+#     # light_scatter = light_scatter.get(severity, light_scatter[3])
+#     # x = cv2.GaussianBlur(x, (light_scatter, light_scatter), light_scatter)
+#     return np.clip(x, 0, 1) * 255  
+
+def glass_blur(x, severity=1):
+    # sigma, max_delta, iterations
+    c = [(0.7, 1, 2), (0.9, 2, 1), (1, 2, 3), (1.1, 3, 2), (1.5, 4, 2)][severity - 1]
+
+    x = np.uint8(gaussian(np.array(x) / 255., sigma=c[0], channel_axis=-1) * 255)
+
+    # locally shuffle pixels
+    for i in range(c[2]):
+        for h in range(224 - c[1], c[1], -1):
+            for w in range(224 - c[1], c[1], -1):
+                dx, dy = np.random.randint(-c[1], c[1], size=(2,))
+                h_prime, w_prime = h + dy, w + dx
+                # swap
+                x[h, w], x[h_prime, w_prime] = x[h_prime, w_prime], x[h, w]
+
+    return np.clip(gaussian(x / 255., sigma=c[0], channel_axis=-1), 0, 1) * 255
+
+
+def defocus_blur(x, severity=1):
+    c = [(3, 0.1), (4, 0.5), (6, 0.5), (8, 0.5), (10, 0.5)][severity - 1]
+
+    x = np.array(x) / 255.
+    kernel = disk(radius=c[0], alias_blur=c[1])
+
+    channels = []
+    for d in range(3):
+        channels.append(cv2.filter2D(x[:, :, d], -1, kernel))
+    channels = np.array(channels).transpose((1, 2, 0))  # 3x224x224 -> 224x224x3
+
+    return np.clip(channels, 0, 1) * 255
+
+# def wind(x, severity=1):
+#     '''Simulate wind effect on the image - motion blur.'''
+#     c = [(10, 3), (15, 5), (15, 8), (15, 12), (20, 15)][severity - 1]
+
+#     output = BytesIO()
+#     x.save(output, format='PNG')
+#     x = MotionImage(blob=output.getvalue())
+
+#     x.motion_blur(radius=c[0], sigma=c[1], angle=np.random.uniform(-45, 45))
+
+#     x = cv2.imdecode(np.frombuffer(x.make_blob(), np.uint8),
+#                         cv2.IMREAD_UNCHANGED)
+#     # x = cv2.imdecode(np.fromstring(x.make_blob(), np.uint8),
+#     #                  cv2.IMREAD_UNCHANGED)
+
+#     if x.shape != (224, 224):
+#         return np.clip(x[..., [2, 1, 0]], 0, 255)  # BGR to RGB
+#     else:  # greyscale to RGB
+#         return np.clip(np.array([x, x, x]).transpose((1, 2, 0)), 0, 255)
+
+
+def zoom_blur(x, severity=1):
+    c = [np.arange(1, 1.11, 0.01),
+         np.arange(1, 1.16, 0.01),
+         np.arange(1, 1.21, 0.02),
+         np.arange(1, 1.26, 0.02),
+         np.arange(1, 1.31, 0.03)][severity - 1]
+
+    x = (np.array(x) / 255.).astype(np.float32)
+    out = np.zeros_like(x)
+    for zoom_factor in c:
+        out += clipped_zoom(x, zoom_factor)
+
+    x = (x + out) / (len(c) + 1)
+    return np.clip(x, 0, 1) * 255
+
+
+def fog(x, severity=1):
+    c = [(1.5, 2), (2, 2), (2.5, 1.7), (2.5, 1.5), (3, 1.4)][severity - 1]
+
+    x = np.array(x) / 255.
+    max_val = x.max()
+    x += c[0] * plasma_fractal(wibbledecay=c[1])[:224, :224][..., np.newaxis]
+    return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
+
+def smoke(x, severity=1):
+    '''Simulate smoke effect on the image - grayish appearance.'''
+    import numpy as np
+    from scipy.ndimage import gaussian_filter
+
+    # Smoke parameters based on severity
+    c = [(1.5, 2), (2, 2), (2.5, 1.7), (2.5, 1.5), (3, 1.4)][severity - 1]
+
+    # Normalize the image
+    x = np.array(x) / 255.0
+    max_val = x.max()
+
+    # Generate smoke-like noise (Gaussian blobs)
+    noise = np.random.rand(224, 224)
+    smoke_pattern = gaussian_filter(noise, sigma=c[1])
+
+    # Add color tint for smoke (grayish appearance)
+    smoke_pattern = np.expand_dims(smoke_pattern, axis=-1)  # Add channel dimension
+    smoke_pattern = np.repeat(smoke_pattern, 3, axis=-1)    # Match RGB channels
+
+    # Blend smoke with the image
+    x += c[0] * smoke_pattern
+
+    # Normalize and clip
+    return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
+
+
+# def frost(x, severity=1):
+#     c = [(1, 0.4),
+#          (0.8, 0.6),
+#          (0.7, 0.7),
+#          (0.65, 0.7),
+#          (0.6, 0.75)][severity - 1]
+#     idx = np.random.randint(5)
+#     frost_dir = '/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound'
+#     filename = [f"{frost_dir}/frost{1}.png", f"{frost_dir}/frost{2}.png", f"{frost_dir}/frost{3}.png", f"{frost_dir}/frost{4}.jpg", f"{frost_dir}/frost{5}.jpg", f"{frost_dir}/frost{6}.jpg"][idx]
+#     frost = cv2.imread(filename)
+#     # randomly crop and convert to rgb
+#     x_start, y_start = np.random.randint(0, frost.shape[0] - 224), np.random.randint(0, frost.shape[1] - 224)
+#     frost = frost[x_start:x_start + 224, y_start:y_start + 224][..., [2, 1, 0]]
+
+#     return np.clip(c[0] * np.array(x) + c[1] * frost, 0, 255)
+
+
+def clipped_zoom(img, zoom_factor):
+    """
+    Example placeholder for the clipped_zoom function,
+    which zooms in on the center of the image by zoom_factor.
+    You can replace this with your actual clipped_zoom implementation.
+    """
+    # naive example for demonstration:
+    # zoom in by resizing + cropping to the original shape
+    h, w, c = img.shape
+    # new size
+    zoom_h, zoom_w = int(h * zoom_factor), int(w * zoom_factor)
+    # resize
+    resized = cv2.resize(img, (zoom_w, zoom_h), interpolation=cv2.INTER_LINEAR)
+    # center-crop back
+    start_h = (zoom_h - h) // 2
+    start_w = (zoom_w - w) // 2
+    return resized[start_h:start_h+h, start_w:start_w+w]
+
+# def rain(x, severity=1):
+#     """
+#     Similar to your snow() function but adds watery, bluish raindrops.
+#     x: input image as a NumPy array (H, W, 3), e.g., (224, 224, 3). dtype=uint8
+#     severity: integer 1-5 controlling how intense the effect is.
+#     """
+
+#     # Each tuple defines:
+#     # (loc, scale, zoom_factor, threshold, motion_blur_radius, motion_blur_sigma, alpha_blend)
+#     # Tweak these to your liking.
+#     c = [
+#         (0.05, 0.2, 3,   0.3,  10, 4,  0.8),
+#         (0.05, 0.2, 3.5, 0.3,  10, 5,  0.7),
+#         (0.1,  0.2, 4,   0.25, 12, 6,  0.7),
+#         (0.1,  0.2, 4.5, 0.25, 15, 8,  0.65),
+#         (0.1,  0.25,5,   0.2,  18,10, 0.6),
+#     ][severity - 1]
+
+#     # Convert x to float [0..1]
+#     x = np.array(x, dtype=np.float32) / 255.0
+
+#     # 1) Create random "raindrop" noise (monochrome)
+#     rain_layer = np.random.normal(loc=c[0], scale=c[1], size=x.shape[:2])
+
+#     # 2) Zoom in/out to cluster/spread droplets
+#     rain_layer = clipped_zoom(rain_layer[..., np.newaxis], c[2])
+
+#     # 3) Threshold out smaller values to form discrete drops
+#     rain_layer[rain_layer < c[3]] = 0.0
+#     rain_layer = np.clip(rain_layer, 0, 1)
+
+#     # 4) Convert to a PIL image -> use Wand for motion blur
+#     pil_rain = PILImage.fromarray((rain_layer.squeeze() * 255).astype(np.uint8), mode='L')
+#     output = BytesIO()
+#     pil_rain.save(output, format='PNG')
+#     wand_rain = MotionImage(blob=output.getvalue())
+
+#     # Random angle for slanted raindrops
+#     angle = random.uniform(-120, -60)
+#     wand_rain.motion_blur(radius=c[4], sigma=c[5], angle=angle)
+
+#     # 5) Convert back to NumPy [0..1], single-channel
+#     # Some versions of wand might raise a warning about fromstring
+#     rain_np = cv2.imdecode(np.frombuffer(wand_rain.make_blob(), np.uint8), cv2.IMREAD_UNCHANGED)
+#     if rain_np is None:
+#         # fallback in case decode fails
+#         rain_np = (rain_layer[...,0] * 255).astype(np.uint8)
+#     else:
+#         # might contain alpha or multiple channels
+#         if len(rain_np.shape) == 3 and rain_np.shape[2] > 1:
+#             rain_np = rain_np[..., 0]  # take first channel
+#     rain_np = rain_np.astype(np.float32) / 255.0
+
+#     # 6) Add blue tint: expand single channel to 3 channels with a mild (R, G, B) scale
+#     rain_color = np.stack([rain_np * 0.5, rain_np * 0.9, rain_np * 1.2], axis=-1)
+#     rain_color = np.clip(rain_color, 0, 1)
+
+#     # 7) Blend with original
+#     alpha = c[6]
+#     gray_x = cv2.cvtColor(x, cv2.COLOR_RGB2GRAY).reshape(x.shape[0], x.shape[1], 1)
+#     # Slight brightness correction on darker zones
+#     x = alpha * x + (1 - alpha) * np.maximum(x, gray_x * 1.3 + 0.3)
+
+#     # 8) Add the streaks in forward orientation and a 180° rotation
+#     #    to add more scattered droplets
+#     final = np.clip(x + rain_color + np.rot90(rain_color, k=2), 0, 1) * 255.0
+#     return final.astype(np.uint8)
+
+
+# def spatter(x, severity=1):
+#     c = [(0.65, 0.3, 4, 0.69, 0.6, 0),
+#          (0.65, 0.3, 3, 0.68, 0.6, 0),
+#          (0.65, 0.3, 2, 0.68, 0.5, 0),
+#          (0.65, 0.3, 1, 0.65, 1.5, 1),
+#          (0.67, 0.4, 1, 0.65, 1.5, 1)][severity - 1]
+#     x = np.array(x, dtype=np.float32) / 255.
+
+#     liquid_layer = np.random.normal(size=x.shape[:2], loc=c[0], scale=c[1])
+
+#     liquid_layer = gaussian(liquid_layer, sigma=c[2])
+#     liquid_layer[liquid_layer < c[3]] = 0
+#     if c[5] == 0:
+#         liquid_layer = (liquid_layer * 255).astype(np.uint8)
+#         dist = 255 - cv2.Canny(liquid_layer, 50, 150)
+#         dist = cv2.distanceTransform(dist, cv2.DIST_L2, 5)
+#         _, dist = cv2.threshold(dist, 20, 20, cv2.THRESH_TRUNC)
+#         dist = cv2.blur(dist, (3, 3)).astype(np.uint8)
+#         dist = cv2.equalizeHist(dist)
+#         #     ker = np.array([[-1,-2,-3],[-2,0,0],[-3,0,1]], dtype=np.float32)
+#         #     ker -= np.mean(ker)
+#         ker = np.array([[-2, -1, 0], [-1, 1, 1], [0, 1, 2]])
+#         dist = cv2.filter2D(dist, cv2.CV_8U, ker)
+#         dist = cv2.blur(dist, (3, 3)).astype(np.float32)
+
+#         m = cv2.cvtColor(liquid_layer * dist, cv2.COLOR_GRAY2BGRA)
+#         m /= np.max(m, axis=(0, 1))
+#         m *= c[4]
+
+#         # water is pale turqouise
+#         color = np.concatenate((175 / 255. * np.ones_like(m[..., :1]),
+#                                 238 / 255. * np.ones_like(m[..., :1]),
+#                                 238 / 255. * np.ones_like(m[..., :1])), axis=2)
+
+#         color = cv2.cvtColor(color, cv2.COLOR_BGR2BGRA)
+#         x = cv2.cvtColor(x, cv2.COLOR_BGR2BGRA)
+
+#         return cv2.cvtColor(np.clip(x + m * color, 0, 1), cv2.COLOR_BGRA2BGR) * 255
+#     else:
+#         m = np.where(liquid_layer > c[3], 1, 0)
+#         m = gaussian(m.astype(np.float32), sigma=c[4])
+#         m[m < 0.8] = 0
+#         #         m = np.abs(m) ** (1/c[4])
+
+#         # mud brown
+#         color = np.concatenate((63 / 255. * np.ones_like(x[..., :1]),
+#                                 42 / 255. * np.ones_like(x[..., :1]),
+#                                 20 / 255. * np.ones_like(x[..., :1])), axis=2)
+
+#         color *= m[..., np.newaxis]
+#         x *= (1 - m[..., np.newaxis])
+
+#         return np.clip(x + color, 0, 1) * 255
 
 
 def contrast(x, severity=1):
