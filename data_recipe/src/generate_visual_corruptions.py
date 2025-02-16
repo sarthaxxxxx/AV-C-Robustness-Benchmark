@@ -506,12 +506,34 @@ def underwater(x, severity = 1):
     img_hazy = cv2.addWeighted(img_low_contrast, 0.85, haze, 0.15, 0)
 
     return  img_hazy
-
-
 ##############################################################################################
 
 ########################################## Human-related ######################################
+def smoke(x, severity=1):
+    '''Simulate smoke effect on the image - grayish appearance.'''
+    import numpy as np
+    from scipy.ndimage import gaussian_filter
 
+    # Smoke parameters based on severity
+    c = [(1.5, 2), (2, 2), (2.5, 1.7), (2.5, 1.5), (3, 1.4)][severity - 1]
+
+    # Normalize the image
+    x = np.array(x) / 255.0
+    max_val = x.max()
+
+    # Generate smoke-like noise (Gaussian blobs)
+    noise = np.random.rand(224, 224)
+    smoke_pattern = gaussian_filter(noise, sigma=c[1])
+
+    # Add color tint for smoke (grayish appearance)
+    smoke_pattern = np.expand_dims(smoke_pattern, axis=-1)  # Add channel dimension
+    smoke_pattern = np.repeat(smoke_pattern, 3, axis=-1)    # Match RGB channels
+
+    # Blend smoke with the image
+    x += c[0] * smoke_pattern
+
+    # Normalize and clip
+    return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
 
 ##############################################################################################
 
@@ -616,31 +638,31 @@ def fog(x, severity=1):
     x += c[0] * plasma_fractal(wibbledecay=c[1])[:224, :224][..., np.newaxis]
     return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
 
-def smoke(x, severity=1):
-    '''Simulate smoke effect on the image - grayish appearance.'''
-    import numpy as np
-    from scipy.ndimage import gaussian_filter
+# def smoke(x, severity=1):
+#     '''Simulate smoke effect on the image - grayish appearance.'''
+#     import numpy as np
+#     from scipy.ndimage import gaussian_filter
 
-    # Smoke parameters based on severity
-    c = [(1.5, 2), (2, 2), (2.5, 1.7), (2.5, 1.5), (3, 1.4)][severity - 1]
+#     # Smoke parameters based on severity
+#     c = [(1.5, 2), (2, 2), (2.5, 1.7), (2.5, 1.5), (3, 1.4)][severity - 1]
 
-    # Normalize the image
-    x = np.array(x) / 255.0
-    max_val = x.max()
+#     # Normalize the image
+#     x = np.array(x) / 255.0
+#     max_val = x.max()
 
-    # Generate smoke-like noise (Gaussian blobs)
-    noise = np.random.rand(224, 224)
-    smoke_pattern = gaussian_filter(noise, sigma=c[1])
+#     # Generate smoke-like noise (Gaussian blobs)
+#     noise = np.random.rand(224, 224)
+#     smoke_pattern = gaussian_filter(noise, sigma=c[1])
 
-    # Add color tint for smoke (grayish appearance)
-    smoke_pattern = np.expand_dims(smoke_pattern, axis=-1)  # Add channel dimension
-    smoke_pattern = np.repeat(smoke_pattern, 3, axis=-1)    # Match RGB channels
+#     # Add color tint for smoke (grayish appearance)
+#     smoke_pattern = np.expand_dims(smoke_pattern, axis=-1)  # Add channel dimension
+#     smoke_pattern = np.repeat(smoke_pattern, 3, axis=-1)    # Match RGB channels
 
-    # Blend smoke with the image
-    x += c[0] * smoke_pattern
+#     # Blend smoke with the image
+#     x += c[0] * smoke_pattern
 
-    # Normalize and clip
-    return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
+#     # Normalize and clip
+#     return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
 
 
 # def frost(x, severity=1):

@@ -153,12 +153,13 @@ def spatter_noise(audio_file, output_path, intensity):
     spatter_dir = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/water_drops'
     add_env_noise(audio_file, output_path, intensity, noise_dir=spatter_dir)
 
-###########################################################################################
-
-##################################### Human ######################################################
 def underwater_noise(audio_file, output_path, intensity):    
     spatter_dir = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/underwater'
     add_env_noise(audio_file, output_path, intensity, noise_dir=spatter_dir)
+
+###########################################################################################
+
+##################################### Human ######################################################
 
 ###########################################################################################
 
