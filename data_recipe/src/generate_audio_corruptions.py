@@ -20,7 +20,6 @@ import torchaudio
 from scipy.signal import butter, filtfilt
 import torchaudio.functional as F
 
-
 # def gaussian_noise(audio_file, output_path, intensity):
 #     # load audio
 #     audio, sr = sf.read(audio_file)
@@ -64,7 +63,7 @@ def gaussian_noise(audio_file, output_path, intensity):
         noise = torch.randn_like(waveform)  # Generate Gaussian noise
         snr_tensor = torch.tensor([snr_db], dtype=waveform.dtype, device=waveform.device).expand(waveform.shape[:-1])  
         return F.add_noise(waveform, noise, snr_tensor)  # Corrected SNR shape
-    waveform, sr = torchaudio.load(audio_path)
+    waveform, sr = torchaudio.load(audio_file)
     waveform_noise = add_gaussian_noise(waveform, NOISE_SNRS[intensity-1])
     torchaudio.save(output_path, waveform_noise, sr)
 
@@ -111,6 +110,49 @@ def impulse_noise(audio_file, output_path, intensity, impulse_prob=0.05):
     salt_pepper = noise_scaling_factor * salt_pepper
     y_noisy = torch.clamp(waveform + salt_pepper, -1.0, 1.0)
     torchaudio.save(output_path, y_noisy, sr)
+###########################################################################################
+
+##################################### Environmental ######################################################
+def add_env_noise(audio_file, output_path, intensity, noise_dir=''):
+    waveform, sr = torchaudio.load(audio_file)
+    assert sr == 16000, "Noise file must have a sample rate of 16 kHz."
+    xlen = waveform.shape[-1]
+    noise_files = os.listdir(noise_dir)
+    if not noise_files:
+        raise FileNotFoundError("No noise files found in the directory.")
+    noise_file = np.random.choice(noise_files)
+    noise_file = os.path.join(noise_dir, noise_file)
+    noise_raw, sr = torchaudio.load(noise_file)
+    if sr != 16000:
+        noise_raw = torchaudio.transforms.Resample(sr, 16000)(noise_raw)
+    noise = noise_raw[..., :xlen]
+    while noise.shape[-1] < xlen:
+        noise = torch.cat([noise, noise], -1)
+    noise = noise[..., :xlen] 
+    snr_tensor = torch.full_like(waveform[:, 0], NOISE_SNRS[intensity-1])
+    waveform_noise = F.add_noise(waveform, noise, snr_tensor)
+    torchaudio.save(output_path, waveform_noise, sr)
+
+def snow_noise(audio_file, output_path, intensity):    
+    snow_dir = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/snow'
+    add_env_noise(audio_file, output_path, intensity, noise_dir=snow_dir)
+
+def wind_noise(audio_file, output_path, intensity):    
+    wind_dir = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/wind'
+    add_env_noise(audio_file, output_path, intensity, noise_dir=wind_dir)
+
+def rain_noise(audio_file, output_path, intensity):    
+    rain_dir = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/rain'
+    add_env_noise(audio_file, output_path, intensity, noise_dir=rain_dir)
+
+def frost_noise(audio_file, output_path, intensity):    
+    frost_dir = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/frost'
+    add_env_noise(audio_file, output_path, intensity, noise_dir=frost_dir)
+
+def spatter_noise(audio_file, output_path, intensity):    
+    spatter_dir = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/water_drops'
+    add_env_noise(audio_file, output_path, intensity, noise_dir=spatter_dir)
+
 ###########################################################################################
 
 def underwater(audio_file, output_path, intensity):
@@ -163,7 +205,6 @@ def add_external_noise(audio_path, weather_path, output_path, intensity):
     # sf.write(output_path, output, sr)
 
     output.export(output_path, format="wav")
-
 
 
 def make_dataset(dir, candi_audios):

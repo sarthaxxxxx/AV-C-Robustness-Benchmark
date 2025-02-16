@@ -34,7 +34,7 @@ IMG_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm']
 #   - Shot noise: random noise that looks like dots
 #   - Impulse noise: random noise that looks like salt and pepper
 #   - Speckle noise: random noise that looks like grains
-#   - Compression noise: random noise due to compression artifacts
+#   - [TODO] Compression noise: random noise due to compression artifacts
 # Environmental:
 #   - Snow: random snowflakes
 #   - Frost: random frost
@@ -42,7 +42,7 @@ IMG_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm']
 #   - Wind: random wind sounds (audio) and motion blur (image)
 #   - Rain: random raindrops
 #   - Underwater - muffled audio and blue-green tint (image)
-#   - Occulusion: occlusion (image) + noise from the occuluded object (audio)
+#   - [TODO] Occulusion: occlusion (image) + noise from the occuluded object (audio)
 # Human-related:
 #   - Concert: brightness (image) and concert sound (audio)
 #   - Smoke: random smoke + smoke alarm (audio)
@@ -294,6 +294,57 @@ def speckle_noise(x, severity=1):
 ##############################################################################
 
 
+####################################### Environmental #######################################
+def snow(x, severity=1):
+    c = [(0.1, 0.3, 3, 0.5, 10, 4, 0.8),
+         (0.2, 0.3, 2, 0.5, 12, 4, 0.7),
+         (0.55, 0.3, 4, 0.9, 12, 8, 0.7),
+         (0.55, 0.3, 4.5, 0.85, 12, 8, 0.65),
+         (0.55, 0.3, 2.5, 0.85, 12, 12, 0.55)][severity - 1]
+
+    x = np.array(x, dtype=np.float32) / 255.
+    snow_layer = np.random.normal(size=x.shape[:2], loc=c[0], scale=c[1])  # [:2] for monochrome
+
+    snow_layer = clipped_zoom(snow_layer[..., np.newaxis], c[2])
+    snow_layer[snow_layer < c[3]] = 0
+
+    snow_layer = PILImage.fromarray((np.clip(snow_layer.squeeze(), 0, 1) * 255).astype(np.uint8), mode='L')
+    output = BytesIO()
+    snow_layer.save(output, format='PNG')
+    snow_layer = MotionImage(blob=output.getvalue())
+
+    snow_layer.motion_blur(radius=c[4], sigma=c[5], angle=np.random.uniform(-135, -45))
+
+    snow_layer = cv2.imdecode(np.fromstring(snow_layer.make_blob(), np.uint8),
+                              cv2.IMREAD_UNCHANGED) / 255.
+    snow_layer = snow_layer[..., np.newaxis]
+
+    x = c[6] * x + (1 - c[6]) * np.maximum(x, cv2.cvtColor(x, cv2.COLOR_RGB2GRAY).reshape(224, 224, 1) * 1.5 + 0.5)
+    return np.clip(x + snow_layer + np.rot90(snow_layer, k=2), 0, 1) * 255
+
+def wind(x, severity=1):
+    '''Simulate wind effect on the image - motion blur.'''
+    c = [(10, 3), (15, 5), (15, 8), (15, 12), (20, 15)][severity - 1]
+
+    output = BytesIO()
+    x.save(output, format='PNG')
+    x = MotionImage(blob=output.getvalue())
+
+    x.motion_blur(radius=c[0], sigma=c[1], angle=np.random.uniform(-45, 45))
+
+    x = cv2.imdecode(np.frombuffer(x.make_blob(), np.uint8),
+                        cv2.IMREAD_UNCHANGED)
+    # x = cv2.imdecode(np.fromstring(x.make_blob(), np.uint8),
+    #                  cv2.IMREAD_UNCHANGED)
+
+    if x.shape != (224, 224):
+        return np.clip(x[..., [2, 1, 0]], 0, 255)  # BGR to RGB
+    else:  # greyscale to RGB
+        return np.clip(np.array([x, x, x]).transpose((1, 2, 0)), 0, 255)
+
+
+##############################################################################################
+
 def gaussian_blur(x, severity=1):
     c = [1, 2, 3, 4, 6][severity - 1]
 
@@ -350,25 +401,25 @@ def defocus_blur(x, severity=1):
 
     return np.clip(channels, 0, 1) * 255
 
-def wind(x, severity=1):
-    '''Simulate wind effect on the image - motion blur.'''
-    c = [(10, 3), (15, 5), (15, 8), (15, 12), (20, 15)][severity - 1]
+# def wind(x, severity=1):
+#     '''Simulate wind effect on the image - motion blur.'''
+#     c = [(10, 3), (15, 5), (15, 8), (15, 12), (20, 15)][severity - 1]
 
-    output = BytesIO()
-    x.save(output, format='PNG')
-    x = MotionImage(blob=output.getvalue())
+#     output = BytesIO()
+#     x.save(output, format='PNG')
+#     x = MotionImage(blob=output.getvalue())
 
-    x.motion_blur(radius=c[0], sigma=c[1], angle=np.random.uniform(-45, 45))
+#     x.motion_blur(radius=c[0], sigma=c[1], angle=np.random.uniform(-45, 45))
 
-    x = cv2.imdecode(np.frombuffer(x.make_blob(), np.uint8),
-                        cv2.IMREAD_UNCHANGED)
-    # x = cv2.imdecode(np.fromstring(x.make_blob(), np.uint8),
-    #                  cv2.IMREAD_UNCHANGED)
+#     x = cv2.imdecode(np.frombuffer(x.make_blob(), np.uint8),
+#                         cv2.IMREAD_UNCHANGED)
+#     # x = cv2.imdecode(np.fromstring(x.make_blob(), np.uint8),
+#     #                  cv2.IMREAD_UNCHANGED)
 
-    if x.shape != (224, 224):
-        return np.clip(x[..., [2, 1, 0]], 0, 255)  # BGR to RGB
-    else:  # greyscale to RGB
-        return np.clip(np.array([x, x, x]).transpose((1, 2, 0)), 0, 255)
+#     if x.shape != (224, 224):
+#         return np.clip(x[..., [2, 1, 0]], 0, 255)  # BGR to RGB
+#     else:  # greyscale to RGB
+#         return np.clip(np.array([x, x, x]).transpose((1, 2, 0)), 0, 255)
 
 
 def zoom_blur(x, severity=1):
@@ -422,7 +473,6 @@ def smoke(x, severity=1):
     return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
 
 
-
 def frost(x, severity=1):
     c = [(1, 0.4),
          (0.8, 0.6),
@@ -440,32 +490,7 @@ def frost(x, severity=1):
     return np.clip(c[0] * np.array(x) + c[1] * frost, 0, 255)
 
 
-def snow(x, severity=1):
-    c = [(0.1, 0.3, 3, 0.5, 10, 4, 0.8),
-         (0.2, 0.3, 2, 0.5, 12, 4, 0.7),
-         (0.55, 0.3, 4, 0.9, 12, 8, 0.7),
-         (0.55, 0.3, 4.5, 0.85, 12, 8, 0.65),
-         (0.55, 0.3, 2.5, 0.85, 12, 12, 0.55)][severity - 1]
 
-    x = np.array(x, dtype=np.float32) / 255.
-    snow_layer = np.random.normal(size=x.shape[:2], loc=c[0], scale=c[1])  # [:2] for monochrome
-
-    snow_layer = clipped_zoom(snow_layer[..., np.newaxis], c[2])
-    snow_layer[snow_layer < c[3]] = 0
-
-    snow_layer = PILImage.fromarray((np.clip(snow_layer.squeeze(), 0, 1) * 255).astype(np.uint8), mode='L')
-    output = BytesIO()
-    snow_layer.save(output, format='PNG')
-    snow_layer = MotionImage(blob=output.getvalue())
-
-    snow_layer.motion_blur(radius=c[4], sigma=c[5], angle=np.random.uniform(-135, -45))
-
-    snow_layer = cv2.imdecode(np.fromstring(snow_layer.make_blob(), np.uint8),
-                              cv2.IMREAD_UNCHANGED) / 255.
-    snow_layer = snow_layer[..., np.newaxis]
-
-    x = c[6] * x + (1 - c[6]) * np.maximum(x, cv2.cvtColor(x, cv2.COLOR_RGB2GRAY).reshape(224, 224, 1) * 1.5 + 0.5)
-    return np.clip(x + snow_layer + np.rot90(snow_layer, k=2), 0, 1) * 255
 
 def clipped_zoom(img, zoom_factor):
     """
