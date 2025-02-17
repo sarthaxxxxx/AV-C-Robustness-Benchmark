@@ -23,6 +23,9 @@ from scipy.ndimage import zoom as scizoom
 from scipy.ndimage import map_coordinates
 import warnings
 
+import collections
+import argparse
+
 warnings.simplefilter("ignore", UserWarning)
 
 
@@ -35,6 +38,7 @@ IMG_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm']
 #   - Shot noise: random noise that looks like dots
 #   - Impulse noise: random noise that looks like salt and pepper
 #   - Speckle noise: random noise that looks like grains
+#   - [TODO] Compression noise: random noise due to compression artifacts
 # Environmental:
 #   - Snow: random snowflakes
 #   - Frost: random frost
@@ -71,30 +75,19 @@ def make_dataset(dir, candi_images):
     images = []
     dir = os.path.expanduser(dir)
     # for name in sorted(os.listdir(dir)):
-    for root, _, files in os.walk(dir):
-        print("files: ", files)
-        for name in sorted(files):
-            if name in candi_images:
-                path = os.path.join(dir, name)
-                item = (path, name)
-                images.append(item)
-    print("images: ", len(images))
+    for name in sorted(candi_images):
+        path = os.path.join(dir, name)
+        item = (path, name)
+        images.append(item)
 
     return images
 
 
 def pil_loader(path):
     # open path as file to avoid ResourceWarning (https://github.com/python-pillow/Pillow/issues/835)
-    # with open(path, 'rb') as f:
-    #     img = Image.open(f)
-    #     return img.convert('RGB')
-    try:
-        with open(path, 'rb') as f:
-            img = Image.open(f)
-            return img.convert('RGB')
-    except FileNotFoundError:
-        print(f"Warning: File not found: {path}")
-        return None    
+    with open(path, 'rb') as f:
+        img = Image.open(f)
+        return img.convert('RGB')
 
 
 def accimage_loader(path):
@@ -115,79 +108,46 @@ def default_loader(path):
 
 
 class DistortImageFolder(data.Dataset):
-    def __init__(self, root, save_path, candi_images, method, severity, transform=None, loader=default_loader):
-        # imgs = make_dataset(root, candi_images)
-        # print("init: ", imgs)
-        # if len(imgs) == 0:
-        #     raise (RuntimeError("Found 0 images in subfolders of: " + root + "\n"
-        #             "Supported image extensions are: " + ",".join(IMG_EXTENSIONS)))
+    def __init__(self, root, save_path, candi_images, method, severity, frame, transform=None, target_transform=None,
+                 loader=default_loader):
+        imgs = make_dataset(root, candi_images)
+        if len(imgs) == 0:
+            raise (RuntimeError("Found 0 images in subfolders of: " + root + "\n"
+                    "Supported image extensions are: " + ",".join(IMG_EXTENSIONS)))
 
-        # self.root = root
-        # self.method = method
-        # self.severity = severity
-        # self.imgs = imgs
-        # self.transform = transform
-        # self.loader = loader
-        # self.candi_images = candi_images
-        # self.save_path = save_path
         self.root = root
-        self.save_path = save_path
-        self.candi_images = candi_images
         self.method = method
         self.severity = severity
+        self.imgs = imgs
         self.transform = transform
+        self.target_transform = target_transform
+        self.loader = loader
+        self.frame = frame
+        self.candi_images = candi_images
+        self.save_path = save_path
 
     def __getitem__(self, index):
-        # Get the frame file name
-        frame_name = self.candi_images[index]
-        frame_path = os.path.join(self.root, frame_name)  # Construct the full path
-
-        # Load the image
-        img = pil_loader(frame_path)
-        if img is None:
-            return None  # Skip if the file is not found
-
-        # Apply the distortion method
-        distorted_img = self.method(img, self.severity)
-
-        if isinstance(distorted_img, np.ndarray):
-            distorted_img = PILImage.fromarray(np.uint8(distorted_img))
-
-        # Apply transformations (if any)
+        path, name = self.imgs[index]
+        img = self.loader(path)
         if self.transform is not None:
-            distorted_img = self.transform(distorted_img)
+            img = self.transform(img)
+            img = self.method(img, self.severity)
 
-        # Save the distorted image
-        save_dir = os.path.join(self.save_path, '')
-        os.makedirs(save_dir, exist_ok=True)
-        save_path = os.path.join(save_dir, frame_name)
-        os.makedirs(save_path.split('frame_')[0], exist_ok=True)
-        print("save_path: ", save_path, "index: ", index, "len: ", len(self.candi_images))
-        distorted_img.save(save_path, quality=85, optimize=True)
+        save_path = os.path.join(self.save_path, '{}'.format(self.method.__name__), 'severity_{}'.format(self.severity), 'frame_{}'.format(self.frame))
+        if not os.path.exists(save_path):
+            try:
+                os.makedirs(save_path)
+            except:
+                print(save_path)
 
-        return 0  # Return a dummy value (since we're not training)
-    
-        # path, name = self.imgs[index]
-        # img = self.loader(path)
-        # if self.transform is not None:
-        #     img = self.transform(img)
-        #     img = self.method(img, self.severity)
+        save_image = os.path.join(save_path, '{}.jpg'.format(name.replace('.jpg', '')))
 
-        # save_path = os.path.join(self.save_path, '{}'.format(self.method.__name__), 'severity_{}'.format(self.severity), 'frame_{}'.format(self.frame))
-        # if not os.path.exists(save_path):
-        #     try:
-        #         os.makedirs(save_path)
-        #     except:
-        #         print(save_path)
+        Image.fromarray(np.uint8(img)).save(save_image, quality=85, optimize=True)
 
-        # save_image = os.path.join(save_path, '{}.jpg'.format(name.replace('.jpg', '')))
-
-        # Image.fromarray(np.uint8(img)).save(save_image, quality=85, optimize=True)
-
-        # return 0  # we do not care about returning the data
+        return 0  # we do not care about returning the data
 
     def __len__(self):
-        return len(self.candi_images)
+        return len(self.imgs)
 
 
 def auc(errs):  # area under the alteration error curve
@@ -289,15 +249,61 @@ def clipped_zoom(img, zoom_factor):
     return img[trim_top:trim_top + h, trim_top:trim_top + h]
 
 
-def crowd(x, severity = 1):
-    """Simulate occlusions/shadow in an image."""
-    x = np.array(x) / 255.
-    h, w, _ = x.shape
-    c = [20, 40, 80, 100, 120][severity - 1]
-    x_bb, y_bb = random.randint(0, w - c), random.randint(0, h - c)
-    x_bb_end, y_bb_end = x_bb + c, y_bb + c
-    x[y_bb:y_bb_end, x_bb:x_bb_end] = 0.3
-    return np.clip(x, 0, 1) * 255
+# def crowd(x, severity = 1):
+#     """Simulate occlusions/shadow in an image."""
+#     x = np.array(x) / 255.
+#     h, w, _ = x.shape
+#     c = [20, 40, 80, 100, 120][severity - 1]
+#     x_bb, y_bb = random.randint(0, w - c), random.randint(0, h - c)
+#     x_bb_end, y_bb_end = x_bb + c, y_bb + c
+#     x[y_bb:y_bb_end, x_bb:x_bb_end] = 0.3
+#     return np.clip(x, 0, 1) * 255
+
+# def crowd(input_image_path, severity):
+def crowd(image, severity):
+    occlusion_dir='/people/cs/s/skm200005/UTD/AV-Robustness/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/crowd_image'
+ 
+    # Load input image
+    # input_image = cv2.imread(input_image_path, cv2.IMREAD_UNCHANGED)
+    input_image = np.array(image)
+    h, w, _ = input_image.shape
+    
+    # Define occlusion sizes based on severity
+    occlusion_sizes = {1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5}  # Percentage of image covered
+    occlusion_scale = occlusion_sizes[severity]
+    
+    # Get a random occlusion image
+    occlusion_files = [f for f in os.listdir(occlusion_dir) if f.endswith('.png')]
+    if not occlusion_files:
+        raise FileNotFoundError("No occlusion images found in the specified directory.")
+    occlusion_image_path = os.path.join(occlusion_dir, random.choice(occlusion_files))
+    occlusion_image = cv2.imread(occlusion_image_path, cv2.IMREAD_UNCHANGED)
+    
+    # Resize occlusion image based on severity
+    occlusion_h, occlusion_w = int(h * occlusion_scale), int(w * occlusion_scale)
+    occlusion_image = cv2.resize(occlusion_image, (occlusion_w, occlusion_h))
+    
+    # Randomly place occlusion in the input image
+    x_offset = random.randint(0, w - occlusion_w)
+    y_offset = random.randint(0, h - occlusion_h)
+    
+    # Blend occlusion image onto the input image
+    overlay = input_image.copy()
+    
+    if occlusion_image.shape[2] == 4:  # If occlusion image has an alpha channel
+        alpha_mask = occlusion_image[:, :, 3] / 255.0
+        for c in range(3):  # Apply occlusion to RGB channels
+            overlay[y_offset:y_offset+occlusion_h, x_offset:x_offset+occlusion_w, c] = (
+                (1 - alpha_mask) * overlay[y_offset:y_offset+occlusion_h, x_offset:x_offset+occlusion_w, c] +
+                alpha_mask * occlusion_image[:, :, c]
+            )
+    else:  # If occlusion image has no alpha channel
+        overlay[y_offset:y_offset+occlusion_h, x_offset:x_offset+occlusion_w] = occlusion_image
+
+    return overlay
+    
+    # # Save the occluded image
+    # cv2.imwrite(output_image_path, overlay)
 
 # def crowd(x, severity = 1):
 #     """ Simulate shadow patterns on the image (random shadow patterns). """
@@ -358,23 +364,50 @@ def gaussian_blur(x, severity=1):
     return np.clip(x, 0, 1) * 255
 
 
-def underwater(x, severity = 1):
-    """Simulate underwater effect on the image - blue-green tint."""
-    x = np.array(x) / 255.
-    tint_values = {
-        1: np.array([1.0, 0.9, 0.8]),
-        2: np.array([1.0, 0.85, 0.7]),
-        3: np.array([1.0, 0.8, 0.6]),
-        4: np.array([0.9, 0.7, 0.5]),
-        5: np.array([0.8, 0.6, 0.4])
-    }
-    blue_tint = tint_values.get(severity, tint_values[3])
-    x = np.clip(x * blue_tint, 0, 1)
+# def underwater(x, severity = 1):
+#     """Simulate underwater effect on the image - blue-green tint."""
+#     x = np.array(x) / 255.
+#     tint_values = {
+#         1: np.array([1.0, 0.9, 0.8]),
+#         2: np.array([1.0, 0.85, 0.7]),
+#         3: np.array([1.0, 0.8, 0.6]),
+#         4: np.array([0.9, 0.7, 0.5]),
+#         5: np.array([0.8, 0.6, 0.4])
+#     }
+#     blue_tint = tint_values.get(severity, tint_values[3])
+#     x = np.clip(x * blue_tint, 0, 1)
 
-    # light_scatter = {1: 3, 2: 5, 3: 9, 4: 13, 5: 17}
-    # light_scatter = light_scatter.get(severity, light_scatter[3])
-    # x = cv2.GaussianBlur(x, (light_scatter, light_scatter), light_scatter)
-    return np.clip(x, 0, 1) * 255  
+#     # light_scatter = {1: 3, 2: 5, 3: 9, 4: 13, 5: 17}
+#     # light_scatter = light_scatter.get(severity, light_scatter[3])
+#     # x = cv2.GaussianBlur(x, (light_scatter, light_scatter), light_scatter)
+#     return np.clip(x, 0, 1) * 255  
+
+def underwater(x, severity = 1):
+    # CHECK: Please plot and check if the image values are scaled for your use
+    # img = cv2.cvtColor(x, cv2.COLOR_BGR2RGB)
+    img = np.array(x)
+
+    # Define intensity-based parameters
+    blur_levels = {1: 3, 2: 5, 3: 7, 4: 10, 5: 15}  # Blur kernel size
+    red_reduction = {1: 0.9, 2: 0.7, 3: 0.5, 4: 0.3, 5: 0.1}  # % of red channel kept
+    contrast_factors = {1: 0.9, 2: 0.8, 3: 0.7, 4: 0.6, 5: 0.5}  # Contrast reduction
+    haze_factors = {1: 20, 2: 40, 3: 60, 4: 80, 5: 100}  # White overlay intensity
+
+    blur_k = blur_levels[severity]
+    red_factor = red_reduction[severity]
+    contrast = contrast_factors[severity]
+    haze_intensity = haze_factors[severity]
+
+    # Reduce red channel to simulate underwater color shift
+    img_underwater = img.astype(np.float32)
+    img_underwater[:, :, 0] *= red_factor  # Reduce red
+    img_underwater = np.clip(img_underwater, 0, 255).astype(np.uint8)
+    img_blurred = cv2.GaussianBlur(img_underwater, (blur_k, blur_k), 0)
+    img_low_contrast = cv2.convertScaleAbs(img_blurred, alpha=contrast, beta=0)
+    haze = np.full_like(img_low_contrast, (haze_intensity, haze_intensity, haze_intensity), dtype=np.uint8)
+    img_hazy = cv2.addWeighted(img_low_contrast, 0.85, haze, 0.15, 0)
+
+    return  img_hazy
 
 def glass_blur(x, severity=1):
     # sigma, max_delta, iterations
@@ -805,39 +838,30 @@ def elastic_transform(image, severity=1):
 
 
 def save_distorted_for_image(method, candi_image_names, severity, data_path, save_path):
-    print(f"Applying {method.__name__} with severity {severity}")
+    # for severity in range(1, 6):
+    print(method.__name__, severity)
+    for frame in range(10):
+        print(frame)
+        distorted_dataset = DistortImageFolder(
+            root=os.path.join(data_path, 'frame_{}').format(frame),
+            save_path=save_path,
+            candi_images=candi_image_names,
+            method=method, 
+            severity=severity,
+            transform=trn.Compose([trn.Resize(256), trn.CenterCrop(224)]),
+            frame=frame)
+        distorted_dataset_loader = torch.utils.data.DataLoader(
+            distorted_dataset, batch_size=128, shuffle=False, num_workers=4)
+        for _ in distorted_dataset_loader:
+            continue
 
-    # Create the distorted dataset
-    distorted_dataset = DistortImageFolder(
-        root=data_path,  # Use the base data path directly
-        save_path=save_path,
-        candi_images=candi_image_names,  # List of frame file names (e.g., "frame_0000076312.jpg")
-        method=method,
-        severity=severity,
-        transform=trn.Compose([trn.Resize(256), trn.CenterCrop(224)])
-    )
-    print("distorted_dataset: ", distorted_dataset)
 
-    # Create the DataLoader
-    distorted_dataset_loader = torch.utils.data.DataLoader(
-        distorted_dataset, batch_size=128, shuffle=False, num_workers=4
-    )
-
-    print("distorted_dataset_loader: ", distorted_dataset_loader)
-
-    # Process the frames
-    for i, _ in enumerate(distorted_dataset_loader):
-        print(i)
-        continue
-
-import collections
-import argparse
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--corruption', type=str, default='gaussian_noise', choices=['gaussian_noise'], help='Type of corruption to apply')
-parser.add_argument('--severity', type=int, default=1, choices=[1, 2, 3, 4, 5, 0], help='Severity of corruption to apply, 0: all')
-parser.add_argument('--data_path', type=str, help='Path to test data')
-parser.add_argument('--save_path', type=str, help='Path to store corruption data')
+parser.add_argument('--corruption', type=str, default='all', help='Type of corruption to apply')
+parser.add_argument('--severity', type=int, default=5, choices=[1, 2, 3, 4, 5], help='Severity of corruption to apply')
+parser.add_argument('--data_path', type=str, help='Path to test data', default = '/people/cs/s/skm200005/UTD/audio-visual-datasets/VGGSound/test/image_mulframe_test')
+parser.add_argument('--save_path', type=str, help='Path to store corruption data', default='/people/cs/s/skm200005/UTD/AV-Robustness/data/VGGSound-C/image-C/')
 args = parser.parse_args()
 
 
@@ -863,20 +887,8 @@ if args.corruption == 'all':
 else:
     d[args.corruption] = eval(args.corruption.lower())
 
-# dir = os.path.join(args.data_path, '')
-# candi_image_names = os.listdir(dir)
-def get_image_files(base_dir):
-    image_files = []
-    for root, _, files in os.walk(base_dir):
-        for file in files:
-            if file.lower().endswith('.jpg'):  # Only include .jpg files
-                image_files.append(os.path.relpath(os.path.join(root, file), base_dir))
-    return image_files
-
-# Example usage
-base_dir = "/home/jovyan/EPIC-KITCHENS"
-candi_image_names = get_image_files(base_dir)
-print(f"Found {len(candi_image_names)} image files.")
+dir = os.path.join(args.data_path, 'frame_0')
+candi_image_names = os.listdir(dir)
 
 for method_name in d.keys():
     save_distorted_for_image(d[method_name], candi_image_names, args.severity, args.data_path, args.save_path)
