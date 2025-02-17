@@ -19,6 +19,7 @@ import torchaudio
 
 from scipy.signal import butter, filtfilt
 import torchaudio.functional as F
+import random
 
 # def gaussian_noise(audio_file, output_path, intensity):
 #     # load audio
@@ -93,7 +94,7 @@ def shot_noise(audio_file, output_path, intensity):
     noise_scaling_factor = torch.sqrt(signal_power / (snr_linear * noise_power))
     noise = noise_scaling_factor * noise
     y_noisy = torch.clamp(waveform + noise, -1.0, 1.0)
-    torchaudio.save(output_path, waveform_noise, sr)
+    torchaudio.save(output_path, y_noisy, sr)
 
 def impulse_noise(audio_file, output_path, intensity, impulse_prob=0.05):
     waveform, sr = torchaudio.load(audio_file)  # waveform shape: [channels, samples]
@@ -161,6 +162,36 @@ def underwater_noise(audio_file, output_path, intensity):
 
 ##################################### Human ######################################################
 
+def smoke_noise(audio_file, output_path, intensity):    
+    spatter_dir = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/crackling_fire_and_siren'
+    add_env_noise(audio_file, output_path, intensity, noise_dir=spatter_dir)
+
+def concert_noise(audio_file, output_path, intensity):    
+    spatter_dir = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/concert'
+    add_env_noise(audio_file, output_path, intensity, noise_dir=spatter_dir)
+
+def crowd_noise(audio_file, output_path, intensity):    
+    spatter_dir = '/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/crowd'
+    add_env_noise(audio_file, output_path, intensity, noise_dir=spatter_dir)
+
+def interference_noise(audio_file, output_path, intensity):
+    '''
+    Add silences to the audio
+    '''
+
+    waveform, sr = torchaudio.load(audio_file)
+    severity_levels = {1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5}  # Fraction of audio to be muted
+    mask_fraction = severity_levels[intensity]
+    total_samples = waveform.shape[1]
+    num_mask_samples = int(total_samples * mask_fraction)
+    num_chunks = intensity * 2  # Increase the number of chunks with severity
+    chunk_size = num_mask_samples // num_chunks  # Each silent chunk size
+    chunk_size = max(chunk_size, sr // 10)  # At least 0.1 sec per chunk
+    mask_positions = random.sample(range(total_samples - chunk_size), num_chunks)
+    for pos in mask_positions:
+        waveform[:, pos:pos + chunk_size] = 0  # Zero out chunk
+    torchaudio.save(output_path, waveform, sr)
+
 ###########################################################################################
 
 # def underwater(audio_file, output_path, intensity):
@@ -181,38 +212,38 @@ def underwater_noise(audio_file, output_path, intensity):
 
 #     sf.write(output_path, audio_low_pass, sr)
 
-def add_external_noise(audio_path, weather_path, output_path, intensity):
+# def add_external_noise(audio_path, weather_path, output_path, intensity):
     
-    audio = AudioSegment.from_file(audio_path)
-    _, sr = sf.read(audio_path)
-    # noise_sound, sr_n = sf.read(weather_path)
-    noise_sound = AudioSegment.from_file(weather_path)
+#     audio = AudioSegment.from_file(audio_path)
+#     _, sr = sf.read(audio_path)
+#     # noise_sound, sr_n = sf.read(weather_path)
+#     noise_sound = AudioSegment.from_file(weather_path)
 
-    # if noise_sound.frame_rate != sr:
-    #     noise_sound = noise_sound.set_frame_rate(sr)
+#     # if noise_sound.frame_rate != sr:
+#     #     noise_sound = noise_sound.set_frame_rate(sr)
 
-    # adjust the length
-    if len(audio) <= len(noise_sound):
-        noise_sound = noise_sound[:len(audio)]
-    else:
-        print(len(audio), len(noise_sound))
-        num_repeats = len(audio) // len(noise_sound) + 1
-        noise_sound = noise_sound * num_repeats
-        noise_sound = noise_sound[:len(audio)]
-        print(len(audio), len(noise_sound))
+#     # adjust the length
+#     if len(audio) <= len(noise_sound):
+#         noise_sound = noise_sound[:len(audio)]
+#     else:
+#         print(len(audio), len(noise_sound))
+#         num_repeats = len(audio) // len(noise_sound) + 1
+#         noise_sound = noise_sound * num_repeats
+#         noise_sound = noise_sound[:len(audio)]
+#         print(len(audio), len(noise_sound))
 
-    if noise_sound.frame_rate != sr:
-        noise_sound = noise_sound.set_frame_rate(sr)
+#     if noise_sound.frame_rate != sr:
+#         noise_sound = noise_sound.set_frame_rate(sr)
 
-    scale = [2, 4, 6, 8, 10]
-    # noise_sound = noise_sound * scale[intensity-1]
-    noise_sound = noise_sound.apply_gain(scale[intensity-1])
+#     scale = [2, 4, 6, 8, 10]
+#     # noise_sound = noise_sound * scale[intensity-1]
+#     noise_sound = noise_sound.apply_gain(scale[intensity-1])
 
-    output = audio.overlay(noise_sound)
-    # output = audio + noise_sound
-    # sf.write(output_path, output, sr)
+#     output = audio.overlay(noise_sound)
+#     # output = audio + noise_sound
+#     # sf.write(output_path, output, sr)
 
-    output.export(output_path, format="wav")
+#     output.export(output_path, format="wav")
 
 
 def make_dataset(dir, candi_audios):

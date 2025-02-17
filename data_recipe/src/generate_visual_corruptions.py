@@ -253,23 +253,23 @@ def clipped_zoom(img, zoom_factor):
     return img[trim_top:trim_top + h, trim_top:trim_top + h]
 
 
-def crowd(x, severity = 1):
-    """Simulate occlusions/shadow in an image."""
-    x = np.array(x) / 255.
-    h, w, _ = x.shape
-    c = [20, 40, 80, 100, 120][severity - 1]
-    x_bb, y_bb = random.randint(0, w - c), random.randint(0, h - c)
-    x_bb_end, y_bb_end = x_bb + c, y_bb + c
-    x[y_bb:y_bb_end, x_bb:x_bb_end] = 0.3
-    return np.clip(x, 0, 1) * 255
+# def crowd(x, severity = 1):
+#     """Simulate occlusions/shadow in an image."""
+#     x = np.array(x) / 255.
+#     h, w, _ = x.shape
+#     c = [20, 40, 80, 100, 120][severity - 1]
+#     x_bb, y_bb = random.randint(0, w - c), random.randint(0, h - c)
+#     x_bb_end, y_bb_end = x_bb + c, y_bb + c
+#     x[y_bb:y_bb_end, x_bb:x_bb_end] = 0.3
+#     return np.clip(x, 0, 1) * 255
 
 
-def interference(x, severity):
-    """
-    Random rotation of the image.
-    """
-    deg = random.randint(-severity*6-5, severity*6+5)
-    return x.rotate(deg)
+# def interference(x, severity):
+#     """
+#     Random rotation of the image.
+#     """
+#     deg = random.randint(-severity*6-5, severity*6+5)
+#     return x.rotate(deg)
 
 ####################################### DIGITAL NOISE #######################################
 def gaussian_noise(x, severity=1):
@@ -534,6 +534,56 @@ def smoke(x, severity=1):
 
     # Normalize and clip
     return np.clip(x * max_val / (max_val + c[0]), 0, 1) * 255
+
+
+def crowd(input_image_path, output_image_path, severity, occlusion_dir='/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/data_recipe/src/noise_files/crowd_image'):
+ 
+    # Load input image
+    input_image = cv2.imread(input_image_path, cv2.IMREAD_UNCHANGED)
+    h, w, _ = input_image.shape
+    
+    # Define occlusion sizes based on severity
+    occlusion_sizes = {1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5}  # Percentage of image covered
+    occlusion_scale = occlusion_sizes[severity]
+    
+    # Get a random occlusion image
+    occlusion_files = [f for f in os.listdir(occlusion_dir) if f.endswith('.png')]
+    if not occlusion_files:
+        raise FileNotFoundError("No occlusion images found in the specified directory.")
+    occlusion_image_path = os.path.join(occlusion_dir, random.choice(occlusion_files))
+    occlusion_image = cv2.imread(occlusion_image_path, cv2.IMREAD_UNCHANGED)
+    
+    # Resize occlusion image based on severity
+    occlusion_h, occlusion_w = int(h * occlusion_scale), int(w * occlusion_scale)
+    occlusion_image = cv2.resize(occlusion_image, (occlusion_w, occlusion_h))
+    
+    # Randomly place occlusion in the input image
+    x_offset = random.randint(0, w - occlusion_w)
+    y_offset = random.randint(0, h - occlusion_h)
+    
+    # Blend occlusion image onto the input image
+    overlay = input_image.copy()
+    
+    if occlusion_image.shape[2] == 4:  # If occlusion image has an alpha channel
+        alpha_mask = occlusion_image[:, :, 3] / 255.0
+        for c in range(3):  # Apply occlusion to RGB channels
+            overlay[y_offset:y_offset+occlusion_h, x_offset:x_offset+occlusion_w, c] = (
+                (1 - alpha_mask) * overlay[y_offset:y_offset+occlusion_h, x_offset:x_offset+occlusion_w, c] +
+                alpha_mask * occlusion_image[:, :, c]
+            )
+    else:  # If occlusion image has no alpha channel
+        overlay[y_offset:y_offset+occlusion_h, x_offset:x_offset+occlusion_w] = occlusion_image
+    
+    # Save the occluded image
+    cv2.imwrite(output_image_path, overlay)
+
+def interference(x, severity):
+    """
+    NOTE: The input to this function is a PIL image.
+    Random rotation of the image.
+    """
+    deg = random.randint(-severity*6-5, severity*6+5)
+    return x.rotate(deg)
 
 ##############################################################################################
 
