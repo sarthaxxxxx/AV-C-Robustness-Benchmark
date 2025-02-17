@@ -26,5 +26,4 @@ venv.bak/
 **/*.mp4
 **/*.pth
 **/*.jpg
-**/*.png
 **/*.json
