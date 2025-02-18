@@ -79,6 +79,8 @@ def gaussian_noise(audio_file, output_path, intensity):
         snr_tensor = torch.tensor([snr_db], dtype=waveform.dtype, device=waveform.device).expand(waveform.shape[:-1])  
         return add_noise(waveform, noise, snr_tensor)  # Corrected SNR shape
     waveform, sr = torchaudio.load(audio_file)
+    if waveform.shape[0] > 1: # Convert original audio to mono (if needed)
+        waveform = torch.mean(waveform, dim=0, keepdim=True)
     waveform_noise = add_gaussian_noise(waveform, NOISE_SNRS[intensity-1])
     torchaudio.save(output_path, waveform_noise, sr)
 
@@ -96,6 +98,8 @@ def gaussian_noise(audio_file, output_path, intensity):
 def speckle_noise(audio_file, output_path, intensity):
     snr_level = NOISE_SNRS[intensity - 1]
     waveform, sr = torchaudio.load(audio_file)  # waveform shape: [channels, samples]
+    if waveform.shape[0] > 1: # Convert original audio to mono (if needed)
+        waveform = torch.mean(waveform, dim=0, keepdim=True)
     signal_power = torch.mean(waveform ** 2)
     noise = torch.randn_like(waveform)  # Zero-mean Gaussian noise
     noise = noise * waveform  # Multiply by signal (speckle noise)
@@ -117,6 +121,8 @@ def speckle_noise(audio_file, output_path, intensity):
 
 def shot_noise(audio_file, output_path, intensity):
     waveform, sr = torchaudio.load(audio_file)
+    if waveform.shape[0] > 1: # Convert original audio to mono (if needed)
+        waveform = torch.mean(waveform, dim=0, keepdim=True)
     snr_db = NOISE_SNRS[intensity - 1]
     signal_power = torch.mean(waveform ** 2)
     y_min, y_max = waveform.min(), waveform.max()
@@ -150,6 +156,8 @@ def shot_noise(audio_file, output_path, intensity):
 
 def impulse_noise(audio_file, output_path, intensity, impulse_prob=0.05):
     waveform, sr = torchaudio.load(audio_file)  # waveform shape: [channels, samples]
+    if waveform.shape[0] > 1: # Convert original audio to mono (if needed)
+        waveform = torch.mean(waveform, dim=0, keepdim=True)
     snr_level = NOISE_SNRS[intensity - 1]
     signal_power = torch.mean(waveform ** 2)
     random_mask = torch.rand_like(waveform)  # Random values in [0,1]
@@ -173,6 +181,18 @@ def impulse_noise(audio_file, output_path, intensity, impulse_prob=0.05):
     y_noisy = torch.clamp(waveform + salt_pepper, -1.0, 1.0)
     torchaudio.save(output_path, y_noisy, sr)
 
+def compression(audio_file, output_path, intensity):
+    audio, sr = torchaudio.load(audio_file)
+    c = [24, 16, 8, 4, 2][intensity - 1]
+    if audio.shape[0] > 1: # Convert original audio to mono (if needed)
+        audio = torch.mean(audio, dim=0, keepdim=True)
+    max_val = torch.max(torch.abs(audio))
+    audio_norm = audio / max_val
+
+    bitrate_levels = 2 ** c
+    quantized_audio = torch.round(audio_norm * (bitrate_levels - 1)) / (bitrate_levels - 1)
+    audio_with_noise = quantized_audio * max_val
+    torchaudio.save(output_path, audio_with_noise, sr)
 
 
 def add_env_noise(audio_file, output_path, intensity, noise_dir=''):
@@ -226,6 +246,7 @@ def underwater_noise(audio_file, output_path, intensity):
     add_env_noise(audio_file, output_path, intensity, noise_dir=spatter_dir)
 
 ###########################################################################################
+
 
 ##################################### Human ######################################################
 
@@ -347,7 +368,6 @@ def interference_noise(audio_file, output_path, intensity):
 #     # # Save the output
 #     # sf.write(output_path, output, sr)
 
-
 def make_dataset(dir, candi_audios):
     audios = []
     dir = os.path.expanduser(dir)
@@ -393,6 +413,8 @@ class DistortAudioFolder(data.Dataset):
             speckle_noise(self.audio_paths[index], os.path.join(save_path, self.candi_audio_names[index]), self.severity)
         elif self.corruption == 'interference':
             interference_noise(self.audio_paths[index], os.path.join(save_path, self.candi_audio_names[index]), self.severity)
+        elif self.corruption == 'compression':
+            compression(self.audio_paths[index], os.path.join(save_path, self.candi_audio_names[index]), self.severity) 
         else:
             eval(self.corruption + '_noise')(self.audio_paths[index], os.path.join(save_path, self.candi_audio_names[index]), self.severity)
         
@@ -429,7 +451,7 @@ d = collections.OrderedDict()
 if args.corruption == 'all':
     corruption_list = [
         'gaussian_noise', 'impulse_noise', 
-        'shot_noise', 'speckle_noise', 
+        'shot_noise', 'speckle_noise', 'compression', 
         'snow', 'frost' , 'spatter', 'wind', 
         'concert', 'smoke', 'rain', 'crowd',
         'underwater', 'interference']
