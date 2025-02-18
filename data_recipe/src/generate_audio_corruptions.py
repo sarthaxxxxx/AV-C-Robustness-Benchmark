@@ -181,17 +181,66 @@ def impulse_noise(audio_file, output_path, intensity, impulse_prob=0.05):
     y_noisy = torch.clamp(waveform + salt_pepper, -1.0, 1.0)
     torchaudio.save(output_path, y_noisy, sr)
 
-def compression(audio_file, output_path, intensity):
-    audio, sr = torchaudio.load(audio_file)
-    c = [24, 16, 8, 4, 2][intensity - 1]
-    if audio.shape[0] > 1: # Convert original audio to mono (if needed)
-        audio = torch.mean(audio, dim=0, keepdim=True)
-    max_val = torch.max(torch.abs(audio))
-    audio_norm = audio / max_val
+# def compression(audio_file, output_path, intensity):
+#     audio, sr = torchaudio.load(audio_file)
+#     c = [24, 16, 8, 4, 2][intensity - 1]
+#     if audio.shape[0] > 1: # Convert original audio to mono (if needed)
+#         audio = torch.mean(audio, dim=0, keepdim=True)
+#     max_val = torch.max(torch.abs(audio))
+#     audio_norm = audio / max_val
 
+#     bitrate_levels = 2 ** c
+#     quantized_audio = torch.round(audio_norm * (bitrate_levels - 1)) / (bitrate_levels - 1)
+#     audio_with_noise = quantized_audio * max_val
+#     torchaudio.save(output_path, audio_with_noise, sr)
+
+def compression(audio_file, output_path, intensity): # frequency domain
+    from scipy.fftpack import dct, idct
+    audio, sr = torchaudio.load(audio_file)
+    if audio.shape[0] > 1:
+        audio = torch.mean(audio, dim=0, keepdim=True)
+
+    c = [24, 16, 8, 4, 2][intensity - 1]
+
+    num_samples = audio.shape[-1]
+    block_size = 1024
+    num_blocks = (num_samples + block_size - 1) // block_size  # ceiling division
+    padded_length = num_blocks * block_size
+    padded_data = torch.zeros(padded_length)
+    padded_data[:num_samples] = audio
+
+    output_data = torch.zeros_like(padded_data)
     bitrate_levels = 2 ** c
-    quantized_audio = torch.round(audio_norm * (bitrate_levels - 1)) / (bitrate_levels - 1)
-    audio_with_noise = quantized_audio * max_val
+
+    for b in range(num_blocks):
+        start = b * block_size
+        end = start + block_size
+        
+        block = padded_data[start:end]
+        
+        # (a) Forward DCT
+        block_dct = dct(block.numpy(), norm='ortho')
+        block_dct = torch.from_numpy(block_dct)
+        # (b) Quantize coefficients
+        #     First, find max absolute value to normalize
+        max_coeff = torch.max(torch.abs(block_dct))
+        if max_coeff < 1e-10:
+            max_coeff = 1e-10  # avoid divide-by-zero for silent blocks
+        block_dct_norm = block_dct / max_coeff
+        
+        # Map to [-1, 1], then quantize to 'levels'
+        block_dct_quant = torch.round(block_dct_norm * (bitrate_levels / 2)) / (bitrate_levels / 2)
+        
+        # Scale back
+        block_dct_compressed = block_dct_quant * max_coeff
+        
+        # (c) Inverse DCT
+        block_idct = idct(block_dct_compressed.numpy(), norm='ortho')
+        block_idct = torch.from_numpy(block_idct)
+        # Store in output buffer
+        output_data[start:end] = block_idct
+
+    audio_with_noise = output_data[:num_samples].reshape(audio.shape)
     torchaudio.save(output_path, audio_with_noise, sr)
 
 
