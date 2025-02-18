@@ -178,7 +178,6 @@ def interference_noise(audio_file, output_path, intensity):
     '''
     Add silences to the audio
     '''
-
     waveform, sr = torchaudio.load(audio_file)
     severity_levels = {1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5}  # Fraction of audio to be muted
     mask_fraction = severity_levels[intensity]
@@ -191,6 +190,21 @@ def interference_noise(audio_file, output_path, intensity):
     for pos in mask_positions:
         waveform[:, pos:pos + chunk_size] = 0  # Zero out chunk
     torchaudio.save(output_path, waveform, sr)
+
+def compression_noise(audio_file, output_path, intensity):
+    from scipy.signal import butter, lfilter
+    waveform, sample_rate = torchaudio.load(audio_file)
+    cutoff_freqs = [8000, 6000, 4000, 2000, 1000]  # Lower cutoff = more degradation
+    cutoff = cutoff_freqs[intensity - 1]
+    def butter_lowpass(cutoff, sr, order=6):
+        nyquist = 0.5 * sr
+        normal_cutoff = cutoff / nyquist
+        b, a = butter(order, normal_cutoff, btype='low', analog=False)
+        return b, a
+    b, a = butter_lowpass(cutoff, sample_rate)
+    filtered_waveform = torch.tensor([lfilter(b, a, ch.numpy()) for ch in waveform])
+    torchaudio.save(output_path, filtered_waveform, sample_rate)
+
 
 ###########################################################################################
 
