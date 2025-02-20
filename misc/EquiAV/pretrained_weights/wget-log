@@ -1,0 +1,6 @@
+--2025-02-19 01:33:31--  https://docs.google.com/uc?export=download
+Resolving docs.google.com (docs.google.com)... 142.250.115.138, 142.250.115.101, 142.250.115.139, ...
+Connecting to docs.google.com (docs.google.com)|142.250.115.138|:443... connected.
+HTTP request sent, awaiting response... 400 Bad Request
+2025-02-19 01:33:31 ERROR 400: Bad Request.
+

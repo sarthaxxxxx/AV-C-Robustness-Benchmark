@@ -1,0 +1,13 @@
+python ft_main.py \
+    --gpu '0,1,2' \
+    --model 'ft_EquiAV' \
+    --dataset VGGSound \
+    --pretrained_model pretrained_weights/EquiAV_pretrained.pth \
+    --max_epoch 50 \
+    --warmup_epoch 1 \
+    --batch_size 32 \
+    --trainfunc_ft bceloss \
+    --lr 1e-4 \
+    --ftmode multimodal \
+    --save_path /mnt/data2/saksham/AV_robust/equiAV_ckpts \
+    --no_wandb
