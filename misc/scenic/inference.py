@@ -40,10 +40,10 @@ def load_audio_waveform(audio_path, desired_samples=128000):
     waveform = waveform[:, np.newaxis]
     return waveform.astype(np.float32)
 
-base_vid_dir = '/mnt/data2/wpian/VGGSound/VGGSound'
-base_aud_dir = '/mnt/data2/saksham/AV_robust/equiAV_audio/'
+base_vid_dir = '/mnt/data1/wpian/VGGSound/VGGSound'
+base_aud_dir = '/mnt/data1/saksham/AV_robust/equiAV_audio/'
 
-vid = 'UCZQrcEt4KA_000030'
+vid = 'snh7E7llb48_000070'
 vid_path = os.path.join(base_vid_dir, vid + '.mp4')
 aud_path = os.path.join(base_aud_dir, vid + '.wav')
 
@@ -70,8 +70,10 @@ inputs = {
     'waveform': waveform_input
 }
 
-model_dir = "/mnt/data2/saksham/AV_robust/scenic/tf_saved_model"
+model_dir = "/mnt/data1/saksham/AV_robust/scenic/tf_saved_model"
 model = tf.saved_model.load(model_dir)
 
 outputs = model(inputs)
+max_index = tf.argmax(outputs, axis=1).numpy()[0]  # Convert to NumPy and extract scalar
+print(max_index)
 print(outputs.shape)
