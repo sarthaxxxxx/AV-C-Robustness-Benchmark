@@ -1,0 +1,928 @@
+vid,label,split,label_equiav,pred
+qBcqawqcC3Y_000132,air conditioning noise,train,vgg_271,124
+iLhJ2bv_GP8_000010,air conditioning noise,train,vgg_271,124
+-cKVrbxrDcU_000024,air conditioning noise,train,vgg_271,124
+iaUwr0fTHzA_000023,air horn,train,vgg_308,31
+qTnBep3DwqU_000004,air horn,train,vgg_308,150
+UBF9vcBj9sQ_000060,air horn,train,vgg_308,103
+FiCtwVtKpZM_000093,airplane,train,vgg_188,273
+_Uh7ZF2Ulm4_000192,airplane,train,vgg_188,273
+N64HKBov-dE_000020,airplane,train,vgg_188,273
+Wg_kiibLxBM_000004,airplane flyby,train,vgg_74,235
+sAeme7IN9uA_000127,airplane flyby,train,vgg_74,235
+L8xip2B_fz8_000300,airplane flyby,train,vgg_74,235
+GCtgditd9Ao_000394,alarm clock ringing,train,vgg_239,291
+ruU7MV8e4Z8_000058,alarm clock ringing,train,vgg_239,291
+8PbZHLpQOFw_000005,alarm clock ringing,train,vgg_239,291
+Cy2akN2bTX4_000017,"alligators, crocodiles hissing",train,vgg_231,43
+l_H_1qzt_bU_000013,"alligators, crocodiles hissing",train,vgg_231,43
+-RJ2GSIuZTA_000133,"alligators, crocodiles hissing",train,vgg_231,43
+WKCMM4h4c6o_000019,ambulance siren,train,vgg_0,301
+VqczA8N9pqM_000019,ambulance siren,train,vgg_0,246
+z55l9ypvST0_000030,ambulance siren,train,vgg_0,301
+9xinEbq6ZMs_000061,arc welding,train,vgg_82,274
+1F2F-ppo5NI_000192,arc welding,train,vgg_82,274
+teHNZBh1gvs_000352,arc welding,train,vgg_82,274
+3eRlys2yHIE_000060,baby babbling,train,vgg_161,173
+JVy16xt5EkU_000000,baby babbling,train,vgg_161,95
+nOhZivlLvOo_000020,baby babbling,train,vgg_161,229
+oF5qNVILyVU_000030,baby crying,train,vgg_144,298
+lGsxnfOPaUw_000022,baby crying,train,vgg_144,298
+NDlK1ogSENw_000016,baby crying,train,vgg_144,298
+Rb38rF9eEzo_000024,baby laughter,train,vgg_100,159
+C4YkkL6W_ow_000001,baby laughter,train,vgg_100,159
+hC9yL_ZfJ7c_000113,baby laughter,train,vgg_100,159
+XrASGs5EIoY_000086,baltimore oriole calling,train,vgg_289,304
+XrASGs5EIoY_000012,baltimore oriole calling,train,vgg_289,304
+FmZhJQHIrqQ_000001,baltimore oriole calling,train,vgg_289,304
+MhTUzn5uMhM_000078,barn swallow calling,train,vgg_216,193
+VE5lF6WFhes_000144,barn swallow calling,train,vgg_216,193
+44YRq69crRY_000056,barn swallow calling,train,vgg_216,193
+2X1eX5WsqTo_000030,basketball bounce,train,vgg_1,164
+fRC0BCVHdGk_000000,basketball bounce,train,vgg_1,164
+B1AANgvYMw4_000070,basketball bounce,train,vgg_1,164
+m8tQPdqpAy4_000053,bathroom ventilation fan running,train,vgg_290,74
+Ka8HQPxY4H8_000026,bathroom ventilation fan running,train,vgg_290,74
+AbPCu5I9DGQ_000005,bathroom ventilation fan running,train,vgg_290,185
+PLq3wjMS2WA_000008,beat boxing,train,vgg_59,208
+csRdiau7Rs8_000097,beat boxing,train,vgg_59,208
+z2oCZ4uBAX0_000020,beat boxing,train,vgg_59,208
+_n5GtoEuO9c_000060,"bee, wasp, etc. buzzing",train,vgg_180,176
+-h8I3cqpgnA_000085,"bee, wasp, etc. buzzing",train,vgg_180,176
+rQnnw8ZV4vY_000603,"bee, wasp, etc. buzzing",train,vgg_180,176
+dB1Q_knfSng_000042,"bird chirping, tweeting",train,vgg_2,149
+g5Lg3mT0Brc_000010,"bird chirping, tweeting",train,vgg_2,70
+Sv2u39NDmZA_000030,"bird chirping, tweeting",train,vgg_2,70
+mmi92uc3MDA_000232,bird squawking,train,vgg_235,202
+YbtpsJE7kBk_000015,bird squawking,train,vgg_235,278
+wb6Ncu5XhHM_000011,bird squawking,train,vgg_235,162
+O5mP6wrRXLI_000068,bird wings flapping,train,vgg_262,37
+1kBVRUwXrn4_000400,bird wings flapping,train,vgg_262,70
+I5Kt8XGFcXw_000049,bird wings flapping,train,vgg_262,37
+XIayra0JotU_000070,black capped chickadee calling,train,vgg_204,287
+EHHefsog-aM_000069,black capped chickadee calling,train,vgg_204,287
+myiaSS53jjI_000526,black capped chickadee calling,train,vgg_204,287
+fMg5fovtooI_000197,blowtorch igniting,train,vgg_268,132
+07GE2h1quj8_000290,blowtorch igniting,train,vgg_268,132
+dCw9kflTWhQ_000173,blowtorch igniting,train,vgg_268,132
+G6E8akytRyw_000059,bouncing on trampoline,train,vgg_184,242
+vrC-nUPnsEY_000031,bouncing on trampoline,train,vgg_184,242
+i5R9JVadqD8_000251,bouncing on trampoline,train,vgg_184,194
+LNuG24C9u8c_000066,bowling impact,train,vgg_72,300
+9Ucx48wfASI_000404,bowling impact,train,vgg_72,300
+np_9Akdy-AI_000011,bowling impact,train,vgg_72,198
+t6TKIOp3dqQ_000056,bull bellowing,train,vgg_243,67
+LCfsFbWZ-x0_000219,bull bellowing,train,vgg_243,270
+okeNklurFq0_000148,bull bellowing,train,vgg_243,67
+UqQwZ_uHudA_000051,canary calling,train,vgg_135,70
+WqaWRS3XuZ4_000004,canary calling,train,vgg_135,72
+x04R1vOFO84_000131,canary calling,train,vgg_135,72
+xru0ei34zcI_000046,cap gun shooting,train,vgg_92,48
+z6A3MMB8NP0_000178,cap gun shooting,train,vgg_92,48
+gGhtZgt5p34_000000,cap gun shooting,train,vgg_92,48
+kjdBnQM2xaE_000068,car engine idling,train,vgg_228,180
+HiZMgIsK3Lw_000137,car engine idling,train,vgg_228,36
+lJCzrcXr47o_000089,car engine idling,train,vgg_228,36
+cNbBx5n4ur4_000026,car engine knocking,train,vgg_63,189
+hqV3aFSPJ_I_000020,car engine knocking,train,vgg_63,189
+i5e3uja3Rx0_000011,car engine knocking,train,vgg_63,189
+eC8Y35rluu0_000065,car engine starting,train,vgg_191,231
+7YkJuYylTVk_000030,car engine starting,train,vgg_191,231
+aKT7RRIU9FM_000035,car engine starting,train,vgg_191,231
+zkgBXdZRS2I_000000,car passing by,train,vgg_162,271
+1xZDoVUV3P8_000000,car passing by,train,vgg_162,144
+Jo4fAcY9Xng_000030,car passing by,train,vgg_162,125
+XDbYR0ExLw0_000382,cat caterwauling,train,vgg_274,209
+ufoqrr-ToiI_000051,cat caterwauling,train,vgg_274,209
+gpeTYBH009Y_000000,cat caterwauling,train,vgg_274,226
+i0tcBIDIkDg_000005,cat growling,train,vgg_227,17
+TU1AsAAJen4_000007,cat growling,train,vgg_227,17
+fT8S8PaIDNc_000214,cat growling,train,vgg_227,17
+jca6eItSFes_000092,cat hissing,train,vgg_244,226
+nkDViiqElww_000029,cat hissing,train,vgg_244,226
+WihQCnmBSJo_000031,cat hissing,train,vgg_244,226
+7qGNh8_MyII_000009,cat meowing,train,vgg_165,209
+nrIxWlxtNDU_000045,cat meowing,train,vgg_165,209
+Hrl1UhQIEAs_000030,cat meowing,train,vgg_165,209
+SgHEpDzfjmM_000332,cat purring,train,vgg_104,100
+UfXWy9eUCRI_000000,cat purring,train,vgg_104,100
+N25N9nR8YWU_000075,cat purring,train,vgg_104,100
+NdoRdLlFyDg_000000,cattle mooing,train,vgg_132,58
+aSPzTOxWV_Y_000029,cattle mooing,train,vgg_132,58
+XYWMTMx0qZE_000030,cattle mooing,train,vgg_132,58
+6eSAtvhLJTE_000045,"cattle, bovinae cowbell",train,vgg_148,197
+nQXTS1Mh3s0_000016,"cattle, bovinae cowbell",train,vgg_148,197
+UHvNH55wg0c_000030,"cattle, bovinae cowbell",train,vgg_148,197
+G2LsLEhzlsA_000203,cell phone buzzing,train,vgg_291,96
+8FOXp_sZv5k_000007,cell phone buzzing,train,vgg_291,83
+fxpsb3kPY1A_000059,cell phone buzzing,train,vgg_291,83
+fXS4OGMzjbc_000030,chainsawing trees,train,vgg_3,220
+DZdhnk9x1MQ_000000,chainsawing trees,train,vgg_3,220
+5NqpmNqPDeQ_000030,chainsawing trees,train,vgg_3,220
+6_i4ZL2qdX8_000219,cheetah chirrup,train,vgg_220,44
+jQpJhHmBMtM_000001,cheetah chirrup,train,vgg_220,44
+MaEhHv3woHo_000177,cheetah chirrup,train,vgg_220,204
+a1xiQtR7RE0_000021,chicken clucking,train,vgg_154,303
+LGk1hK4BDfM_000030,chicken clucking,train,vgg_154,285
+Z8lpW0QTDFY_000102,chicken clucking,train,vgg_154,303
+d2XvPNPW-bw_000064,chicken crowing,train,vgg_4,297
+SbeCnPVuVBo_000250,chicken crowing,train,vgg_4,297
+4ursgQETEJQ_000020,chicken crowing,train,vgg_4,297
+7F4_gsPZXTg_000030,child singing,train,vgg_60,284
+u28xqvE1G0E_000094,child singing,train,vgg_60,284
+OQLTVmDtOVs_000170,child singing,train,vgg_60,284
+xZFqOJXPyN8_000040,"child speech, kid speaking",train,vgg_5,229
+Ab7o5MnmQLc_000020,"child speech, kid speaking",train,vgg_5,308
+ESQKMvVQxOM_000010,"child speech, kid speaking",train,vgg_5,229
+ZuoqIXVx1qM_000008,children shouting,train,vgg_288,225
+nquBUg8OFjM_000179,children shouting,train,vgg_288,242
+5dbdrcn2HV0_000185,children shouting,train,vgg_288,250
+3HGQZLwPRNM_000067,chimpanzee pant-hooting,train,vgg_196,157
+z9J8_eHIRkA_000008,chimpanzee pant-hooting,train,vgg_196,142
+juWNZGSW-_M_000055,chimpanzee pant-hooting,train,vgg_196,157
+9FkNJxdc8bk_000001,chinchilla barking,train,vgg_284,211
+qAYqy71oxWw_000386,chinchilla barking,train,vgg_284,211
+Uk9GNYOc7Aw_000119,chinchilla barking,train,vgg_284,211
+9ySljfe2_co_000050,chipmunk chirping,train,vgg_261,35
+RHbATxP6pic_000003,chipmunk chirping,train,vgg_261,35
+tMfnErt0Fj0_000041,chipmunk chirping,train,vgg_261,35
+_ISFiW-A2B8_000171,chopping food,train,vgg_292,169
+znvawU8Hlz0_000034,chopping food,train,vgg_292,169
+kI5E0o6W3Is_000100,chopping food,train,vgg_292,169
+R7LSWOym100_000174,chopping wood,train,vgg_263,244
+JYqF4uhP7vY_000030,chopping wood,train,vgg_263,161
+mpXgIbx8Tbs_000006,chopping wood,train,vgg_263,244
+KJxSJR3v6oE_000028,church bell ringing,train,vgg_119,47
+1XP6t4NAMls_000070,church bell ringing,train,vgg_119,47
+vhybxj-wmZs_000160,church bell ringing,train,vgg_119,47
+HNJP9IsA65Q_000012,civil defense siren,train,vgg_68,105
+zIZyrETf8P0_000018,civil defense siren,train,vgg_68,105
+OLX6xKij5GI_000005,civil defense siren,train,vgg_68,105
+IdHeNdpn0p8_000022,cow lowing,train,vgg_303,58
+YKm10HIpfq8_000105,cow lowing,train,vgg_303,58
+IwjMce4tgHs_000004,cow lowing,train,vgg_303,58
+_9OqyxNbXnk_000024,coyote howling,train,vgg_192,12
+p5RyVSIirpE_000009,coyote howling,train,vgg_192,258
+zvFmP7Mqdyo_000045,coyote howling,train,vgg_192,222
+SRwoNyPXwoU_000055,cricket chirping,train,vgg_137,204
+Pb8vhbhLwBM_000008,cricket chirping,train,vgg_137,204
+hrjSg6kOeaE_000015,cricket chirping,train,vgg_137,204
+MHJ6Fru5kSo_000073,crow cawing,train,vgg_61,184
+SmloArxVhEU_000002,crow cawing,train,vgg_61,184
+FoueZAMH5dA_000019,crow cawing,train,vgg_61,184
+XZ5CwTUy0F8_000042,cuckoo bird calling,train,vgg_281,107
+1esy_d0BPHU_000499,cuckoo bird calling,train,vgg_281,107
+jzmU0yHWyBM_000151,cuckoo bird calling,train,vgg_281,236
+l1dy0nnUpBA_000000,cupboard opening or closing,train,vgg_240,175
+_UkLInWB8ao_000000,cupboard opening or closing,train,vgg_240,175
+WmmzXmYvs1o_000038,cupboard opening or closing,train,vgg_240,142
+ZC-2tajiosw_000133,cutting hair with electric trimmers,train,vgg_256,237
+XJM-2A-FtzQ_000333,cutting hair with electric trimmers,train,vgg_256,21
+XRIqaLqASxo_000009,cutting hair with electric trimmers,train,vgg_256,237
+gqYklYaxHZ0_000039,dinosaurs bellowing,train,vgg_150,125
+EFpt8iwb4ys_000317,dinosaurs bellowing,train,vgg_150,7
+d-JTWRVbR_g_000120,dinosaurs bellowing,train,vgg_150,7
+6HVq8EODsPA_000328,disc scratching,train,vgg_293,219
+BusEwTNNKIo_000190,disc scratching,train,vgg_293,258
+Y00DRQ6yqCE_000109,disc scratching,train,vgg_293,219
+xJPrRpevxsA_000030,dog barking,train,vgg_125,269
+BUNrz3sXkMI_000070,dog barking,train,vgg_125,269
+ov4HAYnjuh0_000020,dog barking,train,vgg_125,269
+NNXDWre6OqA_000001,dog baying,train,vgg_219,147
+rqV8IkH3Muc_000120,dog baying,train,vgg_219,147
+oALl-G6t2dM_000071,dog baying,train,vgg_219,147
+6IuPqvMQCqE_000030,dog bow-wow,train,vgg_152,48
+RSZzoezA-Qw_000100,dog bow-wow,train,vgg_152,147
+gVxMnRjc_yI_000160,dog bow-wow,train,vgg_152,269
+2-YVr8OpXlY_000031,dog growling,train,vgg_112,152
+gkPndV7j4wQ_000014,dog growling,train,vgg_112,152
+T9BQi8jUthY_000294,dog growling,train,vgg_112,152
+6p28dgDY7YE_000089,dog howling,train,vgg_83,222
+3uZzriF1jXI_000032,dog howling,train,vgg_83,222
+FIOyB6sjTms_000000,dog howling,train,vgg_83,222
+dRGOYAWcb1U_000061,dog whimpering,train,vgg_200,120
+QGQKImZlLes_000046,dog whimpering,train,vgg_200,120
+6QmqdxUl814_000020,dog whimpering,train,vgg_200,120
+0YwpNBdx40A_000013,"donkey, ass braying",train,vgg_208,80
+02_0ce4wQLU_000024,"donkey, ass braying",train,vgg_208,210
+tz_weguNJ7U_000027,"donkey, ass braying",train,vgg_208,80
+B6Vg8AQuoQ0_000030,door slamming,train,vgg_294,229
+8xHw2Et4j_I_000021,door slamming,train,vgg_294,229
+sQ0PHw32Flc_000044,door slamming,train,vgg_294,39
+bS1N8Ani7jk_000180,driving buses,train,vgg_6,272
+JSOwp7wMQic_000002,driving buses,train,vgg_6,272
+u1maAiS95yo_000030,driving buses,train,vgg_6,272
+sCOeeikuOvk_000030,driving motorcycle,train,vgg_7,189
+PjDUsRFRj08_000120,driving motorcycle,train,vgg_7,57
+MZofS7ieIXM_000080,driving motorcycle,train,vgg_7,200
+NugWphjvtmk_000261,driving snowmobile,train,vgg_158,57
+aCb3xlozRAQ_000290,driving snowmobile,train,vgg_158,57
+8PFNX8ZCC9c_000079,driving snowmobile,train,vgg_158,57
+iVO2IR3kuWs_000030,duck quacking,train,vgg_159,53
+h9cQCwYniFs_000095,duck quacking,train,vgg_159,53
+jjdWRzkoiUE_000030,duck quacking,train,vgg_159,53
+yC0HDe8KYOU_000139,eagle screaming,train,vgg_265,9
+3ONjrdTj-qk_000015,eagle screaming,train,vgg_265,95
+tQBl4O2B2m8_000007,eagle screaming,train,vgg_265,9
+Ut8bXGGnx08_000030,eating with cutlery,train,vgg_183,18
+E8wTyOOsYYY_000065,eating with cutlery,train,vgg_183,199
+q620MLDibsc_000090,eating with cutlery,train,vgg_183,63
+q3NqCnsJBYI_000068,electric grinder grinding,train,vgg_214,196
+dcErs8JejnU_000043,electric grinder grinding,train,vgg_214,234
+Ofmf4zja1o8_000150,electric grinder grinding,train,vgg_214,224
+V-JRaAyJz_E_000042,"electric shaver, electric razor shaving",train,vgg_89,131
+5t79929JHC8_000016,"electric shaver, electric razor shaving",train,vgg_89,21
+5-2P164Bv-M_000057,"electric shaver, electric razor shaving",train,vgg_89,21
+EK56Obpu5ME_000067,elephant trumpeting,train,vgg_247,195
+PgG2-gpemT0_000010,elephant trumpeting,train,vgg_247,195
+srFfwga0SU8_000030,elephant trumpeting,train,vgg_247,195
+MvPsKM7_Xs8_000077,eletric blender running,train,vgg_283,181
+p0wpt_g19vM_000031,eletric blender running,train,vgg_283,132
+zWIQoMMl784_000000,eletric blender running,train,vgg_283,181
+sTToBcNbLH4_000080,elk bugling,train,vgg_176,261
+o_ILqeA57_E_000030,elk bugling,train,vgg_176,261
+rQMYsPdqjgY_000844,elk bugling,train,vgg_176,261
+Nz15RLDx4Rc_000005,"engine accelerating, revving, vroom",train,vgg_8,125
+F_3J0xccRR8_000021,"engine accelerating, revving, vroom",train,vgg_8,125
+0bH3TyMHEj8_000030,"engine accelerating, revving, vroom",train,vgg_8,125
+5ZMOvpgtaqc_000030,female singing,train,vgg_9,255
+0WFqxpj_PHc_000030,female singing,train,vgg_9,255
+nWwjFqSFpv0_000030,female singing,train,vgg_9,255
+1k1eMJE_hho_000030,"female speech, woman speaking",train,vgg_10,141
+rBFyfa0BxDQ_000010,"female speech, woman speaking",train,vgg_10,141
+D4W50EfAS8Q_000030,"female speech, woman speaking",train,vgg_10,141
+MBeX-8Y30cw_000016,ferret dooking,train,vgg_273,292
+umNm33h_mFA_000001,ferret dooking,train,vgg_273,292
+MBeX-8Y30cw_000097,ferret dooking,train,vgg_273,292
+ayc8PK3vOxM_000066,fire crackling,train,vgg_190,117
+XH4V80mJUw4_000002,fire crackling,train,vgg_190,117
+LYf8FEvC9tA_000005,fire crackling,train,vgg_190,117
+CFq5aUabLZ4_000080,fire truck siren,train,vgg_79,246
+W8BbpsAWxho_000056,fire truck siren,train,vgg_79,246
+vXdQA-7NiUk_000019,fire truck siren,train,vgg_79,246
+VPDp2IiNgG4_000000,fireworks banging,train,vgg_11,191
+CdEKl0BEpI0_000010,fireworks banging,train,vgg_11,191
+20d4vfH1r7A_000040,fireworks banging,train,vgg_11,191
+sR-yBucHMBA_000081,firing cannon,train,vgg_237,125
+symmHRnbAJs_000237,firing cannon,train,vgg_237,142
+aR2xrECuGQE_000199,firing cannon,train,vgg_237,142
+sNMc-5u8UW0_000143,firing muskets,train,vgg_218,23
+INExk4YRqgs_000004,firing muskets,train,vgg_218,23
+aRfC5YUoDxc_000019,firing muskets,train,vgg_218,48
+OXvgOLn5ehg_000078,"fly, housefly buzzing",train,vgg_295,10
+eVNINzK_hpw_000061,"fly, housefly buzzing",train,vgg_295,10
+4SToswHS8bw_000141,"fly, housefly buzzing",train,vgg_295,10
+JfugWGkdVNo_000001,foghorn,train,vgg_282,240
+rJUXMT8bmcM_000012,foghorn,train,vgg_282,240
+UxD0qnZCa3w_000110,foghorn,train,vgg_282,240
+ZnuT3GkxMUE_000004,footsteps on snow,train,vgg_266,158
+7RAgdMrccug_000017,footsteps on snow,train,vgg_266,106
+l628EqC2ZBc_000023,footsteps on snow,train,vgg_266,158
+mVFJEtG7hSA_000483,forging swords,train,vgg_258,174
+99-nfBK80no_000263,forging swords,train,vgg_258,149
+1ovmYuSuw5g_000034,forging swords,train,vgg_258,174
+21raTPIK5J0_000000,fox barking,train,vgg_232,263
+RSNr77fEk8U_000141,fox barking,train,vgg_232,263
+IZr_1vTYTHQ_000027,fox barking,train,vgg_232,263
+8jYJXxVSfso_000017,francolin calling,train,vgg_146,30
+i_CrIsEufjs_000002,francolin calling,train,vgg_146,30
+6ZkJ15TdHmw_000291,francolin calling,train,vgg_146,30
+fPL97WEor_g_000000,frog croaking,train,vgg_53,223
+c5BwefB89jc_000010,frog croaking,train,vgg_53,223
+l-2WyrC7Tas_000269,frog croaking,train,vgg_53,223
+1bGk56J2BPI_000005,gibbon howling,train,vgg_120,296
+CTvhe9ME-wk_000015,gibbon howling,train,vgg_120,296
+cqWSMzcYjWs_000026,gibbon howling,train,vgg_120,296
+VE80RNWuSxs_000024,goat bleating,train,vgg_270,202
+F30FZxeZLiw_000000,goat bleating,train,vgg_270,76
+3raMVUoN6Lw_000017,goat bleating,train,vgg_270,202
+cQMRWb4HcFw_000096,golf driving,train,vgg_248,306
+jcLMXBh380k_000022,golf driving,train,vgg_248,306
+cTtpxu7fwgs_000003,golf driving,train,vgg_248,306
+CARSpTqiQjg_000018,goose honking,train,vgg_121,285
+o1eATYuzao8_000030,goose honking,train,vgg_121,285
+9V_GKAZ0wVw_000403,goose honking,train,vgg_121,285
+H5znhcqlWrQ_000020,hail,train,vgg_134,78
+1XtnAQnS91c_000017,hail,train,vgg_134,78
+olNSHb8kvso_000005,hail,train,vgg_134,78
+KJoVGKBnZAw_000146,hair dryer drying,train,vgg_236,243
+eWg3Z2LsQrk_000096,hair dryer drying,train,vgg_236,243
+xYdMTMjxx88_000458,hair dryer drying,train,vgg_236,259
+-XTdxysGplA_000000,hammering nails,train,vgg_156,161
+p8JeMfwkNws_000026,hammering nails,train,vgg_156,161
+YzBaTwjmikc_000018,hammering nails,train,vgg_156,161
+mq6FQZ6BkMs_000063,"heart sounds, heartbeat",train,vgg_127,51
+klhO0Y6jgFM_000175,"heart sounds, heartbeat",train,vgg_127,51
+smKcEKB9W24_000189,"heart sounds, heartbeat",train,vgg_127,51
+ct4KovxrquI_000186,hedge trimmer running,train,vgg_267,220
+6Av02OOe5nk_000041,hedge trimmer running,train,vgg_267,220
+Kdnki7XBzPE_000031,hedge trimmer running,train,vgg_267,131
+K9pxq6oUhWI_000050,helicopter,train,vgg_12,253
+24OKPZIt8NE_000150,helicopter,train,vgg_12,253
+Skuap90TC7g_000030,helicopter,train,vgg_12,239
+2lIszX4ZAfY_000030,horse clip-clop,train,vgg_99,290
+xfd-ki1Dtlc_000003,horse clip-clop,train,vgg_99,290
+3mwpcqHnhN4_000030,horse clip-clop,train,vgg_99,290
+1sf-Wco1stc_000290,horse neighing,train,vgg_166,178
+aR_vxJKLJ54_000004,horse neighing,train,vgg_166,178
+6ILMGBWntxY_000006,horse neighing,train,vgg_166,178
+YojQoxEdW8k_000195,ice cracking,train,vgg_229,106
+06iI8SqH55k_000044,ice cracking,train,vgg_229,226
+Vzw07t64zks_000095,ice cracking,train,vgg_229,106
+uAi5Zwx9Yo0_000064,"ice cream truck, ice cream van",train,vgg_142,242
+n5hRcxZFq4I_000089,"ice cream truck, ice cream van",train,vgg_142,238
+KiKwtM_laoA_000127,"ice cream truck, ice cream van",train,vgg_142,238
+N3lNYFGQDSE_000040,lathe spinning,train,vgg_106,234
+R1LJ1yQBrKQ_000310,lathe spinning,train,vgg_106,239
+fUpjBiHTCMc_000088,lathe spinning,train,vgg_106,239
+RhZvaeARgpc_000030,lawn mowing,train,vgg_107,275
+rz68vPX4oR8_000000,lawn mowing,train,vgg_107,275
+kCds5WRsuYQ_000070,lawn mowing,train,vgg_107,275
+_UqT9fl-BcY_000012,lighting firecrackers,train,vgg_108,252
+XqUPqLZ09NE_000048,lighting firecrackers,train,vgg_108,252
+SWaq5ko__SM_000034,lighting firecrackers,train,vgg_108,252
+VdAZ14-NDOc_000030,lions growling,train,vgg_160,65
+_nlaU3VUfe0_000060,lions growling,train,vgg_160,65
+6m9XPOKgWE0_000020,lions growling,train,vgg_160,73
+gOaQmkAlhUA_000021,lions roaring,train,vgg_75,65
+-wvdBDsvSmc_000097,lions roaring,train,vgg_75,65
+NvAScGaKUIA_000030,lions roaring,train,vgg_75,65
+TehDWoXL96Y_000204,lip smacking,train,vgg_257,48
+Ac_k6p3DrlI_001085,lip smacking,train,vgg_257,307
+QWF9M1gPRcQ_001256,lip smacking,train,vgg_257,307
+kADNci-RGRo_000497,machine gun shooting,train,vgg_65,172
+pRNr1pqekUw_000025,machine gun shooting,train,vgg_65,172
+mCbn3Ywr6nQ_000000,machine gun shooting,train,vgg_65,172
+AfYIBgyKNho_000035,magpie calling,train,vgg_213,149
+-qizkFkLQT4_000042,magpie calling,train,vgg_213,116
+nMUnak-NIJc_000013,magpie calling,train,vgg_213,116
+1Kbn1ZyMmRs_000030,male singing,train,vgg_13,127
+4ndYVaLbpEQ_000030,male singing,train,vgg_13,127
+r_czUsh-I7k_000161,male singing,train,vgg_13,127
+yRVe_qF5OLk_000230,"male speech, man speaking",train,vgg_14,308
+DSOQnoi3l5M_000030,"male speech, man speaking",train,vgg_14,308
+6O4Xz0D-HMo_000030,"male speech, man speaking",train,vgg_14,308
+-LNvqMp0HrA_000198,metronome,train,vgg_296,89
+hXTwiqiWqs4_000013,metronome,train,vgg_296,89
+AKDRRkSaG5o_000086,metronome,train,vgg_296,89
+nLpoICblFvI_000011,missile launch,train,vgg_69,121
+XvEg6jSb3qY_000031,missile launch,train,vgg_69,121
+8LVXoCCrtL0_000190,missile launch,train,vgg_69,121
+qhy7wB7Cq5E_000050,mosquito buzzing,train,vgg_209,176
+x55BbbWOGu0_000141,mosquito buzzing,train,vgg_209,88
+hscHP77dcHU_000042,mosquito buzzing,train,vgg_209,88
+Xz3e0t6JD28_000040,"motorboat, speedboat acceleration",train,vgg_15,271
+BmWTByve7xg_000030,"motorboat, speedboat acceleration",train,vgg_15,271
+M0gCiUVSyCE_000080,"motorboat, speedboat acceleration",train,vgg_15,271
+a7lshJyhfis_000064,mouse clicking,train,vgg_145,288
+1SCMmdT1-YY_000020,mouse clicking,train,vgg_145,288
+8X-q-W6MavY_000204,mouse clicking,train,vgg_145,288
+KaEuTPFDwXM_000000,mouse pattering,train,vgg_211,98
+Ue5q1ya4CCA_000002,mouse pattering,train,vgg_211,98
+yv8H0CRn-jQ_000070,mouse pattering,train,vgg_211,98
+X1N7dqRUhoo_000078,mouse squeaking,train,vgg_272,185
+PNRVqL7pe4A_000029,mouse squeaking,train,vgg_272,185
+nmVUJlM5YZU_000019,mouse squeaking,train,vgg_272,185
+M4w9yl5HJno_000063,mynah bird singing,train,vgg_97,236
+bHsBc-3C1e4_000014,mynah bird singing,train,vgg_97,236
+jd35DRuAqiE_000171,mynah bird singing,train,vgg_97,236
+6WFznj9XoM4_000140,ocean burbling,train,vgg_66,145
+K6d9eMxHt4o_000040,ocean burbling,train,vgg_66,170
+ayiJmUnaCmw_000090,ocean burbling,train,vgg_66,170
+PtZ7jqGzCY8_000010,opening or closing car doors,train,vgg_201,308
+l5Z2yG5w6OM_000003,opening or closing car doors,train,vgg_201,187
+qGqG81R1Zds_000000,opening or closing car doors,train,vgg_201,187
+ZQjuK85Qeiw_000106,opening or closing car electric windows,train,vgg_287,148
+1YWf06Valqs_001000,opening or closing car electric windows,train,vgg_287,187
+hPXu45XnMh0_000015,opening or closing car electric windows,train,vgg_287,179
+CbabViJ0eEY_000445,opening or closing drawers,train,vgg_202,265
+yrOW-Um1u2s_000003,opening or closing drawers,train,vgg_202,6
+lfnrOyiE1wg_000194,opening or closing drawers,train,vgg_202,265
+sq-PQBO4fM8_000030,orchestra,train,vgg_16,79
+dhYVes3jMZM_000150,orchestra,train,vgg_16,135
+kxycHRJD8nE_000260,orchestra,train,vgg_16,135
+6-eB2bSzWg0_000006,otter growling,train,vgg_230,75
+5oK_2-mHzqw_000012,otter growling,train,vgg_230,75
+T4yTDE-BF5Y_000050,otter growling,train,vgg_230,75
+Y0XtaaxNnjM_000107,owl hooting,train,vgg_128,233
+oweHy_65lN4_000012,owl hooting,train,vgg_128,233
+8C5B5Okv2po_000000,owl hooting,train,vgg_128,233
+sJOmNzwTf0E_000079,parrot talking,train,vgg_163,278
+0VbN89q-cUU_000102,parrot talking,train,vgg_163,278
+15vwA27hSNU_000015,parrot talking,train,vgg_163,278
+Iw3US8sScU4_000005,penguins braying,train,vgg_245,94
+A4wD6HZA5KY_000000,penguins braying,train,vgg_245,94
+hjTX8N5mcJ4_000001,penguins braying,train,vgg_245,44
+HrOY-NV8yAc_000030,people babbling,train,vgg_167,95
+NS1h51X3bic_000000,people babbling,train,vgg_167,95
+2S8S8bCiaeI_000030,people babbling,train,vgg_167,95
+hv0rAXB2638_000022,people battle cry,train,vgg_249,96
+2T-pBPhzsfo_000012,people battle cry,train,vgg_249,96
+64hJB1Q419I_000016,people battle cry,train,vgg_249,96
+m1zCgaboSO0_000000,people belly laughing,train,vgg_185,264
+3B8_AvjGIFc_000050,people belly laughing,train,vgg_185,264
+QxQ6Mo9KP6U_000090,people belly laughing,train,vgg_185,264
+N9cM9BdATNs_000081,people booing,train,vgg_17,279
+bVwoL9N5dx4_000061,people booing,train,vgg_17,279
+qDLgSa94Rwk_000221,people booing,train,vgg_17,279
+ElG6-NiKITw_000000,people burping,train,vgg_45,302
+t4z1V7tCveg_000030,people burping,train,vgg_45,59
+0ciASEdWOuA_000009,people burping,train,vgg_45,302
+6Zn4qXw-2ew_000030,people cheering,train,vgg_136,90
+-CJGj3-kNQY_000050,people cheering,train,vgg_136,90
+Fd_9e8x-arI_000002,people cheering,train,vgg_136,90
+GvvATwxg8h4_000330,people clapping,train,vgg_93,295
+pyOjqrbu1_k_000520,people clapping,train,vgg_93,295
+syuTAqcqVGE_000030,people clapping,train,vgg_93,295
+kRjNXTFIJ6w_000057,people coughing,train,vgg_203,302
+7pqRqXjqeX4_000330,people coughing,train,vgg_203,59
+8dlE19FO7Ds_000144,people coughing,train,vgg_203,59
+zmJt2rhq19M_000030,people crowd,train,vgg_18,90
+L0ctaUIyOGg_000020,people crowd,train,vgg_18,61
+AHg01lejFxw_000030,people crowd,train,vgg_18,90
+Icq5e4vvUNk_000004,people eating,train,vgg_277,267
+HEgEQ8Z3n0w_000140,people eating,train,vgg_277,267
+xVUw-8T6JbE_000413,people eating,train,vgg_277,267
+50tBhiy4YxE_000048,people eating apple,train,vgg_233,260
+nMlT6g8UMm4_000058,people eating apple,train,vgg_233,260
+N62KqinW4nE_000287,people eating apple,train,vgg_233,260
+YyZXfh6rOdE_000161,people eating crisps,train,vgg_206,154
+AWit1CgegYk_000073,people eating crisps,train,vgg_206,154
+KgGj_D-gKyw_000376,people eating crisps,train,vgg_206,154
+y1rmy38dUm0_000448,people eating noodle,train,vgg_174,13
+sbn71wiGzCc_000413,people eating noodle,train,vgg_174,13
+86_aq0HNL0A_000006,people eating noodle,train,vgg_174,13
+1dO7fONpkvE_000000,people farting,train,vgg_179,24
+Bds3rIhZDn0_000010,people farting,train,vgg_179,212
+eiy5Hrp50fw_000252,people farting,train,vgg_179,212
+sc7pB6VvJT8_000013,people finger snapping,train,vgg_297,0
+bBRrrhgFlvk_000015,people finger snapping,train,vgg_297,0
+BGhpttIsvRY_000561,people finger snapping,train,vgg_297,0
+av8Ha9H8-0w_000392,people gargling,train,vgg_279,8
+oMrBcpZoH-A_000103,people gargling,train,vgg_279,8
+AZZCB1GPRv0_000004,people gargling,train,vgg_279,302
+VGD2TokfoYE_000104,people giggling,train,vgg_255,229
+4rPgUfaKrv0_000541,people giggling,train,vgg_255,92
+xMgnmpVzYGw_000027,people giggling,train,vgg_255,92
+22HMtr4aeVo_000050,people hiccup,train,vgg_223,14
+aKevq_vcE0M_000030,people hiccup,train,vgg_223,14
+wRZErFGs2PE_000030,people hiccup,train,vgg_223,14
+UER2mN9O6DQ_000131,people humming,train,vgg_224,87
+LK4Izj5rWyQ_000005,people humming,train,vgg_224,87
+fRGunj3d4Kw_000083,people humming,train,vgg_224,87
+jJ4sXIpa0-A_000081,people marching,train,vgg_115,11
+h6emAdEl15o_000038,people marching,train,vgg_115,11
+zpDh4NX3Jns_000019,people marching,train,vgg_115,11
+mav-kHuDaag_000135,people nose blowing,train,vgg_276,4
+cFmyfASA0xw_000002,people nose blowing,train,vgg_276,48
+zKuVmCRwYAw_000072,people nose blowing,train,vgg_276,111
+8RuYfw4xqZc_000030,people running,train,vgg_215,143
+JsXUSL8kzdk_000030,people running,train,vgg_215,143
+0Y2Eo7QpooU_000015,people running,train,vgg_215,143
+XF-dkAiAKnc_000480,people screaming,train,vgg_133,225
+DF5LtYwhU9M_000000,people screaming,train,vgg_133,225
+vYEsMek-WQc_000430,people screaming,train,vgg_133,308
+5N2DC0bTsCY_000030,people shuffling,train,vgg_143,110
+VN_4Z0j3Qrw_000030,people shuffling,train,vgg_143,110
+U34SG4Elr5w_000030,people shuffling,train,vgg_143,110
+Tm27YwuQcAI_000042,people slapping,train,vgg_285,52
+Y6Z6DhdDyHM_000270,people slapping,train,vgg_285,8
+pr3-ZyH87qg_000173,people slapping,train,vgg_285,52
+KFlzjDjborc_000277,people slurping,train,vgg_172,154
+315VDFrYSZs_000987,people slurping,train,vgg_172,171
+VB-pz42YQeQ_000602,people slurping,train,vgg_172,171
+XHUDP7gVBes_000020,people sneezing,train,vgg_139,4
+qe166EMhnx0_000001,people sneezing,train,vgg_139,4
+CSdGqDZ09pA_000000,people sneezing,train,vgg_139,4
+qkZbN1nezLk_000030,people sniggering,train,vgg_95,22
+5SpLHPSHCFE_000150,people sniggering,train,vgg_95,22
+pIA8ExXOJ9k_000030,people sniggering,train,vgg_95,22
+msJEUyccJMU_000060,people sobbing,train,vgg_194,298
+knlFemwOuXs_000030,people sobbing,train,vgg_194,298
+D-YflsjEDDI_000060,people sobbing,train,vgg_194,298
+NtU6azFxcdE_000130,people whispering,train,vgg_129,24
+frjbwkS57XE_000150,people whispering,train,vgg_129,24
+CNX4-EN36eU_000050,people whispering,train,vgg_129,24
+0KweewGN-aY_000030,people whistling,train,vgg_98,268
+GRjcvpuyuaU_000040,people whistling,train,vgg_98,268
+UsOhOIiaLLY_000000,people whistling,train,vgg_98,268
+Yy_N0l9TqPg_000048,pheasant crowing,train,vgg_81,139
+00tm1g6HAg0_000051,pheasant crowing,train,vgg_81,139
+5sftCBWR6RI_000017,pheasant crowing,train,vgg_81,118
+TstyffFwIIM_000030,pig oinking,train,vgg_205,130
+b0Bmt0TNYtI_000020,pig oinking,train,vgg_205,130
+63vop7258V4_000030,pig oinking,train,vgg_205,130
+sCv0hq3CQc0_000030,"pigeon, dove cooing",train,vgg_19,60
+4ZL0k3aqblc_000030,"pigeon, dove cooing",train,vgg_19,60
+ZJJ5bIh8V30_000030,"pigeon, dove cooing",train,vgg_19,60
+0ZdFvKgwweg_000012,planing timber,train,vgg_116,224
+xZv_X2nSECY_000012,planing timber,train,vgg_116,224
+haQTnQPWy7M_000048,planing timber,train,vgg_116,224
+igGAsklLY5U_000038,plastic bottle crushing,train,vgg_259,192
+qEbJncCnuSI_000039,plastic bottle crushing,train,vgg_259,192
+LxdaY5-LY1Y_000081,plastic bottle crushing,train,vgg_259,192
+K7JZR_5QUjU_000100,playing accordion,train,vgg_20,201
+ndLL-ycrOuM_000040,playing accordion,train,vgg_20,201
+6hB1E-ge0UU_000250,playing accordion,train,vgg_20,201
+0VMe1reP0jI_000030,playing acoustic guitar,train,vgg_21,20
+r578-_JmuQo_000160,playing acoustic guitar,train,vgg_21,20
+34YlgsB5WuE_000030,playing acoustic guitar,train,vgg_21,20
+z3KazXe97Ak_000082,playing badminton,train,vgg_56,183
+iIO2_rwTr7M_000110,playing badminton,train,vgg_56,183
+K-ImIv4gA7E_000014,playing badminton,train,vgg_56,122
+vReuTxTnvyI_000070,playing bagpipes,train,vgg_78,280
+6ruj1_Q3SlQ_000150,playing bagpipes,train,vgg_78,280
+oCFJgH-51Lg_000042,playing bagpipes,train,vgg_78,280
+C96gDdF-uv4_000020,playing banjo,train,vgg_22,262
+eU4WueLiTQA_000121,playing banjo,train,vgg_22,40
+YoEAzazuJgI_000080,playing banjo,train,vgg_22,262
+_mVk_DahMBc_000534,playing bass drum,train,vgg_103,232
+AhNwN0c-Ztg_000000,playing bass drum,train,vgg_103,232
+SvT_f_lVyNQ_000010,playing bass drum,train,vgg_103,129
+W6kRSpNpIf4_000089,playing bass guitar,train,vgg_23,258
+hUns0WtLF1g_000480,playing bass guitar,train,vgg_23,258
+qJVyHsJ2uEs_000300,playing bass guitar,train,vgg_23,258
+K33GU1rwggw_000024,playing bassoon,train,vgg_24,221
+TmKldKRHNmA_000229,playing bassoon,train,vgg_24,221
+it_00sAaUtI_000038,playing bassoon,train,vgg_24,221
+RYOcGk1n70c_000077,playing bongo,train,vgg_86,40
+gJO4rXzpQ-Y_000004,playing bongo,train,vgg_86,40
+OFl6N3x4bN4_000005,playing bongo,train,vgg_86,40
+0V6DjfppH2g_000152,playing bugle,train,vgg_207,82
+PECUpJuUeAQ_000265,playing bugle,train,vgg_207,5
+Az7vnIf2nXs_000084,playing bugle,train,vgg_207,82
+QBo6hYdX-28_000204,playing castanets,train,vgg_304,138
+A6I3j-BvrZE_000052,playing castanets,train,vgg_304,127
+Budxy4SOy0Y_000000,playing castanets,train,vgg_304,138
+RQInNBTsxYI_000030,playing cello,train,vgg_25,140
+NlUhXUjqX-c_000030,playing cello,train,vgg_25,140
+NxpCpklgHas_000030,playing cello,train,vgg_25,140
+BTY5tEwm-54_000097,playing clarinet,train,vgg_46,249
+WjZEI1W-O_A_000000,playing clarinet,train,vgg_46,249
+DtRqBLRUTRo_000069,playing clarinet,train,vgg_46,249
+gZ97rBpS0qg_000037,playing congas,train,vgg_198,45
+YLJ4NWNpt9o_000131,playing congas,train,vgg_198,45
+gQVBvIts_nM_000066,playing congas,train,vgg_198,45
+vEN7-a_BSp0_000116,playing cornet,train,vgg_94,256
+1ficajioicg_000075,playing cornet,train,vgg_94,256
+LfqjXDBP7GU_000061,playing cornet,train,vgg_94,256
+fdqScxG9D1M_000130,playing cymbal,train,vgg_26,77
+ORUbnpQ-oUE_000020,playing cymbal,train,vgg_26,77
+Elki-LVVP_E_000138,playing cymbal,train,vgg_26,77
+p57NNVCXJCI_000245,playing darts,train,vgg_178,8
+Vz54WkUWJNA_000373,playing darts,train,vgg_178,114
+xnHqLMh34wU_000077,playing darts,train,vgg_178,114
+_LNQ-Fjsiqk_000167,playing didgeridoo,train,vgg_27,203
+j-7QRJIUO0U_000085,playing didgeridoo,train,vgg_27,203
+7-4iolIHPBI_000049,playing didgeridoo,train,vgg_27,203
+WZ8Oe83Mk7g_000132,playing djembe,train,vgg_212,305
+iR2FJefdWz8_000189,playing djembe,train,vgg_212,305
+Sim2AB79cro_000193,playing djembe,train,vgg_212,305
+LVyHk0lktDY_000076,playing double bass,train,vgg_118,25
+WPdlGl38s0s_000086,playing double bass,train,vgg_118,25
+UjWJ6BOQ-HE_000060,playing double bass,train,vgg_118,25
+GHC6Hpe8tk0_000410,playing drum kit,train,vgg_28,77
+-OwoOIYsIXY_000170,playing drum kit,train,vgg_28,129
+aoXFtSgcf7g_000030,playing drum kit,train,vgg_28,129
+0EGpWxPEr7M_000030,playing electric guitar,train,vgg_29,151
+4a7L_HE_2w8_000030,playing electric guitar,train,vgg_29,151
+yIE2GnZVO9c_000260,playing electric guitar,train,vgg_29,151
+kqZe-cA048g_000030,playing electronic organ,train,vgg_110,281
+fESiXEhMRfI_000030,playing electronic organ,train,vgg_110,281
+5KBLS4JKC1o_000030,playing electronic organ,train,vgg_110,282
+tu5XohUR3Pg_001544,playing erhu,train,vgg_70,108
+ERYUB760gi0_000193,playing erhu,train,vgg_70,108
+62Sboyh19LA_000182,playing erhu,train,vgg_70,108
+im3linVIcSs_000030,playing flute,train,vgg_30,26
+Kg_TMfJhBV0_000030,playing flute,train,vgg_30,26
+L3sxl6FL1hQ_000130,playing flute,train,vgg_30,26
+s7afsrBrnqY_000162,playing french horn,train,vgg_102,38
+Hpcta5kO0qA_000023,playing french horn,train,vgg_102,135
+WCzoaSb-WNE_000147,playing french horn,train,vgg_102,38
+CyHBkwPguP4_000059,playing glockenspiel,train,vgg_51,205
+sYqpnsIKRdE_000097,playing glockenspiel,train,vgg_51,205
+IzL1cAvI4Bg_000122,playing glockenspiel,train,vgg_51,205
+7uSqIrKT72Y_000061,playing gong,train,vgg_177,101
+Up5DiOZ51yY_000218,playing gong,train,vgg_177,101
+KogVAB8utXU_000239,playing gong,train,vgg_177,101
+Y9qVuCIMTag_000007,playing guiro,train,vgg_195,215
+Y-CQFjDqF7U_000010,playing guiro,train,vgg_195,215
+w6tBFQFsKO4_000035,playing guiro,train,vgg_195,215
+2i03yVUTE08_000185,playing hammond organ,train,vgg_47,282
+YkBMGukUTBg_000219,playing hammond organ,train,vgg_47,282
+WTwwS6vDKPk_000043,playing hammond organ,train,vgg_47,282
+PxrTknyG714_000001,playing harmonica,train,vgg_113,42
+UyQM7tlgspU_000005,playing harmonica,train,vgg_113,42
+9dtMTbSTZ9Y_000058,playing harmonica,train,vgg_113,42
+o45UbTSD9JA_000416,playing harp,train,vgg_31,71
+YHQ92CiNOY8_000270,playing harp,train,vgg_31,71
+bj0hVqsecbw_000344,playing harp,train,vgg_31,71
+pRWjRnlmdwU_000326,playing harpsichord,train,vgg_52,156
+zsIKlIdKOZk_000006,playing harpsichord,train,vgg_52,156
+eGtyTVGzvus_000030,playing harpsichord,train,vgg_52,156
+BjEwLEMFlvM_000161,playing hockey,train,vgg_221,122
+4fwQDqRDHt4_000368,playing hockey,train,vgg_221,122
+iUN_Q8dZcNE_000125,playing hockey,train,vgg_221,122
+EyOQpC3zzfg_000034,playing lacrosse,train,vgg_251,15
+CoWy8XMO59Y_000008,playing lacrosse,train,vgg_251,15
+GO6FAIwQddE_000022,playing lacrosse,train,vgg_251,15
+6oMxf6gNpO0_000055,playing mandolin,train,vgg_114,188
+uGEr7cvgBhg_000054,playing mandolin,train,vgg_114,188
+-BRvHgBiB2I_000147,playing mandolin,train,vgg_114,188
+82YR_WzCbho_000080,"playing marimba, xylophone",train,vgg_32,286
+PNneH-eaWgM_000190,"playing marimba, xylophone",train,vgg_32,286
+y3aBaoAANbg_000030,"playing marimba, xylophone",train,vgg_32,286
+aLTJsWCbDJ4_000071,playing oboe,train,vgg_181,214
+AreBzjVIhrk_000022,playing oboe,train,vgg_181,214
+OQwiKSp0SEc_000044,playing oboe,train,vgg_181,214
+RUm9jN9BDaI_000190,playing piano,train,vgg_33,119
+opPFOPFGr7Q_000010,playing piano,train,vgg_33,119
+cJuWEvjeVX0_000120,playing piano,train,vgg_33,119
+7kHM7JuWCZM_000070,playing saxophone,train,vgg_34,97
+1CcfihQOcEQ_000171,playing saxophone,train,vgg_34,97
+J3mjel2hB9I_000321,playing saxophone,train,vgg_34,97
+7IgV1Ta4Vpc_000134,playing shofar,train,vgg_298,137
+ZUg7rRpFGvA_000000,playing shofar,train,vgg_298,137
+Eqn4IlzpfHs_000021,playing shofar,train,vgg_298,137
+ea13BpdZruU_000072,playing sitar,train,vgg_105,241
+wLAXfkK-DPg_000174,playing sitar,train,vgg_105,241
+daaWaoVELa0_000093,playing sitar,train,vgg_105,241
+eNzFek-0Ano_000060,playing snare drum,train,vgg_64,2
+p9BN-HDPdO8_000027,playing snare drum,train,vgg_64,129
+uP2ez8Qi-r4_000080,playing snare drum,train,vgg_64,2
+yuagAF12FOk_000050,playing squash,train,vgg_48,227
+lR_4yghwRGM_000045,playing squash,train,vgg_48,227
+wJPzA8OzX-U_000001,playing squash,train,vgg_48,227
+_aWFkVbqfVo_000883,"playing steel guitar, slide guitar",train,vgg_84,64
+fXsEQX8ce-M_000128,"playing steel guitar, slide guitar",train,vgg_84,64
+0U6l_tSUtQo_000084,"playing steel guitar, slide guitar",train,vgg_84,64
+kBcZBHH1cpk_000072,playing steelpan,train,vgg_189,29
+CLpVZzKCf4o_000125,playing steelpan,train,vgg_189,29
+OSNGQfrx0FY_000146,playing steelpan,train,vgg_189,29
+7PzLkLRhdu4_000060,playing synthesizer,train,vgg_88,1
+gaucp4Sg2BY_000120,playing synthesizer,train,vgg_88,1
+5VTJP6_RLW0_000190,playing synthesizer,train,vgg_88,1
+2UtwiVVYfGw_000089,playing tabla,train,vgg_50,207
+00pATAvDGFc_000037,playing tabla,train,vgg_50,207
+CTwaTWyiLCA_000065,playing tabla,train,vgg_50,207
+euTxo93SyTM_000102,playing table tennis,train,vgg_49,293
+59Xef4GPClc_000075,playing table tennis,train,vgg_49,293
+qwa_QJD4UcU_000236,playing table tennis,train,vgg_49,293
+xQbFdE_8F0g_000239,playing tambourine,train,vgg_117,276
+3s4wNcHHxGw_000065,playing tambourine,train,vgg_117,276
+wcizRfXMUsA_000000,playing tambourine,train,vgg_117,276
+h7JIgYsN7BI_000303,playing tennis,train,vgg_225,299
+csIyth6AfgQ_000000,playing tennis,train,vgg_225,299
+fhQTjKUdUSk_000121,playing tennis,train,vgg_225,299
+jPIlMfuaNYE_000076,playing theremin,train,vgg_55,27
+k34hnNesDK0_000049,playing theremin,train,vgg_55,27
+qQ-v_9gsiz4_000286,playing theremin,train,vgg_55,27
+kolF8kZ8UcM_000032,playing timbales,train,vgg_168,81
+z-9HFgb8Lkw_000044,playing timbales,train,vgg_168,81
+i9ZqGCD35bo_000077,playing timbales,train,vgg_168,81
+cQp2Zt9hsBo_000148,playing timpani,train,vgg_151,228
+UcHlMSsS5co_000121,playing timpani,train,vgg_151,104
+m3fQusGGIug_000332,playing timpani,train,vgg_151,228
+GJZxsKMG4zQ_000210,playing trombone,train,vgg_35,135
+8_ncC5y3l7Q_000187,playing trombone,train,vgg_35,135
+qAgWC5qUTss_000238,playing trombone,train,vgg_35,135
+EiHYL3nXyjA_000043,playing trumpet,train,vgg_111,5
+sPyuBIixJOQ_000080,playing trumpet,train,vgg_111,5
+EnrDfqAA8RA_000030,playing trumpet,train,vgg_111,5
+654zycw1-6g_000004,playing tuning fork,train,vgg_299,142
+a41JxPhotQ8_000497,playing tuning fork,train,vgg_299,288
+80KT6bYCFkg_000049,playing tuning fork,train,vgg_299,175
+IAkfSQROmP8_000032,playing tympani,train,vgg_199,104
+4OgEl-yFEoU_000252,playing tympani,train,vgg_199,104
+hQQEzOBEopQ_000225,playing tympani,train,vgg_199,228
+Y_0IDdmpJdw_000000,playing ukulele,train,vgg_90,277
+nKgf9pr6qCo_000795,playing ukulele,train,vgg_90,277
+yWj_gfFFf7U_000006,playing ukulele,train,vgg_90,277
+nyTSJEDp-gk_000061,playing vibraphone,train,vgg_96,155
+DcmXSm0QJOo_000058,playing vibraphone,train,vgg_96,155
+mE2vpMJYjr8_000021,playing vibraphone,train,vgg_96,155
+xYAHwbhWEgM_000030,"playing violin, fiddle",train,vgg_36,182
+T1c5WU5AxCs_000030,"playing violin, fiddle",train,vgg_36,182
+RntZqf9XNUc_000030,"playing violin, fiddle",train,vgg_36,182
+HYOgM9dLUNQ_000108,playing volleyball,train,vgg_62,270
+f7uto-NtFbA_000072,playing volleyball,train,vgg_62,270
+Lgn_t_Jj21s_000027,playing volleyball,train,vgg_62,270
+_HOz2bzfR3g_000087,playing washboard,train,vgg_300,294
+MNsQzMFz7_k_000208,playing washboard,train,vgg_300,294
+8IB6h5jjP9A_000013,playing washboard,train,vgg_300,294
+0mdAsIMgeZo_000058,playing zither,train,vgg_182,85
+0G7ooh7zwi8_000085,playing zither,train,vgg_182,85
+V13cah_OYhg_000021,playing zither,train,vgg_182,85
+QxKTm_SsY6E_000010,police car (siren),train,vgg_37,301
+hyKgwy274DU_000030,police car (siren),train,vgg_37,19
+h9OoqOxkt6E_000070,police car (siren),train,vgg_37,301
+FYXVRrcvTsc_000184,police radio chatter,train,vgg_80,218
+OoEAz6kgsf8_000053,police radio chatter,train,vgg_80,218
+hH3ouFpct-E_000043,police radio chatter,train,vgg_80,218
+YGajtytEVUc_000182,popping popcorn,train,vgg_264,18
+hDFdK1QpasI_000079,popping popcorn,train,vgg_264,18
+CPcfDXfnzXQ_000016,popping popcorn,train,vgg_264,18
+Bpq4P7nmfKE_000030,printer printing,train,vgg_101,63
+ybK2WQLhHlo_000030,printer printing,train,vgg_101,63
+_LhJAUtX3U0_000026,printer printing,train,vgg_101,63
+pIAku0o-nTI_000101,pumping water,train,vgg_305,56
+VvFHiv5SkpY_000452,pumping water,train,vgg_305,271
+XDg4j_wtTm4_000253,pumping water,train,vgg_305,215
+puBUqdKxU6g_000030,"race car, auto racing",train,vgg_38,102
+CYyIccX_3zw_000110,"race car, auto racing",train,vgg_38,271
+Xzno7nZ05Ds_000520,"race car, auto racing",train,vgg_38,102
+SViuYBRd0EA_000340,"railroad car, train wagon",train,vgg_39,239
+fR5IrDBiMgw_000020,"railroad car, train wagon",train,vgg_39,257
+Qci_lyUvgBc_000030,"railroad car, train wagon",train,vgg_39,265
+E45bbjY3ZI8_000151,raining,train,vgg_197,266
+m0zmzxmkj4s_000116,raining,train,vgg_197,179
+eRMtvHQQB3A_000018,raining,train,vgg_197,266
+TTEtcymhyms_000245,rapping,train,vgg_149,33
+4loEscUObuk_000351,rapping,train,vgg_149,33
+yRWndZvIAHc_000030,rapping,train,vgg_149,33
+CqToHdFXr-o_000154,reversing beeps,train,vgg_193,179
+7EeALDvt3_I_000357,reversing beeps,train,vgg_193,179
+OlrjbY8qQpg_000072,reversing beeps,train,vgg_193,179
+5v6PoxLrxVQ_000537,ripping paper,train,vgg_175,69
+FVxsHlMK-10_000538,ripping paper,train,vgg_175,24
+PUevyySQb8k_000780,ripping paper,train,vgg_175,154
+Nx8ZpzGTong_000036,roller coaster running,train,vgg_141,273
+rAJlZQa4LrE_000159,roller coaster running,train,vgg_141,216
+8a_P2l7iwPQ_000061,roller coaster running,train,vgg_141,248
+IILZkLn6etw_000080,rope skipping,train,vgg_73,160
+RCzf87R3uAA_000196,rope skipping,train,vgg_73,160
+JeasCjeuaWA_000416,rope skipping,train,vgg_73,160
+Vc59q0jWIyI_000130,"rowboat, canoe, kayak rowing",train,vgg_40,49
+FJYWS_q96Vg_000030,"rowboat, canoe, kayak rowing",train,vgg_40,49
+lq4Xiw5NYns_000200,"rowboat, canoe, kayak rowing",train,vgg_40,49
+94ciXAj0DdQ_000145,running electric fan,train,vgg_246,84
+v7G_kkPBNVM_000153,running electric fan,train,vgg_246,252
+74yzE49QAsc_000003,running electric fan,train,vgg_246,84
+rbIdjQTm_Fg_000030,sailing,train,vgg_164,168
+SZLMgNWbG54_000030,sailing,train,vgg_164,271
+58g4nIgax7w_000030,sailing,train,vgg_164,145
+VoIjRgRlfeU_000190,scuba diving,train,vgg_76,86
+H8dP1Jscu40_001398,scuba diving,train,vgg_76,86
+aqyDFgvBz0E_000111,scuba diving,train,vgg_76,86
+Frj_-NgXUfQ_000333,sea lion barking,train,vgg_286,134
+153ooyK7Tck_000365,sea lion barking,train,vgg_286,134
+wrqgJI7mMRI_000049,sea lion barking,train,vgg_286,288
+IyW5PzybyAM_000471,sea waves,train,vgg_269,170
+_0cw63_LXSE_000006,sea waves,train,vgg_269,230
+D3dI977SM_o_000069,sea waves,train,vgg_269,145
+QkSsFQD6djk_000458,sharpen knife,train,vgg_123,180
+RKObjMsG8BY_000082,sharpen knife,train,vgg_123,180
+C8ngGHZ377U_000223,sharpen knife,train,vgg_123,180
+pyHJrlNMYwo_000350,sheep bleating,train,vgg_186,202
+czB-bpqQ54A_000030,sheep bleating,train,vgg_186,202
+8k3eSv8rd_0_000000,sheep bleating,train,vgg_186,202
+T7Ryc4OzhSg_000025,shot football,train,vgg_278,66
+OIDkBydfPpM_000098,shot football,train,vgg_278,66
+hw0_LH3UAww_000370,shot football,train,vgg_278,66
+Aveeuh-1dm0_000044,singing bowl,train,vgg_41,126
+SkQsnfVBiTA_000215,singing bowl,train,vgg_41,126
+geRhyd89IY8_000050,singing bowl,train,vgg_41,126
+lzqaRlvwUHM_000010,singing choir,train,vgg_126,186
+Xj6Hbi-1qYQ_000130,singing choir,train,vgg_126,186
+8bgIqvEhaUU_000231,singing choir,train,vgg_126,186
+KRWcALcTYjw_000030,skateboarding,train,vgg_87,166
+WWonKoc6XQw_000010,skateboarding,train,vgg_87,166
+0AFOq7PKDDo_000020,skateboarding,train,vgg_87,166
+ac7_ey__6mI_000040,skidding,train,vgg_91,167
+-rySnom_Dfk_000100,skidding,train,vgg_91,167
+D4SaVjD23Vw_000020,skidding,train,vgg_91,167
+pEwpzffuEaM_000057,skiing,train,vgg_67,194
+P6L_MFpPL34_000420,skiing,train,vgg_67,194
+X7cr7O1AsgU_000106,skiing,train,vgg_67,194
+GOEQJf1SsKI_000030,sliding door,train,vgg_169,265
+b9MyE04Bcfc_000004,sliding door,train,vgg_169,265
+GyyetLQQxAU_000030,sliding door,train,vgg_169,265
+PnR47zX_HXs_000021,sloshing water,train,vgg_254,146
+1vvxtLJFbzk_000140,sloshing water,train,vgg_254,58
+Oz6Wp-SdXag_000030,sloshing water,train,vgg_254,163
+ul14johUAls_000049,slot machine,train,vgg_57,216
+-Ej9UORoB2s_000292,slot machine,train,vgg_57,216
+KMbpSAf2nAM_000285,slot machine,train,vgg_57,216
+OyLjVys4ba0_000023,smoke detector beeping,train,vgg_280,48
+PQM5zXmNbVM_000022,smoke detector beeping,train,vgg_280,213
+RamMouL9IHk_000000,smoke detector beeping,train,vgg_280,213
+K4oDmR_vCO4_000018,snake hissing,train,vgg_250,133
+B2zxLGtgTu4_000049,snake hissing,train,vgg_250,133
+C4FP88O-VkI_000032,snake hissing,train,vgg_250,133
+1Fh1KK8-JTE_000030,snake rattling,train,vgg_306,113
+Y5uBPcz5ANM_000188,snake rattling,train,vgg_306,113
+IPA828qsZVg_000064,snake rattling,train,vgg_306,113
+4EULWLB1R_Q_000000,splashing water,train,vgg_155,146
+TRiCsVaLj_A_000010,splashing water,train,vgg_155,202
+KvQy-ph09w0_000400,splashing water,train,vgg_155,146
+kWe8PZyFs8w_000064,spraying water,train,vgg_253,206
+etZlv-s5WWU_000081,spraying water,train,vgg_253,206
+HxUEgJ1L3gQ_000131,spraying water,train,vgg_253,206
+LSZUZoZaT5Q_000064,squishing water,train,vgg_210,106
+CPVO7EbzYeI_000192,squishing water,train,vgg_210,254
+R15cxJajTXY_000073,squishing water,train,vgg_210,254
+_avvMepU-ZA_000100,stream burbling,train,vgg_138,28
+WTCaSyHGifU_000010,stream burbling,train,vgg_138,230
+B1bnHCBGTJQ_000000,stream burbling,train,vgg_138,230
+5zp9MjkhAVE_000053,strike lighter,train,vgg_275,48
+T37frKvOxAg_000264,strike lighter,train,vgg_275,48
+8ItpSmhXtsc_000531,strike lighter,train,vgg_275,259
+Rwf9Tl-DtAg_000013,striking bowling,train,vgg_241,198
+RWlJ1MDT--8_000506,striking bowling,train,vgg_241,198
+EFJGWWcz4Yw_000023,striking bowling,train,vgg_241,198
+5VByN9uKwCo_000165,striking pool,train,vgg_222,50
+T9Yh1ZgC1FU_000393,striking pool,train,vgg_222,50
+pAA31FAGUf0_000069,striking pool,train,vgg_222,50
+KtfyZDd0wYU_000150,"subway, metro, underground",train,vgg_58,150
+bCNCFh8ImXk_000214,"subway, metro, underground",train,vgg_58,150
+ivCGWGvceuw_000018,"subway, metro, underground",train,vgg_58,150
+0mjs4MIhaXc_000110,swimming,train,vgg_170,283
+dm9NY8Kw3vg_000280,swimming,train,vgg_170,283
+aOaCU-8rHSc_000039,swimming,train,vgg_170,175
+WzQrV5QTE30_000079,tap dancing,train,vgg_42,41
+PiQzM3HrV38_000015,tap dancing,train,vgg_42,41
+MiTdsTsKnPc_000030,tap dancing,train,vgg_42,41
+EBM2RjPwQs8_000163,tapping guitar,train,vgg_122,68
+-3GsMfOpuRM_000145,tapping guitar,train,vgg_122,68
+8TGaHgRdIjI_000424,tapping guitar,train,vgg_122,68
+xyhPnOGNwVU_000036,telephone bell ringing,train,vgg_301,48
+QLvfrPZEcgE_000009,telephone bell ringing,train,vgg_301,190
+MNZgKyCnKlY_000350,telephone bell ringing,train,vgg_301,190
+WT3F0jVr57o_000030,thunder,train,vgg_242,266
+Vem0D4NYkM8_000280,thunder,train,vgg_242,247
+Lxsl_9XeVr0_000520,thunder,train,vgg_242,247
+yuq02rBx3Dw_000220,toilet flushing,train,vgg_43,54
+JUCMHtdkU-Q_000043,toilet flushing,train,vgg_43,54
+qUskey7LhRA_000110,toilet flushing,train,vgg_43,54
+MMLlnAvxPKQ_000023,tornado roaring,train,vgg_234,123
+OLIxHTtFsMY_000065,tornado roaring,train,vgg_234,168
+Q1tD-hQ-aGU_000018,tornado roaring,train,vgg_234,123
+YYY7uQSI3RA_000176,tractor digging,train,vgg_71,136
+04cPCTkXXk8_000001,tractor digging,train,vgg_71,136
+2VrEbItZwEU_000111,tractor digging,train,vgg_71,136
+L-GdKKOFel0_000060,train horning,train,vgg_124,32
+hPSEfiwJo-I_000033,train horning,train,vgg_124,32
+UWikbCKXP04_000369,train horning,train,vgg_124,32
+zK_BWWMFrGY_000046,train wheels squealing,train,vgg_238,103
+RB4Z4-ghuCs_000140,train wheels squealing,train,vgg_238,103
+RFujlj3J23k_000214,train wheels squealing,train,vgg_238,103
+FdOiQR5EOGY_000045,train whistling,train,vgg_157,196
+L5fe1P6ulvE_000116,train whistling,train,vgg_157,196
+qbswxrk8pgo_000182,train whistling,train,vgg_157,257
+ibpIcnGvJAc_000749,turkey gobbling,train,vgg_147,128
+SvJ0kUY22C8_000055,turkey gobbling,train,vgg_147,128
+maUHK05OFy0_000330,turkey gobbling,train,vgg_147,128
+8AEg3aGab6Q_000060,typing on computer keyboard,train,vgg_173,16
+qABZtq1m4Yc_000030,typing on computer keyboard,train,vgg_173,16
+HZxl5ot0Luk_000010,typing on computer keyboard,train,vgg_173,16
+0mu0HoTltgs_000170,typing on typewriter,train,vgg_130,62
+OGp1OZ52ong_000011,typing on typewriter,train,vgg_130,62
+qqMMj283p-k_000298,typing on typewriter,train,vgg_130,62
+zINEPXWgq_Y_000016,underwater bubbling,train,vgg_217,109
+c4ZgkfiLIqU_000016,underwater bubbling,train,vgg_217,109
+iqPfHp8a87I_000017,underwater bubbling,train,vgg_217,86
+5WxwA8DtIa0_000010,using sewing machines,train,vgg_153,46
+M7kJxHlAf-Q_000140,using sewing machines,train,vgg_153,46
+7-EwtZ7nC2w_000040,using sewing machines,train,vgg_153,46
+8ZJeFXSYZi0_000192,vacuum cleaner cleaning floors,train,vgg_54,234
+qKZ02aH3cGA_000332,vacuum cleaner cleaning floors,train,vgg_54,234
+wMXiOt2HHUw_000020,vacuum cleaner cleaning floors,train,vgg_54,234
+xX4St6cIuJM_000001,"vehicle horn, car horn, honking",train,vgg_44,31
+kzgu8GkF7DY_000015,"vehicle horn, car horn, honking",train,vgg_44,31
+34uzVKTxHKo_000004,"vehicle horn, car horn, honking",train,vgg_44,31
+bio0x_qHgpU_000132,volcano explosion,train,vgg_109,91
+Q9a1gqlU4tI_000161,volcano explosion,train,vgg_109,91
+X31BzAaeSs0_000042,volcano explosion,train,vgg_109,145
+AFxJ9-jGd9A_000057,warbler chirping,train,vgg_260,217
+rvJshKmyaCA_000096,warbler chirping,train,vgg_260,217
+JFRYYe3yIKs_000123,warbler chirping,train,vgg_260,217
+CcZAfuEVCBU_000020,waterfall burbling,train,vgg_187,170
+5L_U_jBhCXc_000030,waterfall burbling,train,vgg_187,230
+3xyT6DVReN8_000000,waterfall burbling,train,vgg_187,230
+zDwuh-uvPOk_000000,whale calling,train,vgg_302,99
+zYz69uWpyb0_000245,whale calling,train,vgg_302,99
+JixXL5s6fnE_000086,whale calling,train,vgg_302,99
+SdcWMd-5BIA_000005,wind chime,train,vgg_226,3
+ouhf-BAb4Bk_000145,wind chime,train,vgg_226,47
+TSTXoLMuqPA_000287,wind chime,train,vgg_226,3
+DfegGrSDk3s_000033,wind noise,train,vgg_85,145
+AQP8MxlW_bM_000030,wind noise,train,vgg_85,118
+4npuBancLyY_000147,wind noise,train,vgg_85,123
+hjatea9TZ0s_000140,wind rustling leaves,train,vgg_171,118
+8hCdDIA6Hjg_000030,wind rustling leaves,train,vgg_171,145
+aD5Qq0NVx08_000030,wind rustling leaves,train,vgg_171,170
+UKsZU5LrauI_000047,wood thrush calling,train,vgg_140,165
+3H8z5u8X__k_000005,wood thrush calling,train,vgg_140,165
+PfrHb8eia8E_000005,wood thrush calling,train,vgg_140,165
+DoanvD4kdio_000146,woodpecker pecking tree,train,vgg_131,184
+xI5Q9FI2VfE_000004,woodpecker pecking tree,train,vgg_131,149
+tS8AOBamjQQ_000000,woodpecker pecking tree,train,vgg_131,149
+HmpL7qu-QoA_000168,writing on blackboard with chalk,train,vgg_252,245
+Qv1q7VY9QL8_000518,writing on blackboard with chalk,train,vgg_252,245
+1LPAg4M_X3o_000160,writing on blackboard with chalk,train,vgg_252,245
+lFOUgX5jM9Q_000138,yodelling,train,vgg_77,112
+dVDshuuqQsg_000000,yodelling,train,vgg_77,112
+IyJ3a5uuCOs_000035,yodelling,train,vgg_77,112
+y9mwSAXGQkQ_000069,zebra braying,train,vgg_307,210
+Mtj4Neg86Dw_000040,zebra braying,train,vgg_307,210
+Bi_NvNCIFNs_000002,zebra braying,train,vgg_307,80
