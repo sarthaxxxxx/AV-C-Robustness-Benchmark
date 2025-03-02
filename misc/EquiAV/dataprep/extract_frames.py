@@ -32,8 +32,8 @@ if __name__ == "__main__":
     from argparse import ArgumentParser
     parser = ArgumentParser(description="Python script to extract frames from a video, save as jpgs.")
     parser.add_argument("-meta_file", type=str, default='/mnt/user/saksham/AV_robust/AV-C-Robustness-Benchmark/misc/EquiAV/dataprep/meta/vgg_comb.csv', help="Should be a csv file of a single columns, each row is the input video path.")
-    parser.add_argument("-vid_dir", type=str, default='/mnt/data2/wpian/VGGSound/VGGSound', help="The place to store the video frames.")
-    parser.add_argument("-save_dir", type=str, default='/mnt/data2/saksham/AV_robust/equiAV/', help="The place to store the video frames.")
+    parser.add_argument("-vid_dir", type=str, default='/mnt/data1/wpian/VGGSound/VGGSound', help="The place to store the video frames.")
+    parser.add_argument("-save_dir", type=str, default='/mnt/data1/saksham/AV_robust/equiAV/', help="The place to store the video frames.")
     parser.add_argument("--dry_run", action="store_true")
     args = parser.parse_args()
 
@@ -46,6 +46,9 @@ if __name__ == "__main__":
     for i, row in tqdm(df.iterrows(), total=num_file):
         file_path = os.path.join(args.vid_dir, row['vid'] + '.mp4')
         save_dir = os.path.join(args.save_dir, row['vid'])
+        if os.path.exists(save_dir):
+            print(f"Skipping {file_path} as it already exists")
+            continue
         os.makedirs(save_dir, exist_ok=True)
         try :
             extract_frame(row['vid'], file_path, save_dir)

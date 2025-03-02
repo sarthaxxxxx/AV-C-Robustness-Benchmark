@@ -16,6 +16,8 @@ import distutils
 from ft_trainer import *
 from utils import DistributedSamplerWrapper, WeightedRandomSampler
 
+np.float = float 
+
 warnings.filterwarnings(action='ignore')
 
 ## ===== ===== ===== ===== ===== ===== ===== =====
@@ -98,11 +100,11 @@ parser.add_argument('--print_freq', default=10, type=int, help='print frequency'
 
 args = parser.parse_args();
 
-args.train_list = f"/home/lhk/workspace/ESSL/EquiAV/datasets/dataprep/{args.dataset}/train.json"
-args.verify_list = f"/home/lhk/workspace/ESSL/EquiAV/datasets/dataprep/{args.dataset}/test.json"
-args.label_csv = f"/home/lhk/workspace/ESSL/EquiAV/datasets/dataprep/{args.dataset}/class_labels_indices.csv"
+args.train_list = f"dataprep/{args.dataset}/train.json"
+args.verify_list = f"dataprep/{args.dataset}/test.json"
+args.label_csv = f"dataprep/{args.dataset}/class_labels_indices.csv"
 
-weight_file = f'/home/lhk/workspace/ESSL/EquiAV/datasets/dataprep/{args.dataset}/weights.csv' if args.bal else None
+weight_file = f'dataprep/{args.dataset}/weights.csv' if args.bal else None
 
 label_dim = {'AudioSet_2M':[527,'mAP'],
              'AudioSet_20K':[527,'mAP'],
