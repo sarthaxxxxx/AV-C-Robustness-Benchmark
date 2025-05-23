@@ -10,8 +10,9 @@ from corruptions.corruptions import corruption_dict
 
 # Modified from https://github.com/YuanGongND/cav-mae/blob/master/src/dataloader.py
 class AV2C(Dataset):
-    def __init__(self, json_file, corruption=None, severity=5):
+    def __init__(self, json_file, frame_num=4, corruption=None, severity=5):
         self.datapath = json_file
+        self.frame_num = frame_num
         self.corruption = corruption
         self.severity = severity
         
@@ -50,7 +51,7 @@ class AV2C(Dataset):
         waveform, sr = torchaudio.load(filename)
 
         if self.corruption is not None:
-            waveform = self.audio_corruption(waveform)
+            waveform = self.audio_corruption(waveform, self.severity)
 
         waveform = waveform.numpy().T
         
@@ -63,11 +64,11 @@ class AV2C(Dataset):
     def __len__(self):
         return self.data.shape[0]
     
-    def __getitem__(self, index, frame_num=4):
+    def __getitem__(self, index):
         datum = self.data[index]
         datum = self.decode_data(datum)
         
-        image_path = datum['video_path'] + f'/frame_{frame_num}/' + datum['video_id'] + '.jpg'
+        image_path = datum['video_path'] + f'/frame_{self.frame_num}/' + datum['video_id'] + '.jpg'
         image = self.get_image(image_path)
 
         audio_path = datum['wav']
