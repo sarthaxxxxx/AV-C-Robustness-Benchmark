@@ -40,3 +40,13 @@ Each entry in `AVRobustBench` contains an `(image, audio)` tuple with the option
 
 
 `demo.ipynb` showcases a few examples of using the dataset.
+
+## Citation
+```
+@inproceedings{maharana2025avbenchmark,
+    title={AVROBUSTBENCH: Benchmarking the Robustness of Audio-Visual Recognition Models at Test-Time},
+    author={Sarthak Kumar Maharana and Saksham Singh Kushwaha and Baoming Zhang and Adrian Rodriguez and Songtao Wei and Yapeng Tian and Yunhui Guo},
+    booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
+    year={2025},
+}
+```
