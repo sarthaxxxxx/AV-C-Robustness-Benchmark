@@ -1,14 +1,8 @@
-<div align="center">
-
-## Audio-Visual Robustness Benchmark to Common Corruptions
-
-
-</div>
+# AV-C-Robustness-Benchmark
+This repo contains the corruptions for 
 
 
-### Step 1 : Create AV-C benchmark dataset and JSON files.
+## AV2C Dataset
+We release the AV2C (Audio-Visual 2 Corruptions) dataset to supplement our work. `avc2_dataset.py` contains the dataset which takes any audio-visual datasets and adds any of the corruptions at any severity level that we released. The file is modular, allowing anyone to modify it for their datasets and their models. `/corruptions` contains the code for each of the corruptions, their severity levels, the images to create corrupted images, and the audio to create corrupted audios. 
 
-- Run dataset_corruptions.sh in data_recipe/src to create the corruption dataset (would have to tweak the paths, etc). 
-- Next, for your dataset, you WOULD need a reference_json file (as in data/vgg_test_refer.json). Same style, pls!
-- Third, run create_clean_json.py (MANDATORY) and link this reference_json file. After that, run create_both_c_json.py. This would create json files for your new dataset.
-
+### Setting up the current dataset
