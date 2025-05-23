@@ -1,9 +1,12 @@
 # AV-C-Robustness-Benchmark
 ## Introduction
-[Demo](https://www.youtube.com/watch?v=hYdcRO3BuIY&ab_channel=SarthakMaharana)
+[[Demo](https://www.youtube.com/watch?v=hYdcRO3BuIY&ab_channel=SarthakMaharana)]
 
 
-This repo contains the corruptions for
+This repo contains the official PyTorch implementation of AVRobustBench, a benchmark consisting of four audio-visual datasets, AudioSet-2C, VGGSound-2C, KINETICS-2C, and EpicKitchens-2C. "2C" stands for adding corruptions to both modalities. These datasets span diverse domains, environments, and action categories, offering a broad and realistic evaluation suite for audio-visual recognition models. Our benchmark takes these datasets and adds up to 15 different co-occuring and correlated corruptions at 5 different severity levels to benchmark state-of-the-art audio-visual models to test robustness to corruptions. Our datasets are [here](https://huggingface.co/datasets/sakshamsingh1/av_robust_data/tree/main).
+
+
+While recent audio-visual models have demonstrated impressive performance, their robustness to distributional shifts at test-time remains not fully understood. Existing robustness benchmarks mainly focus on single modalities, making them insufficient for thoroughly assessing the robustness of audio-visual models. Motivated by real-world scenarios where shifts can occur simultaneously in both audio and visual modalities, we introduce AVRobustBench, a comprehensive benchmark designed to evaluate the test-time robustness of audio-visual recognition models.
 
 
 ## AVRobustBench Dataset
