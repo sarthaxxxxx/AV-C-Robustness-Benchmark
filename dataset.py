@@ -9,7 +9,7 @@ import soundfile
 from corruptions.corruptions import corruption_dict
 
 # Modified from https://github.com/YuanGongND/cav-mae/blob/master/src/dataloader.py
-class AV2C(Dataset):
+class AVRobustBench(Dataset):
     def __init__(self, json_file, frame_num=4, corruption=None, severity=5):
         self.datapath = json_file
         self.frame_num = frame_num
