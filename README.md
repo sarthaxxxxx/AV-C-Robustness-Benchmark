@@ -23,6 +23,7 @@ To begin, you will be required to create a json file for your dataset containing
             "video_id": "4ufZrEAJnJI",
             "video_path": "/home/adrian/Data/AudioSet/eval_frames"
         }]}
+```
 
 The dataset json file need not follow this structure. Modify it for your needs. If you modify the json file, you will need to modify `avc2_dataset.py`. Note that the dataset file does not contain any logic for labels, as different datasets have different labels. A user can easily modify our code to add their relevant metadata, labels, and any other corruptions. Our dataset makes it easy to get an image/audio from their dataset and add a corruption to both modalities. 
 
