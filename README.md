@@ -1,19 +1,28 @@
-# AV-C-Robustness-Benchmark
+<div align="center">
+
+# AVROBUSTBENCH: Benchmarking the Robustness of Audio-Visual Recognition Models at Test-Time
+
+<em> Sarthak Kumar Maharana, Saksham Singh Kushwaha, Baoming Zhang, Adrian Rodriguez, Songtao Wei, Yapeng Tian, and Yunhui Guo </em>
+</div>
+
 ## Introduction
-[[Demo](https://www.youtube.com/watch?v=hYdcRO3BuIY&ab_channel=SarthakMaharana)]
+
+While recent audio-visual recognition models have demonstrated impressive performance, their robustness to distributional shifts at test-time remains not fully understood. Existing robustness benchmarks mainly focus on single modalities, making them insufficient for thoroughly assessing the robustness of audio-visual models. Motivated by real-world scenarios where shifts can occur simultaneously in both audio and visual modalities, we introduce AVROBUSTBENCH, a comprehensive benchmark designed to evaluate the test-time robustness of audio-visual recognition models. Specifically, we introduce 75 AV corruptions that co-occur and are correlated across both modalities, enabling a large-scale assessment of these models’ resilience to challenging, realistic shifts. It is worth emphasizing
+that the unique challenge in AVROBUSTBENCH arises from the real-time occurrence of correlated corruptions that simultaneously affect both the audio and visual modalities. Benchmarking and the robustness of audio-visual models to real world distributional shifts at test-time deserves attention and will hopefully serve as a valuable foundation for future research.
 
 
-This repo contains the official PyTorch implementation of AVRobustBench, a benchmark consisting of four audio-visual datasets, AudioSet-2C, VGGSound-2C, KINETICS-2C, and EpicKitchens-2C. "2C" stands for adding corruptions to both modalities. These datasets span diverse domains, environments, and action categories, offering a broad and realistic evaluation suite for audio-visual recognition models. Our benchmark takes these datasets and adds up to 15 different co-occuring and correlated corruptions at 5 different severity levels to benchmark state-of-the-art audio-visual models to test robustness to corruptions. Our datasets are [here](https://huggingface.co/datasets/sakshamsingh1/av_robust_data/tree/main).
+Check out the demo here ------> [[Demo](https://www.youtube.com/watch?v=hYdcRO3BuIY&ab_channel=SarthakMaharana)]
 
 
-While recent audio-visual models have demonstrated impressive performance, their robustness to distributional shifts at test-time remains not fully understood. Existing robustness benchmarks mainly focus on single modalities, making them insufficient for thoroughly assessing the robustness of audio-visual models. Motivated by real-world scenarios where shifts can occur simultaneously in both audio and visual modalities, we introduce AVRobustBench, a comprehensive benchmark designed to evaluate the test-time robustness of audio-visual recognition models.
+We release the code and datasets comprising AVROBUSTBENCH. We propose four audio-visual datasets, AudioSet-2C, VGGSound-2C, KINETICS-2C, and EpicKitchens-2C. These datasets span diverse domains, environments, and action categories, offering a broad and realistic evaluation suite for audio-visual recognition models. Our datasets are [here](https://huggingface.co/datasets/sakshamsingh1/av_robust_data/tree/main).
 
 
-## AVRobustBench Dataset
-We release the AVRobustBench (Audio-Visual 2 Corruptions) dataset to supplement our work. `dataset.py` contains the code which takes any audio-visual datasets and adds any of the corruptions at any severity level that we released. The file is modular, allowing anyone to modify it for their datasets and their models. `/corruptions` contains the code for each of the corruptions, their severity levels, the images to create corrupted images, and the audio to create corrupted audios. 
+
+## Steps to introduce corruptions
+`dataset.py` contains the code that takes any audio-visual datasets and adds any of the corruptions at any severity level that we released. The file is modular, allowing anyone to modify it for their datasets and their models. `/corruptions` contains the code for each of the corruptions, their severity levels, the images to create corrupted images, and the audio to create corrupted audios. 
 
 ### Setting up the current dataset
-To begin, you will be required to create a json file for your dataset containing its wav path, labels, video ID, and video path. For example, `BkjpjAohg-0` is the video ID for a file `BkjpjAohg-0.mp4`. The video path is the directory containing the frames for the video ID. As an example using AudioSet:
+To begin, you will be required to create a json file for your dataset containing its wav path, labels, video ID, and video path. For example, `BkjpjAohg-0` is the video ID for a file `BkjpjAohg-0.mp4`. The video path is the directory containing the frames for the video ID. As an example, using AudioSet:
 
 ```json
 {
