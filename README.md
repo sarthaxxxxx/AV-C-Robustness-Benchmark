@@ -22,7 +22,7 @@ We release the code and datasets comprising AVROBUSTBENCH. We propose four audio
 `dataset.py` contains the code that takes any audio-visual datasets and adds any of the corruptions at any severity level that we released. The file is modular, allowing anyone to modify it for their datasets and their models. `/corruptions` contains the code for each of the corruptions, their severity levels, the images to create corrupted images, and the audio to create corrupted audios. 
 
 ### Extract frames and audio from the videos
-To extract the frames and audio from the videos on the dataset, please refer to this [repo](https://github.com/YuanGongND/cav-mae/tree/master/src/preprocess) for instructions of how to extract them. After following those instructions, you should have a directory containing frames 0 through 9 for all videos, along with another directory containing the corresponding audio.
+To extract the frames and audio from the videos on the dataset, please refer to this [repo](https://github.com/YuanGongND/cav-mae/tree/master/src/preprocess) for instructions of how to extract them. After following those instructions, you should have directories that contain image frames and audio files for videos.
 
 ### Setting up the json file
 To begin, you will be required to create a json file for your dataset containing its wav path, labels, video ID, and video path. For example, `BkjpjAohg-0` is the video ID for a file `BkjpjAohg-0.mp4`. The video path is the directory containing the frames for the video ID. As an example, using AudioSet:
