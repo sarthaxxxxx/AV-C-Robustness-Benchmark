@@ -49,6 +49,11 @@ The dataset json file need not follow this structure. Modify it for your needs. 
 
 
 Create a json path and pass this into the dataset class. We provide a `create_json.py` as a reference of how to create the json.
+
+### Using the dataset 
+Below is the code to use the dataset. The possible corruptions are gaussian, impulse, shot, speckle, compression, snow, frost, spatter, wind, rain, underwater, concert, smoke, crowd, and interference. The severity is an integer between 1 and 5.
+
+
 ```python
 from dataset import AVRobustBench
 file_path = 'path/to/your/json'
