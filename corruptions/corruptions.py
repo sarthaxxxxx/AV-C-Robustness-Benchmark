@@ -72,6 +72,7 @@ def add_env_noise(waveform, sample_rate, intensity, noise_dir=''):
 
 NOISE_SNRS = [40, 30, 20, 10, 0]
 
+
 # Gaussian
 def gaussian_visual(x, severity=5):
     c = [.08, .12, 0.18, 0.26, 0.38][severity - 1]
@@ -80,9 +81,9 @@ def gaussian_visual(x, severity=5):
     x = Image.fromarray(x.astype(np.uint8))
     return x
 
-def gaussian_audio(waveform, snr_db=5):
+def gaussian_audio(waveform, intensity=5):
     noise = torch.randn_like(waveform)
-    snr_tensor = torch.tensor([snr_db], dtype=waveform.dtype, device=waveform.device).expand(waveform.shape[:-1])
+    snr_tensor = torch.tensor([intensity], dtype=waveform.dtype, device=waveform.device).expand(waveform.shape[:-1])
     return F.add_noise(waveform, noise, snr_tensor)
 
 # Impulse
@@ -210,7 +211,7 @@ def snow_visual(x, severity=5):
     return x
 
 def snow_audio(waveform, intensity=5):    
-    snow_dir = './corruptions/noise_files/snow'
+    snow_dir = './corruptions/audio_corruptions/snow'
     return add_env_noise(waveform, sample_rate=16000, intensity=intensity, noise_dir=snow_dir)
 
 # Frost
@@ -221,7 +222,7 @@ def frost_visual(x, severity=5):
          (0.65, 0.7),
          (0.6, 0.75)][severity - 1]
     idx = np.random.randint(5)
-    frost_dir = './corruptions/noisy_images'
+    frost_dir = './corruptions/visual_corruptions'
     filename = [f"{frost_dir}/frost{1}.png", f"{frost_dir}/frost{2}.png", f"{frost_dir}/frost{3}.png", f"{frost_dir}/frost{4}.jpg", f"{frost_dir}/frost{5}.jpg", f"{frost_dir}/frost{6}.jpg"][idx]
     frost = cv2.imread(filename)
     # randomly crop and convert to rgb
@@ -232,7 +233,7 @@ def frost_visual(x, severity=5):
     return x
 
 def frost_audio(waveform, intensity=5):
-    frost_dir = './corruptions/noise_files/frost'
+    frost_dir = './corruptions/audio_corruptions/frost'
     return add_env_noise(waveform, sample_rate=16000, intensity=intensity, noise_dir=frost_dir)
 
 # Spatter
@@ -295,12 +296,14 @@ def spatter_visual(x, severity=5):
         return x
 
 def spatter_audio(waveform, intensity=5):
-    spatter_dir = './corruptions/noise_files/water_drops'
+    spatter_dir = './corruptions/audio_corruptions/water_drops'
     return add_env_noise(waveform, sample_rate=16000, intensity=intensity, noise_dir=spatter_dir)
 
 # Wind
 def wind_visual(x, severity=5):
     c = [(10, 3), (15, 5), (15, 8), (15, 12), (20, 15)][severity - 1]
+
+    x = np.array(x) / 255.
 
     x = Image.fromarray(x)
 
@@ -323,7 +326,7 @@ def wind_visual(x, severity=5):
         return x
 
 def wind_audio(waveform, intensity=5):
-    wind_dir = './corruptions/noise_files/wind'
+    wind_dir = './corruptions/audio_corruptions/wind'
     return add_env_noise(waveform, sample_rate=16000, intensity=intensity, noise_dir=wind_dir)
 
 # Rain
@@ -364,11 +367,12 @@ def rain_visual(x, severity=5):
     return x
 
 def rain_audio(waveform, intensity=5):
-    rain_dir = './corruptions/noise_files/rain'
+    rain_dir = './corruptions/audio_corruptions/rain'
     return add_env_noise(waveform, sample_rate=16000, intensity=intensity, noise_dir=rain_dir)
 
 # Underwater
-def underwater_visual(x, severity = 5):
+def underwater_visual(x, severity=5):
+    x = np.array(x)
     img = cv2.cvtColor(x, cv2.COLOR_BGR2RGB)
 
     blur_levels = {1: 3, 2: 5, 3: 7, 4: 10, 5: 15}  # Blur kernel size
@@ -392,7 +396,7 @@ def underwater_visual(x, severity = 5):
     return  x
 
 def underwater_audio(waveform, intensity=5):
-    underwater_dir = './corruptions/noise_files/underwater'
+    underwater_dir = './corruptions/audio_corruptions/underwater'
     return add_env_noise(waveform, sample_rate=16000, intensity=intensity, noise_dir=underwater_dir)
 
 # Concert
@@ -408,7 +412,7 @@ def concert_visual(x, severity=5):
     return x
 
 def concert_audio(waveform, intensity=5):
-    concert_dir = './corruptions/noise_files/concert'
+    concert_dir = './corruptions/audio_corruptions/concert'
     return add_env_noise(waveform, sample_rate=16000, intensity=intensity, noise_dir=concert_dir)
 
 # Smoke
@@ -426,13 +430,14 @@ def smoke_visual(x, severity=5):
     return x
 
 def smoke_audio(waveform, intensity=5):
-    smoke_dir = './corruptions/noise_files/crackling_fire_and_siren'
+    smoke_dir = './corruptions/audio_corruptions/crackling_fire_and_siren'
     return add_env_noise(waveform, sample_rate=16000, intensity=intensity, noise_dir=smoke_dir)
 
 
 # Crowd
 def crowd_visual(img_np, severity=5):
-    occlusion_dir = './corruptions/noise_files/crowd_image'
+    img_np = np.array(img_np)
+    occlusion_dir = './corruptions/visual_corruptions/crowd_image'
     if not isinstance(img_np, np.ndarray):
         raise TypeError("Expected input image as NumPy array")
     h, w, _ = img_np.shape
@@ -462,11 +467,12 @@ def crowd_visual(img_np, severity=5):
     return x
 
 def crowd_audio(waveform, intensity=5):
-    crowd_dir = './corruptions/noise_files/speech'
+    crowd_dir = './corruptions/audio_corruptions/crowd_speech'
     return add_env_noise(waveform, sample_rate=16000, intensity=intensity, noise_dir=crowd_dir)
 
 # Interference
 def interference_visual(x, severity=5):
+    x = np.array(x)
     x = Image.fromarray(x)
     deg = random.randint(-severity*6-5, severity*6+5)
     x = x.rotate(deg)

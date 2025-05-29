@@ -2,42 +2,38 @@ import json
 import csv
 import os
 
-# Path to the directory containing the videos
-path_to_videos = './AudioSet/eval_segments'
-# Path to the directory containing the frames
-path_to_frames = './AudioSet/eval_frames'
-# Path to directory containing the audio
-path_to_audio = './AudioSet/eval_audio'
-# Path to any metadata your dataset requires
-path_to_labels = './AudioSet/eval_segments.csv'
+path_to_videos = './assets/eval_segments'
+path_to_frames = './assets/eval_frames'
+path_to_audio = './assets/eval_audio'
+path_to_labels = './assets/eval_segments.csv'
+
+save_path = './assets/eval.json'
+
+labels_dict = {}   # each key starts as ''
+
+with open(path_to_labels, 'r', newline='') as f:
+    reader = csv.reader(f, skipinitialspace=True)
+    for row in reader:
+        if row[0].startswith('#'):
+            continue
+        video_id = row[0]
+        labels = row[3]
+        labels_dict[video_id] = labels
 
 data = []
 
-for image in os.listdir(path_to_videos):
-    video_id = image.split('.')[0]
-    wav = os.path.join(os.path.abspath(path=path_to_audio), video_id) + ".wav"
-    video_path = os.path.abspath(path=path_to_frames)
-    labels = ''
+for video in os.listdir(path_to_videos):
+    video_id = video.split('.')[0]
+    wav = os.path.join(os.path.abspath(path_to_audio), video_id + ".wav")
+    video_path = os.path.abspath(path_to_frames)
+    labels = labels_dict[video_id]
 
-    with open(path_to_labels, 'r', newline='') as f:
-        reader = csv.reader(f, skipinitialspace=True)
+    data.append({
+        'wav': wav,
+        'labels': labels,
+        'video_id': video_id,
+        'video_path': video_path,
+    })
 
-        for row in reader:
-            if row[0].startswith('#'):
-                continue # Skip headers
-
-            if row[0] == video_id:
-                labels = labels + row[3]
-    
-    data_dict = {
-                 'wav': wav,
-                 'labels': labels,
-                 'video_id': video_id,
-                 'video_path': video_path,}
-    
-    data.append(data_dict)
-
-json_data = {'data': data}
-
-with open('./AudioSet/eval.json', 'w') as f:
-    json_file = json.dump(json_data, f, indent=4)
+with open(save_path, 'w') as f:
+    json.dump({'data': data}, f, indent=4)
