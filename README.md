@@ -48,7 +48,7 @@ To begin, you will be required to create a json file for your dataset containing
 The dataset json file need not follow this structure. Modify it for your needs. If you modify the json file, you will need to modify `dataset.py`. Note that the dataset file does not contain any logic for labels, as different datasets have different label structures. A user can easily modify our code to add their relevant metadata, labels, and any other corruptions. Our dataset makes it easy to get an image/audio pair from their dataset and add a corruption to both modalities. 
 
 
-Create a json path and pass this into the dataset class. We provide a `create_json.py` as a reference of how to create the json file. `/assets` contains the video, frames, audio, label metadata, and json.
+Create a json path and pass this into the dataset class. We provide a `create_json.py` as a reference of how to create the json file. `/assets` contains a video, frames, audio, label metadata, and json.
 
 ### Using the dataset 
 Below is the code to use the dataset. The possible corruptions are `gaussian`, `impulse`, `shot`, `speckle`, `compression`, `snow`, `frost`, `spatter`, `wind`, `rain`, `underwater`, `concert`, `smoke`, `crowd`, and `interference`. The `severity` is an integer between 1 and 5.
@@ -63,7 +63,7 @@ dataset = AVRobustBench(file_path, corruption='gaussian', severity=5, frame_num=
 Each entry in `AVRobustBench` contains an `(frames, audio)` tuple with the option of adding corruptions on them. `frames` is a list of PIL images if `all_frames=true` or a list with a singular image, while `audio` is a BytesIO .wav file-like. PIL images are the standard, but there is no standard for audio files. Some codebases use `torchaudio`, `librosa`, `soundfile`, or something else. Due to `audio` being a .wav file-like stored in memory, it can be passed as a .wav to any audio library.
 
 ### Creating a corrupted video
-Additionally, we provide a static function in `AvRobustBench` that allows a user to input an mp4 video file path, add the visual and audio corruptions to the video, then allow for displaying or saving this video to preprocess if required. The video is stored in memory as a BytesIO but can be saved in disk with the parameter `save_path` .Below is the code to create corrupted videos.
+Additionally, we provide a static function in `AVRobustBench` that allows a user to input an mp4 video file path, add the visual and audio corruptions to the video, then allow for displaying or saving this video to preprocess if required. The video is stored in memory as a BytesIO but can be saved in disk with the parameter `save_path` .Below is the code to create corrupted videos.
 
 ```python
 from dataset import AVRobustBench
