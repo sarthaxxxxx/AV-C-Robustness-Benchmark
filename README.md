@@ -17,9 +17,11 @@ Check out the demo here ------> [[Demo](https://www.youtube.com/watch?v=hYdcRO3B
 We release the code and datasets comprising AVROBUSTBENCH. We propose four audio-visual datasets, AudioSet-2C, VGGSound-2C, KINETICS-2C, and EpicKitchens-2C. These datasets span diverse domains, environments, and action categories, offering a broad and realistic evaluation suite for audio-visual recognition models. Our datasets are [here](https://huggingface.co/datasets/sakshamsingh1/av_robust_data/tree/main).
 
 
-
 ## Steps to introduce corruptions
 `dataset.py` contains the code that takes any audio-visual datasets and adds any of the corruptions at any severity level that we released. The file is modular, allowing anyone to modify it for their datasets and their models. `/corruptions` contains the code for each of the corruptions, their severity levels, the images to create corrupted images, and the audio to create corrupted audios. 
+
+### Set up the environment
+This repo requires Python 3.10>. Create an environment and run `pip install -r requirements.txt` before continuing.
 
 ### Extract frames and audio from the videos
 To extract the frames and audio from the videos on the dataset, please refer to this [repo](https://github.com/YuanGongND/cav-mae/tree/master/src/preprocess) for instructions of how to extract them. After following those instructions, you should have directories that contain image frames and audio files for videos.
