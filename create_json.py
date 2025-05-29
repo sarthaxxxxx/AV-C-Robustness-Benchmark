@@ -9,8 +9,7 @@ path_to_labels = './assets/eval_segments.csv'
 
 save_path = './assets/eval.json'
 
-labels_dict = {}   # each key starts as ''
-
+labels_dict = {} 
 with open(path_to_labels, 'r', newline='') as f:
     reader = csv.reader(f, skipinitialspace=True)
     for row in reader:
