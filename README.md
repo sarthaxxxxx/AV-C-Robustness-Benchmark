@@ -65,7 +65,7 @@ dataset = AVRobustBench(file_path, corruption='gaussian', severity=5, frame_num=
 Each entry in `AVRobustBench` contains an `(frames, audio)` tuple with the option of adding corruptions on them. `frames` is a list of PIL images if `all_frames=true` or a list with a singular image, while `audio` is a BytesIO .wav file-like. PIL images are the standard, but there is no standard for audio files. Some codebases use `torchaudio`, `librosa`, `soundfile`, or something else. Due to `audio` being a .wav file-like stored in memory, it can be passed as a .wav to any audio library.
 
 ### Creating a corrupted video
-Additionally, we provide a static function in `AVRobustBench` that allows a user to input an mp4 video file path, add the visual and audio corruptions to the video, then allow for displaying or saving this video to preprocess if required. The video is stored in memory as a BytesIO but can be saved in disk with the parameter `save_path` .Below is the code to create corrupted videos.
+Additionally, we provide a static function in `AVRobustBench` that allows a user to input an mp4 video file path, add the visual and audio corruptions to the video, then allow for displaying or saving this video to preprocess if required. The video is stored in memory as a BytesIO but can be saved in disk with the parameter `save_path`. Below is the code to create corrupted videos.
 
 ```python
 from dataset import AVRobustBench
