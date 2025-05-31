@@ -1,23 +1,31 @@
 <div align="center">
 
-# AVROBUSTBENCH: Benchmarking the Robustness of Audio-Visual Recognition Models at Test-Time
+# $\texttt{AVROBUSTBENCH}$: Benchmarking the Robustness of Audio-Visual Recognition Models at Test-Time
 
 <em> Sarthak Kumar Maharana, Saksham Singh Kushwaha, Baoming Zhang, Adrian Rodriguez, Songtao Wei, Yapeng Tian, and Yunhui Guo </em>
 </div>
 
 ## Introduction
 
-While recent audio-visual recognition models have demonstrated impressive performance, their robustness to distributional shifts at test-time remains not fully understood. Existing robustness benchmarks mainly focus on single modalities, making them insufficient for thoroughly assessing the robustness of audio-visual models. Motivated by real-world scenarios where shifts can occur simultaneously in both audio and visual modalities, we introduce AVROBUSTBENCH, a comprehensive benchmark designed to evaluate the test-time robustness of audio-visual recognition models. Specifically, we introduce 75 AV corruptions that co-occur and are correlated across both modalities, enabling a large-scale assessment of these models’ resilience to challenging, realistic shifts. It is worth emphasizing
-that the unique challenge in AVROBUSTBENCH arises from the real-time occurrence of correlated corruptions that simultaneously affect both the audio and visual modalities. Benchmarking and the robustness of audio-visual models to real world distributional shifts at test-time deserves attention and will hopefully serve as a valuable foundation for future research.
+While recent audio-visual recognition models have demonstrated impressive performance, their robustness to distributional shifts at test-time remains not fully understood. Existing robustness benchmarks mainly focus on single modalities, making them insufficient for thoroughly assessing the robustness of audio-visual models. Motivated by real-world scenarios where shifts can occur simultaneously in both audio and visual modalities, we introduce $\texttt{AVROBUSTBENCH}$, a comprehensive benchmark designed to evaluate the test-time robustness of audio-visual recognition models. Specifically, we introduce 75 AV corruptions that co-occur and are correlated across both modalities, enabling a large-scale assessment of these models’ resilience to challenging, realistic shifts. It is worth emphasizing
+that the unique challenge in $\texttt{AVROBUSTBENCH}$ arises from the real-time occurrence of correlated corruptions that simultaneously affect both the audio and visual modalities. Benchmarking and the robustness of audio-visual models to real world distributional shifts at test-time deserves attention and will hopefully serve as a valuable foundation for future research.
 
 
-Check out the demo here ------> [[Demo](https://www.youtube.com/watch?v=hYdcRO3BuIY&ab_channel=SarthakMaharana)]
+## Code, Datasets, and Demo
+
+We release the code and datasets comprising $\texttt{AVROBUSTBENCH}$. We propose four audio-visual datasets, $\texttt{AUDIOSET-2C}$, $\texttt{VGGSOUND-2C}$, $\texttt{KINETICS-2C}$, and $\texttt{EPICKITCHENS-2C}$. These datasets span diverse domains, environments, and action categories, offering a broad and realistic evaluation suite for audio-visual recognition models. 
+
+We construct our datasets by introducing our proposed corruptions to the test sets of AudioSet, VGGSound, Kinetics-Sounds, and Epic-Kitchens. $\texttt{AUDIOSET-2C}$ contains 16,742 audio-video test pairs. Each clip is roughly 10s and spans 527 classes. $\texttt{VGGSOUND-2C}$ contains 14,046 test pairs. $\texttt{KINETICS-2C}$ contains 3,111 clips across 32 classes, each around 10s long. $\texttt{EPICKITCHENS-2C}$ has 205 egocentric video clips capturing daily kitchen tasks of an average duration of 7.4 mins each.
+
+To download our datasets, we have released them on Huggingface. This [link](https://huggingface.co/datasets/sakshamsingh1/av_robust_data/tree/main) will redirect you there.
+
+For a better audio-visual experience, our YouTube demo is [here](https://www.youtube.com/watch?v=hYdcRO3BuIY&ab_channel=SarthakMaharana).
 
 
-We release the code and datasets comprising AVROBUSTBENCH. We propose four audio-visual datasets, AudioSet-2C, VGGSound-2C, KINETICS-2C, and EpicKitchens-2C. These datasets span diverse domains, environments, and action categories, offering a broad and realistic evaluation suite for audio-visual recognition models. Our datasets are [here](https://huggingface.co/datasets/sakshamsingh1/av_robust_data/tree/main).
 
 
-## Steps to introduce corruptions
+
+## Steps to introduce our proposed audio-visual corruptions
 `dataset.py` contains the code that takes any audio-visual datasets and adds any of the corruptions at any severity level that we released. The file is modular, allowing anyone to modify it for their datasets and their models. `/corruptions` contains the code for each of the corruptions, their severity levels, the images to create corrupted images, and the audio to create corrupted audios. 
 
 ### Set up the environment
