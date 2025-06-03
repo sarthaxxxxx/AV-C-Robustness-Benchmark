@@ -2,16 +2,20 @@
 
 # $\texttt{AVROBUSTBENCH}$: Benchmarking the Robustness of Audio-Visual Recognition Models at Test-Time
 
-<em> Sarthak Kumar Maharana, Saksham Singh Kushwaha, Baoming Zhang, Adrian Rodriguez, Songtao Wei, Yapeng Tian, and Yunhui Guo </em>
+<em> [Sarthak Kumar Maharana](https://sarthaxxxxx.github.io/), [Saksham Singh Kushwaha](https://sakshamsingh1.github.io/), [Baoming Zhang*](https://www.linkedin.com/in/baoming-zhang-286083313/), [Adrian Rodriguez*](https://axr2718.github.io/), [Songtao Wei](https://www.linkedin.com/in/songtao-wei/), [Yapeng Tian](https://www.yapengtian.com/), and [Yunhui Guo](https://yunhuiguo.github.io/) </em>
+
+The University of Texas at Dallas, Richardson, TX, USA
+
+✍🏻 [Paper](https://arxiv.org/abs/2506.00358) 🗃️ [Datasets](https://huggingface.co/datasets/sakshamsingh1/av_robust_data/tree/main) 👾 [Demo](https://www.youtube.com/watch?v=hYdcRO3BuIY&ab_channel=SarthakMaharana)
 </div>
 
-## Introduction
+## Introduction 🗣️
 
 While recent audio-visual recognition models have demonstrated impressive performance, their robustness to distributional shifts at test-time remains not fully understood. Existing robustness benchmarks mainly focus on single modalities, making them insufficient for thoroughly assessing the robustness of audio-visual models. Motivated by real-world scenarios where shifts can occur $\textit{simultaneously}$ in both audio and visual modalities, we introduce $\texttt{AVROBUSTBENCH}$, a comprehensive benchmark designed to evaluate the test-time robustness of audio-visual recognition models. Specifically, we introduce 75 AV corruptions that $\textit{co-occur}$ and are $\textit{correlated}$ across both modalities, enabling a large-scale assessment of these models’ resilience to challenging, realistic shifts. It is worth emphasizing
 that the unique challenge in $\texttt{AVROBUSTBENCH}$ arises from the real-time occurrence of correlated corruptions that simultaneously affect both the audio and visual modalities. Benchmarking and the robustness of audio-visual models to real world distributional shifts at test-time deserves attention and will hopefully serve as a valuable foundation for future research.
 
 
-## Code, Datasets, and Demo
+## Code, Datasets, and Demo 🛠️
 
 We release the code and datasets comprising $\texttt{AVROBUSTBENCH}$. We propose four audio-visual datasets, $\texttt{AUDIOSET-2C}$, $\texttt{VGGSOUND-2C}$, $\texttt{KINETICS-2C}$, and $\texttt{EPICKITCHENS-2C}$. These datasets span diverse domains, environments, and action categories, offering a broad and realistic evaluation suite for audio-visual recognition models. 
 
@@ -25,7 +29,7 @@ For a better audio-visual experience, our YouTube demo is [here](https://www.you
 
 
 
-## Steps to introduce our proposed audio-visual corruptions
+## Steps to introduce our proposed audio-visual corruptions 🚀
 `dataset.py` contains the code that takes any audio-visual datasets and adds any of the corruptions at any severity level that we released. The file is modular, allowing anyone to modify it for their datasets and their models. `/corruptions` contains the code for each of the corruptions, their severity levels, the images to create corrupted images, and the audio to create corrupted audios. 
 
 ### Set up the environment
