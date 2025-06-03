@@ -11,6 +11,11 @@ The University of Texas at Dallas, Richardson, TX, USA
 
 ## Introduction 🗣️
 
+<div align="center">
+  <img src="assets/av_robustness_vgg_samples-1.png" alt="Samples from VGGSound-2C" width="100%">
+</div>
+
+
 While recent audio-visual recognition models have demonstrated impressive performance, their robustness to distributional shifts at test-time remains not fully understood. Existing robustness benchmarks mainly focus on single modalities, making them insufficient for thoroughly assessing the robustness of audio-visual models. Motivated by real-world scenarios where shifts can occur $\textit{simultaneously}$ in both audio and visual modalities, we introduce $\texttt{AVROBUSTBENCH}$, a comprehensive benchmark designed to evaluate the test-time robustness of audio-visual recognition models. Specifically, we introduce 75 AV corruptions that $\textit{co-occur}$ and are $\textit{correlated}$ across both modalities, enabling a large-scale assessment of these models’ resilience to challenging, realistic shifts. It is worth emphasizing
 that the unique challenge in $\texttt{AVROBUSTBENCH}$ arises from the real-time occurrence of correlated corruptions that simultaneously affect both the audio and visual modalities. Benchmarking and the robustness of audio-visual models to real world distributional shifts at test-time deserves attention and will hopefully serve as a valuable foundation for future research.
 
